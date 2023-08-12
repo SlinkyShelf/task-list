@@ -6,6 +6,14 @@ import "./scss/theme.scss"
 import SignInPage from "./pages/SignInPage";
 import {app, db} from "./modules/firebase-auth.js"
 
+import Footer from "./components/Footer.js";
+
+function MainContent({user})
+{
+  return <>
+    <Footer user={user}/>
+  </>
+}
 
 function App() {
   const [user] = useAuthState(auth);
@@ -14,6 +22,7 @@ function App() {
   return (
     <div className="App">
       {(user == undefined) && <SignInPage/>}
+      {user && <MainContent user={user}/>}
     </div>
   );
 }
