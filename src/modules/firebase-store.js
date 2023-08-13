@@ -1,4 +1,4 @@
-import { getJsonData, storeData } from "./modules/firebasestorage.js";
+import { getJsonData, storeData } from "./firebasestorage.js";
 import { useState, useEffect } from "react";
 import store from "./store.js";
 

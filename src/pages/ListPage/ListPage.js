@@ -16,12 +16,27 @@ function safePath(obj, path, end)
     return obj
 }
 
+function ListTab({list, listName})
+{
+    return <>
+        {list.type == "folder" && <div>
+            {listName}
+        </div>}
+        {list.type == "folder" && <div>
+        {listName}
+        </div>}
+    </>
+}
+
 function ListPage()
 {
     const [userData] = store.useState("firebase-user-data")
 
     return <div className="ListPage">
-        {safePath(userData, "lists", []).map()}
+        {Object.keys(safePath(userData, "lists")).map((listName) => {
+            console.log(listName)
+            return <ListTab listName={listName} list={userData[listName]}/>
+        })}
     </div>
 }
 
