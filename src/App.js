@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react";
-import {useAuthState} from "react-firebase-hooks/auth"
-import { auth } from "./modules/firebase-auth.js";
+import { useAuthState } from "react-firebase-hooks/auth"
+import { auth, app, db } from "./modules/firebase-auth.js";
 import "./index.scss"
 import "./theme.scss"
 
-import SignInPage from "./pages/SignInPage/SignInPage.js";
-import {app, db} from "./modules/firebase-auth.js"
+import store from "./modules/store.js"
 
 import Footer from "./components/Footer/Footer.js";
+import SignInPage from "./pages/SignInPage/SignInPage.js";
+import ListPage from "./pages/ListPage/ListPage.js";
 
-function MainContent({user})
-{
+// Pages: list, edit, settings, new-task
+store.setState("current-page", "list")
+
+function MainContent({ user }) {
+  const [currentPage] = store.useState("current-page")
+  
   return <>
-
-    <Footer user={user}/>
+    {currentPage == "list" && <ListPage/>}
+    <Footer user={user} />
   </>
 }
 
@@ -22,8 +27,8 @@ function App() {
 
   return (
     <div className="App">
-      {(user == undefined) && <SignInPage/>}
-      {user && <MainContent user={user}/>}
+      {(user == undefined) && <SignInPage />}
+      {user && <MainContent user={user} />}
     </div>
   );
 }
