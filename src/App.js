@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
 import {useAuthState} from "react-firebase-hooks/auth"
 import { auth } from "./modules/firebase-auth.js";
-import "./scss/theme.scss"
+import "./index.scss"
+import "./theme.scss"
 
-import SignInPage from "./pages/SignInPage";
+import SignInPage from "./pages/SignInPage/SignInPage.js";
 import {app, db} from "./modules/firebase-auth.js"
 
-import Footer from "./components/Footer.js";
+import Footer from "./components/Footer/Footer.js";
 
 function MainContent({user})
 {
   return <>
+
     <Footer user={user}/>
   </>
 }
 
 function App() {
   const [user] = useAuthState(auth);
-  console.log(user)
 
   return (
     <div className="App">

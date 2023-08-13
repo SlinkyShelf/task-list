@@ -1,6 +1,6 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup, browserPopupRedirectResolver  } from "firebase/auth";
-import "../scss/Pages/SignInPage.scss"
-import { auth } from "../modules/firebase-auth";
+import "./SignInPage.scss"
+import { auth } from "../../modules/firebase-auth";
 
 function SignIn()
 {
