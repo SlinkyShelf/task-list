@@ -18,7 +18,9 @@ store.setState("firebase-user-data", {
     "test-list-folder": {
       "type": "folder",
       "lists": {
-        
+        "test-list": {
+          "type": "list"
+        }
       }
     } 
   }

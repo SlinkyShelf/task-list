@@ -1,0 +1,87 @@
+@use "../../theme.scss" as *;
+
+$tab-height: 7vh;
+$font-scale: calc($tab-height / 5);
+
+.bottom-border {
+    width: 100%;
+    height: 1px;
+
+    background-color: $line-color;
+
+    position: absolute;
+    left: 0%;
+    bottom: 0%;
+}
+
+.List-Page-Source-Tab {
+    // background-color: lighten(black, 20%);
+    color: $line-color;
+    width: 100%;
+    height: $tab-height;
+
+    padding-left: calc(($tab-height - 1em) / 2);
+
+    position: relative;
+
+    font-size: calc($font-scale * 3);
+    display: flex;
+    align-items: center;
+}
+
+$List-Tab-Spacing: .5em;
+
+.List-Page-List-Table {
+    font-size: calc($font-scale * 1.5);
+    width: calc(100% - $List-Tab-Spacing * 2);
+    margin-left: $List-Tab-Spacing;
+}
+
+.List-Page-Tab {
+    margin-top: $List-Tab-Spacing;
+}
+
+.List-Page-List {
+    color: white;
+}
+
+.List-Page-Folder {
+    color: white;
+    
+}
+
+.List-Page-Title {
+    background-color: lighten($background-color, 10%);
+    border-radius: .4em;
+    border: $line-color 1px solid;
+    height: $tab-height;
+    padding-left: 1em;
+
+    display: flex;
+    align-items: center;
+}
+
+.List-Page-Folder-List {
+    margin-left: 2em;
+    height: $tab-height;
+}
+
+$line-width: 2px;
+
+.Down-Line {
+    position: relative;
+    width: 5%;
+    aspect-ratio: 1;
+    top: -1em;
+}
+
+.Down-Line-Side {
+    position: absolute;
+    background-color: white;
+    width: 5%;
+    height: $line-width;
+}
+
+.Down-Line-Up {
+    position: absolute;
+}

@@ -1,11 +1,11 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup, browserPopupRedirectResolver  } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithRedirect , browserPopupRedirectResolver  } from "firebase/auth";
 import "./SignInPage.scss"
 import { auth } from "../../modules/firebase-auth";
 
 function SignIn()
 {
     const provider = new GoogleAuthProvider()
-    signInWithPopup(auth, provider, browserPopupRedirectResolver)
+    signInWithRedirect(auth, provider, browserPopupRedirectResolver)
 }
 
 function SignInPage()
