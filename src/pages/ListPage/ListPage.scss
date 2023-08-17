@@ -5,9 +5,8 @@ $font-scale: calc($tab-height / 4);
 
 .bottom-border {
     width: 100%;
-    height: 1px;
-
-    background-color: $line-color;
+    border-top: 1px solid $line-color;
+    height: 0px;
 
     position: absolute;
     left: 0%;
@@ -48,11 +47,26 @@ $List-Tab-Spacing: .5em;
     border-radius: .4em;
     border: $line-color 1px solid;
     height: $tab-height;
+
+    padding-left: 1em;
+
+    display: flex;
+    align-items: center;
 }
 
 .List-Page-Folder {
     color: white;
+    // padding-left: 0em;
+
     
+}
+
+@mixin icon {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    filter: invert(100%);
 }
 
 .List-Page-Tab-List-Icon {
@@ -62,9 +76,31 @@ $List-Tab-Spacing: .5em;
     $side-spacing: calc(($tab-height - $height ) / 2 );
     
     height: $height;
-    position: absolute;
+    aspect-ratio: 1;
+
+    // position: absolute;
     right: $side-spacing;
     top: $side-spacing;
+
+    @include icon;
+}
+
+.List-Page-Tab-Folder-Icon {
+    background-image: url("../../imgs/folder.png");
+
+    $height: calc($tab-height * .8);
+    $side-spacing: calc(($tab-height - $height ) / 2 );
+    
+    height: $height;
+    aspect-ratio: 1;
+
+    margin-right: .5em;
+
+    // position: absolute;
+    right: $side-spacing;
+    top: $side-spacing;
+
+    @include icon;
 }
 
 .List-Page-Title {
@@ -72,7 +108,7 @@ $List-Tab-Spacing: .5em;
     border-radius: .4em;
     border: $line-color 1px solid;
     height: $tab-height;
-    padding-left: 1em;
+    padding-left: .5em;
 
     position: relative;
 
@@ -114,13 +150,23 @@ $line-width: 1px;
 }
 
 .Down-Line-Up {
+    // position: absolute;
+    // width: 0px;
+    // border-right: 1px solid white;
+    // height: 3em;
+
+    // top: calc(50% - 3em);
+    // left: calc(-1 * $tab-indent / 2);
+
+    // z-index: -1;
+}
+
+.Down-Line-Up-Test {
     position: absolute;
+    height: calc(100% - $tab-height / 2);
     width: 0px;
     border-right: 1px solid white;
-    height: 3em;
-
-    top: calc(50% - 3em);
-    left: calc(-1 * $tab-indent / 2);
-
+    bottom: calc($tab-height / 2);
     z-index: -1;
+    left: calc($tab-indent / 2);
 }

@@ -27,6 +27,7 @@ function ListTab({list, listName, depth})
     return <div className="List-Page-Tab-Container">
         {list.type == "folder" && <div className="List-Page-Folder List-Page-Tab">
             <div className="List-Page-Title" onClick={() => setOpen(!open)}>
+                <div className="List-Page-Tab-Folder-Icon" />
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
                 {depth > 0 &&  <div className="Down-Line-Up"/>}
@@ -36,9 +37,11 @@ function ListTab({list, listName, depth})
                     return <ListTab list={list.lists[lName]} listName={lName} key={lName} depth={depth+1}/>
                 })}
             </div>}
+            <div className="Down-Line-Up-Test"/>
         </div>}
 
         {list.type == "list" && <div className="List-Page-List List-Page-Tab">
+            {/* <div className="List-Page-Tab-List-Icon" /> */}
             {listName}
             {depth > 0 &&  <div className="Down-Line-Side"/>}
             {depth > 0 &&  <div className="Down-Line-Up"/>}
