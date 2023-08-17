@@ -30,7 +30,6 @@ function ListTab({list, listName, depth})
                 <div className="List-Page-Tab-Folder-Icon" />
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
-                {depth > 0 &&  <div className="Down-Line-Up"/>}
             </div>
             {open && <div className="List-Page-Folder-List">
                 {Object.keys(list.lists).map((lName) => {

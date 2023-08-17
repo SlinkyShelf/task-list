@@ -149,18 +149,6 @@ $line-width: 1px;
     z-index: -1;
 }
 
-.Down-Line-Up {
-    // position: absolute;
-    // width: 0px;
-    // border-right: 1px solid white;
-    // height: 3em;
-
-    // top: calc(50% - 3em);
-    // left: calc(-1 * $tab-indent / 2);
-
-    // z-index: -1;
-}
-
 .Down-Line-Up-Test {
     position: absolute;
     height: calc(100% - $tab-height / 2);
