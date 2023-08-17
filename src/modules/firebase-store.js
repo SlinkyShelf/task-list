@@ -2,13 +2,13 @@ import { getJsonData, storeData } from "./firebasestorage.js";
 import { useState, useEffect } from "react";
 import store from "./store.js";
 
-function FirebaseStore({coll, key, storename})
+function FirebaseStore({coll, docName, storename})
 {
     const [data, setData] = store.useState(storename)
     const [gotData, setGotData] = useState(false)
 
     useEffect(() => {
-        getJsonData(coll, key).then((d) => {
+        getJsonData(coll, docName, ).then((d) => {
             if (d)
                 setData(d)
             setGotData(true)
@@ -18,7 +18,7 @@ function FirebaseStore({coll, key, storename})
     useEffect(() => {
         if (!gotData) {return}
 
-        storeData(coll, key)
+        storeData(coll, docName, data)
     }, [data])
 
     return <></>

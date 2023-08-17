@@ -1,5 +1,6 @@
 import "./ListPage.scss"
 import store from "../../modules/store"
+import { useState } from "react"
 
 const colorDepth = ["red", "green", "blue", "orange"]
 
@@ -18,27 +19,31 @@ function safePath(obj, path, end)
     return obj
 }
 
-function ListTab({list, listName})
+function ListTab({list, listName, depth})
 {
-    return <>
+    depth = depth || 0
+    const [open, setOpen] = useState(false)
+
+    return <div className="List-Page-Tab-Container">
         {list.type == "folder" && <div className="List-Page-Folder List-Page-Tab">
-            <div className="List-Page-Title">{listName}</div>
-            <div className="List-Page-Folder-List">
-                {Object.keys(list.lists).map((lName) => {
-                    return <ListTab list={list.lists[lName]} listName={lName} key={lName} />
-                })}
+            <div className="List-Page-Title" onClick={() => setOpen(!open)}>
+                {listName}
+                {depth > 0 &&  <div className="Down-Line-Side"/>}
+                {depth > 0 &&  <div className="Down-Line-Up"/>}
             </div>
+            {open && <div className="List-Page-Folder-List">
+                {Object.keys(list.lists).map((lName) => {
+                    return <ListTab list={list.lists[lName]} listName={lName} key={lName} depth={depth+1}/>
+                })}
+            </div>}
         </div>}
 
         {list.type == "list" && <div className="List-Page-List List-Page-Tab">
             {listName}
+            {depth > 0 &&  <div className="Down-Line-Side"/>}
+            {depth > 0 &&  <div className="Down-Line-Up"/>}
         </div>}
-
-        <div className="Down-Line">
-            <div className="Down-Line-Side"/>
-            <div className="Down-Line-Up"/>
-        </div>
-    </>
+    </div>
 }
 
 function SourceTab({source})

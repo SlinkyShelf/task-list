@@ -10,11 +10,12 @@ const storeData = async (coll, key, value) => {
     }
   }
 
-  const getJsonData = async (coll, key) => {
+  const getJsonData = async (coll, key, def) => {
+    def = def || {}
     try {
       const docsnap = await getDoc(new doc(new collection(db, coll), key))
       console.log(docsnap.data())
-      return docsnap.data() || {}
+      return docsnap.data() || def
     } catch(e) {
       console.log(e)
     }
