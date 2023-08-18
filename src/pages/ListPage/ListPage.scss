@@ -13,6 +13,13 @@ $font-scale: calc($tab-height / 4);
     bottom: 0%;
 }
 
+@mixin rounded-red {
+    background-color: lighten($background-color, 0%);
+    border-radius: .4em;
+    border: $line-color 1px solid;
+    height: $tab-height;
+}
+
 .List-Page-Source-Tab {
     // background-color: lighten(black, 20%);
     color: $line-color;
@@ -36,6 +43,30 @@ $List-Tab-Spacing: .5em;
     margin-left: $List-Tab-Spacing;
 }
 
+.List-Page-New-Item {
+    display: flex;
+
+    align-items: center;
+
+    margin-top: $List-Tab-Spacing;
+
+    @include rounded-red;
+}
+
+.New-Item-Icon {
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+.List-Page-New-Item-Input {
+    color: red;
+    background-color: transparent;
+    border: none;
+
+    text-decoration: underline;
+    
+}
+
 .List-Page-Tab {
     margin-top: $List-Tab-Spacing;
     position: relative;
@@ -43,10 +74,7 @@ $List-Tab-Spacing: .5em;
 
 .List-Page-List {
     color: white;
-    background-color: lighten($background-color, 0%);
-    border-radius: .4em;
-    border: $line-color 1px solid;
-    height: $tab-height;
+    @include rounded-red;
 
     padding-left: 1em;
 
@@ -62,6 +90,16 @@ $List-Tab-Spacing: .5em;
 }
 
 @mixin icon {
+    $height: calc($tab-height * .8);
+    $side-spacing: calc(($tab-height - $height ) / 2 );
+    
+    height: $height;
+    aspect-ratio: 1;
+
+    // position: absolute;
+    right: $side-spacing;
+    top: $side-spacing;
+
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -72,42 +110,31 @@ $List-Tab-Spacing: .5em;
 .List-Page-Tab-List-Icon {
     background-image: url("../../imgs/list.png");
 
-    $height: calc($tab-height * .8);
-    $side-spacing: calc(($tab-height - $height ) / 2 );
-    
-    height: $height;
-    aspect-ratio: 1;
-
-    // position: absolute;
-    right: $side-spacing;
-    top: $side-spacing;
-
     @include icon;
 }
 
 .List-Page-Tab-Folder-Icon {
     background-image: url("../../imgs/folder.png");
 
-    $height: calc($tab-height * .8);
-    $side-spacing: calc(($tab-height - $height ) / 2 );
-    
-    height: $height;
-    aspect-ratio: 1;
-
     margin-right: .5em;
 
-    // position: absolute;
-    right: $side-spacing;
-    top: $side-spacing;
+    @include icon;
+}
+
+.not-selected {
+    filter : invert(100%) opacity(50%) ;
+}
+
+.List-Page-Tab-Add-Icon {
+    background-image: url("../../imgs/add.png");
+
+    position: absolute;
 
     @include icon;
 }
 
 .List-Page-Title {
-    background-color: lighten($background-color, 0%);
-    border-radius: .4em;
-    border: $line-color 1px solid;
-    height: $tab-height;
+    @include rounded-red;
     padding-left: .5em;
 
     position: relative;
