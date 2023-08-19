@@ -3,9 +3,11 @@
 $tab-height: 5.5vh;
 $font-scale: calc($tab-height / 4);
 
+$small-border: 1px solid $line-color;
+
 .bottom-border {
     width: 100%;
-    border-top: 1px solid $line-color;
+    border-top: $small-border;
     height: 0px;
 
     position: absolute;
@@ -184,4 +186,36 @@ $line-width: 1px;
     bottom: calc($tab-height / 2);
     z-index: -1;
     left: calc($tab-indent / 2);
+}
+
+.List-Page-Create-Menu {
+    position: absolute;
+    right: 1em;
+    top: 50%;
+
+    z-index: 5;
+}
+
+.List-Page-Create-Menu-Option {
+    height: $tab-height;
+    background-color: lighten($background-color, 0%);
+
+    border: $small-border;
+    border-top: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .25em;
+
+    &:first-child {
+        border-top: $small-border;
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
+    }
+
+    &:last-child {
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
+    }
 }
