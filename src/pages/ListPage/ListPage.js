@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react"
 import useLongPress from "../../modules/long-press";
 
 import {createStore } from 'state-pool';
+import { readPath, ConvertListsPath } from "../../modules/helpers";
 
 const listPageStore = createStore();
 listPageStore.setState("selected-path", null)
@@ -106,43 +107,39 @@ function FindName(list, defaultName)
     return newName
 }
 
-function ListTab({list, listName, depth, path, setUserData, userData})
+function ListTab({list, listName, depth, path})
 {
     depth = depth || 0
     const [open, setOpen] = useState(false)
     const [actionMenu, setActionMenu] = useState(false)
 
     const [currentPage, setCurrentPage] = store.useState("current-page")
-    const [createType, setCreateType] = useState(null)
-    const [editPath, setEditPath] = store.useState("edit-path")
+    const [editPath, setEditPath] = store.useState("list-edit-path")
 
-    function edit(type)
-    {
-        // console.log("Create")
-        // setCreateType(type)
-        // setCreatePath(path)
-        // setCurrentPage("create")
+    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
+
+    const drives = {
+        "Firebase": {
+            "data": firebaseUserData,
+            "setData": setFirebaseUserData
+        }
     }
 
     function CreateList()
     {
-        let newData = JSON.parse(JSON.stringify(userData))
-        let list = newData
-        const splitPath = path.split(".")
-        splitPath.map((p) => {
-            list = list.lists[p]
-        })
-        console.log(list)
+        let {data, setData, target} = readPath(ConvertListsPath(path), drives)
 
         const newList = {
             "type": "list",
             "tags": {}
         }
 
-        list.lists[FindName(list.lists, "Untitled")] = newList
-        setUserData(newData)
-        setEditPath(`${path}.New-List`)
-        setCurrentPage("edit")
+        const listName = FindName(target.lists, "Untitled")
+
+        target.lists[listName] = newList
+        setData(data)
+        setEditPath(`${path}.${listName}`)
+        setCurrentPage("list-edit")
     }
 
     function CreateFolder()
@@ -164,6 +161,15 @@ function ListTab({list, listName, depth, path, setUserData, userData})
             setOpen(!open)
         }, defaultOptions);
 
+    const combinedOptions = {
+        "Edit": () => {
+            setEditPath(path)
+            setCurrentPage("list-edit")
+        },
+        "Delete": () => {},
+        "Cancel": () => setActionMenu(false)
+    }
+
     return <div className="List-Page-Tab-Container">
         {list.type == "folder" && <div className="List-Page-Folder List-Page-Tab">
         {/* onClick={() => setOpen(!open)} onHold={() => setCreateMenu(true) */}
@@ -175,29 +181,28 @@ function ListTab({list, listName, depth, path, setUserData, userData})
             <ActionMenu open={actionMenu} setOpen={setActionMenu} Options={{
                     "New List": CreateList,
                     "New Folder": CreateFolder,
-                    "Edit": () => {
-                        setEditPath(path)
-                        setCurrentPage("edit")
-                    },
-                    "Delete": () => {},
-                    "Cancel": () => setActionMenu(false)
+                    ...combinedOptions
                 }}/>
             {open && <div className="List-Page-Folder-List">
                 {Object.keys(list.lists).map((lName) => {
                     return <ListTab list={list.lists[lName]} listName={lName} 
-                    key={lName} depth={depth+1} path={`${path}.${lName}`}
-                    setUserData={setUserData} userData={userData}/>
+                    key={lName} depth={depth+1} path={`${path}.${lName}`}/>
                 })}
                 {/* {createType != null && <NewItem type={createType} path={path}/>} */}
             </div>}
             <div className="Down-Line-Up-Test"/>
         </div>}
 
-        {list.type == "list" && <div className="List-Page-List List-Page-Tab">
+        {list.type == "list" && <div>
             {/* <div className="List-Page-Tab-List-Icon" /> */}
-            {listName}
-            {depth > 0 &&  <div className="Down-Line-Side"/>}
-            {depth > 0 &&  <div className="Down-Line-Up"/>}
+            <div className="List-Page-List List-Page-Tab" {...longPressEvent}>
+                {listName}
+                {depth > 0 &&  <div className="Down-Line-Side"/>}
+                {depth > 0 &&  <div className="Down-Line-Up"/>}
+            </div>
+            <ActionMenu open={actionMenu} setOpen={setActionMenu} Options={{
+                    ...combinedOptions
+                }}/>
         </div>}
     </div>
 }
@@ -212,7 +217,7 @@ function SourceTab({source})
 
 function ListPage()
 {
-    const [userData, setUserData, updateUserData] = store.useState("firebase-user-data")
+    const [userData, setUserData] = store.useState("firebase-user-data")
 
     const [selectedPath, setSelectedPath] = listPageStore.useState("selected-path")
 
@@ -221,7 +226,7 @@ function ListPage()
         <div className="List-Page-List-Table">
             {Object.keys(safePath(userData, "lists")).map((listName) => {
                 return <ListTab listName={listName} list={userData.lists[listName]} key={listName} 
-                path={listName} setUserData={setUserData} userData={userData}/>
+                path={`Firebase:${listName}`}/>
             })}
         </div>
     </div>

@@ -14,3 +14,10 @@ body {
 
     font-family:'Lexend Deca';
 }
+
+@mixin icon {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: invert(100%);
+}
