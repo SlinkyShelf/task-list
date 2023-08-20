@@ -1,3 +1,10 @@
+function getListName(path)
+{
+    const pathSplit = path.split(".")
+    let ListName = pathSplit[pathSplit.length-1]
+    return ListName.substring(ListName.indexOf(":")+1)
+}
+
 function ConvertListsPath(path)
 {
     const mainSplit = path.split(":")
@@ -13,14 +20,9 @@ function readPath(path, drives)
     let setData
 
     let target
-
-    console.log(path)
-
     let pathSplit = path.split(":")
     let drive = pathSplit[0]
     path = pathSplit[1]
-
-    console.log(path)
 
     if (!drives[drive])
         console.log("Drives have no drive", drive, drives)
@@ -40,4 +42,4 @@ function readPath(path, drives)
     return { "data": data, "setData": setData, "target": target }
 }
 
-export { readPath, ConvertListsPath }
+export { readPath, ConvertListsPath, getListName }

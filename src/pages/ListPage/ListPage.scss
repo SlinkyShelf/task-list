@@ -141,7 +141,7 @@ $List-Tab-Spacing: .5em;
     @include rounded-red;
     padding-left: .5em;
 
-    position: relative;
+    // position: relative;
 
     display: flex;
     align-items: center;
@@ -157,7 +157,7 @@ $tab-indent: 1.25em;
 $line-width: 1px;
 
 .List-Page-Tab-Container {
-    position: relative;
+    // position: relative;
 }
 
 .Down-Line {
@@ -192,8 +192,8 @@ $line-width: 1px;
 
 .List-Page-Action-Menu {
     position: absolute;
-    right: 1em;
-    top: calc($tab-height/2);
+    right: 0;
+    top: 0;
 
     z-index: 5;
 }

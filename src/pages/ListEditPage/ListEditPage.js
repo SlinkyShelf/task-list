@@ -1,7 +1,7 @@
 import "./ListEditPage.scss"
 import store from "../../modules/store"
 
-import { ConvertListsPath, readPath } from "../../modules/helpers"
+import { ConvertListsPath, readPath, getListName } from "../../modules/helpers"
 import { useEffect, useState } from "react"
 
 function ListEditPage()
@@ -35,7 +35,6 @@ function ListEditPage()
         else   
             parentPath = editPath.split(":")[0]+":"
 
-        console.log(parentPath)
         const actualPath = ConvertListsPath(parentPath)
 
         const {data, setData, target} = readPath(actualPath, drives)
@@ -63,9 +62,9 @@ function ListEditPage()
 
         const {data, setData, target} = readPath(actualPath, drives)
 
-        let ListName = pathSplit[pathSplit.length-1]
-        ListName = ListName.substring(ListName.indexOf(":")+1)
-        console.log("ListName: "+ListName)
+        // let ListName = pathSplit[pathSplit.length-1]
+        // ListName = ListName.substring(ListName.indexOf(":")+1)
+        let ListName = getListName(editPath)
 
         setTitle(ListName)
         setEditTitle(ListName)
