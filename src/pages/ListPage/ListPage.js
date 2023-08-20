@@ -89,7 +89,24 @@ function ActionMenu({Options, open, setOpen})
     </div>)
 }
 
-function ListTab({list, listName, depth, path})
+function FindName(list, defaultName)
+{
+    if (!list[defaultName])
+        return defaultName
+
+    let newName = defaultName
+
+    let int = 1
+    while (list[newName])
+    {
+        newName = defaultName + " " + int
+        int += 1
+    }
+
+    return newName
+}
+
+function ListTab({list, listName, depth, path, setUserData, userData})
 {
     depth = depth || 0
     const [open, setOpen] = useState(false)
@@ -109,15 +126,29 @@ function ListTab({list, listName, depth, path})
 
     function CreateList()
     {
+        let newData = JSON.parse(JSON.stringify(userData))
+        let list = newData
+        const splitPath = path.split(".")
+        splitPath.map((p) => {
+            list = list.lists[p]
+        })
+        console.log(list)
 
-        setCreateType("list")
-        setOpen(true)
+        const newList = {
+            "type": "list",
+            "tags": {}
+        }
+
+        list.lists[FindName(list.lists, "Untitled")] = newList
+        setUserData(newData)
+        setEditPath(`${path}.New-List`)
+        setCurrentPage("edit")
     }
 
     function CreateFolder()
     {
-        setCreateType("folder")
-        setOpen(true)
+        // setCreateType("folder")
+        // setOpen(true)
     }
 
     const defaultOptions = {
@@ -144,13 +175,18 @@ function ListTab({list, listName, depth, path})
             <ActionMenu open={actionMenu} setOpen={setActionMenu} Options={{
                     "New List": CreateList,
                     "New Folder": CreateFolder,
+                    "Edit": () => {
+                        setEditPath(path)
+                        setCurrentPage("edit")
+                    },
                     "Delete": () => {},
                     "Cancel": () => setActionMenu(false)
                 }}/>
             {open && <div className="List-Page-Folder-List">
                 {Object.keys(list.lists).map((lName) => {
                     return <ListTab list={list.lists[lName]} listName={lName} 
-                    key={lName} depth={depth+1} path={`${path}.${lName}`}/>
+                    key={lName} depth={depth+1} path={`${path}.${lName}`}
+                    setUserData={setUserData} userData={userData}/>
                 })}
                 {/* {createType != null && <NewItem type={createType} path={path}/>} */}
             </div>}
@@ -176,7 +212,7 @@ function SourceTab({source})
 
 function ListPage()
 {
-    const [userData] = store.useState("firebase-user-data")
+    const [userData, setUserData, updateUserData] = store.useState("firebase-user-data")
 
     const [selectedPath, setSelectedPath] = listPageStore.useState("selected-path")
 
@@ -184,7 +220,8 @@ function ListPage()
         <SourceTab source={"Firebase"}/>
         <div className="List-Page-List-Table">
             {Object.keys(safePath(userData, "lists")).map((listName) => {
-                return <ListTab listName={listName} list={userData.lists[listName]} key={listName} path={listName}/>
+                return <ListTab listName={listName} list={userData.lists[listName]} key={listName} 
+                path={listName} setUserData={setUserData} userData={userData}/>
             })}
         </div>
     </div>
