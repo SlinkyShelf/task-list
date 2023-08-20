@@ -1,10 +1,5 @@
 @use "../../theme.scss" as *;
 
-$tab-height: 5.5vh;
-$font-scale: calc($tab-height / 4);
-
-$small-border: 1px solid $line-color;
-
 .bottom-border {
     width: 100%;
     border-top: $small-border;
@@ -51,13 +46,14 @@ $List-Tab-Spacing: .5em;
     align-items: center;
 
     margin-top: $List-Tab-Spacing;
+    height: $tab-height;
 
     @include rounded-red;
 }
 
 .New-Item-Icon {
     margin-left: .5em;
-    margin-right: .5em;
+    // margin-right: .5em;
 }
 
 .List-Page-New-Item-Input {
@@ -65,7 +61,13 @@ $List-Tab-Spacing: .5em;
     background-color: transparent;
     border: none;
 
-    text-decoration: underline;
+    font-size: calc($font-scale * 1.5);
+
+    // text-decoration: underline;
+    border-bottom: $small-border;
+
+    margin-left: .5em;
+
     
 }
 
@@ -188,15 +190,18 @@ $line-width: 1px;
     left: calc($tab-indent / 2);
 }
 
-.List-Page-Create-Menu {
+.List-Page-Action-Menu {
     position: absolute;
     right: 1em;
-    top: 50%;
+    top: calc($tab-height/2);
 
     z-index: 5;
 }
 
-.List-Page-Create-Menu-Option {
+.List-Page-Action-Menu-Option {
+
+    user-select: none;
+
     height: $tab-height;
     background-color: lighten($background-color, 0%);
 

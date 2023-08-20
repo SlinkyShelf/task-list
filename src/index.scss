@@ -4,3 +4,10 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
 }
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}

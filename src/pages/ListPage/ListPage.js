@@ -1,6 +1,6 @@
 import "./ListPage.scss"
 import store from "../../modules/store"
-import { useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 import useLongPress from "../../modules/long-press";
 
@@ -26,9 +26,26 @@ function safePath(obj, path, end)
     return obj
 }
 
-function NewItem({type})
+function NewItem({type, create, unfocus})
 {   
     const [ itemName, setItemName ] = useState("")
+
+    const ref = useRef()
+
+    useEffect(() => {
+        function outsideClick(e)
+        {
+            if (ref.current && !ref.current.contains(e.target)) {
+                create(itemName)
+            }
+        }
+
+        document.addEventListener("pointerdown", outsideClick)
+
+        return () => {
+            document.removeEventListener("pointerdown", outsideClick);
+          };
+    }, [])
 
     return <div className="List-Page-New-Item">
         {type == "list" && <div className="List-Page-Tab-List-Icon New-Item-Icon"/>}
@@ -37,56 +54,34 @@ function NewItem({type})
 
         <input type="text" className="List-Page-New-Item-Input" 
             value={itemName} onChange={(e) => setItemName(e.target.value)}/>
-
-        {/* <div className={`List-Page-Tab-Folder-Icon ${!isFolder && "not-selected"}`} />
-        <div className={`List-Page-Tab-List-Icon ${isFolder && "not-selected"}`} /> */}
     </div>
 }
 
-function HoldWrapper({ children, onClick, onHold })
+function ActionMenu({Options, open, setOpen})
 {
-    const [holdTimer, setHoldTimer] = useState()
-    const [usedHold, setUsedHold] = useState(false)
+    const ref = useRef()
 
-    function pDown()
-    {
-        const t = setTimeout(() => {
-            onHold()
-            setUsedHold(true)
-        }, 1000)
-        setHoldTimer(t)
-    }
-
-    function pUp(e)
-    {
-        e.preventDefault()
-        if (holdTimer)
+    useEffect(() => {
+        function outsideClick(e)
         {
-            clearTimeout(holdTimer);
-            setHoldTimer(null)
+            if (ref.current && !ref.current.contains(e.target)) {
+                setOpen(false)
+            }
         }
 
-        if (!usedHold) {
-            onClick()
-        }
+        document.addEventListener("pointerdown", outsideClick)
 
-        
+        return () => {
+            document.removeEventListener("pointerdown", outsideClick);
+          };
+    }, [])
 
-        setUsedHold(false)
-    }
-
-    return <div onPointerDown={pDown} onPointerUp={pUp} >
-        {children}
-    </div>
-}
-
-function CreateMenu({Options, open, setOpen})
-{
-    return (open && <div className="List-Page-Create-Menu">
+    return (open && <div className="List-Page-Action-Menu" ref={ref} onBlur={() => console.log("Test")}>
         {Object.keys(Options).map((key) => {
-            return <div className="List-Page-Create-Menu-Option" key={key} onClick={() => {
+            return <div className="List-Page-Action-Menu-Option" key={key} onClick={(e) => {
                 setOpen(false)
                 Options[key]()
+                e.preventDefault()
             }}>
                 {key}
             </div>
@@ -94,40 +89,70 @@ function CreateMenu({Options, open, setOpen})
     </div>)
 }
 
-function ListTab({list, listName, depth})
+function ListTab({list, listName, depth, path})
 {
     depth = depth || 0
     const [open, setOpen] = useState(false)
-    const [createMenu, setCreateMenu] = useState(false)
+    const [actionMenu, setActionMenu] = useState(false)
+
+    const [currentPage, setCurrentPage] = store.useState("current-page")
     const [createType, setCreateType] = useState(null)
-    // const [selectedPath, setSelectedPath ] = listPageStore.useState("selected-path")
+    const [editPath, setEditPath] = store.useState("edit-path")
+
+    function edit(type)
+    {
+        // console.log("Create")
+        // setCreateType(type)
+        // setCreatePath(path)
+        // setCurrentPage("create")
+    }
 
     function CreateList()
     {
-        setCreateType("List")
+
+        setCreateType("list")
+        setOpen(true)
     }
 
     function CreateFolder()
     {
-
+        setCreateType("folder")
+        setOpen(true)
     }
+
+    const defaultOptions = {
+        shouldPreventDefault: true,
+        delay: 500,
+    };
+
+    const longPressEvent = useLongPress(
+        () => {
+            setActionMenu(true)
+        }, 
+        () => {
+            setOpen(!open)
+        }, defaultOptions);
 
     return <div className="List-Page-Tab-Container">
         {list.type == "folder" && <div className="List-Page-Folder List-Page-Tab">
-            <HoldWrapper onClick={() => setOpen(!open)} onHold={() => setCreateMenu(true)}><div className="List-Page-Title" >
+        {/* onClick={() => setOpen(!open)} onHold={() => setCreateMenu(true) */}
+            <div className="List-Page-Title" {...longPressEvent}>
                 <div className="List-Page-Tab-Folder-Icon" />
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
-                <CreateMenu open={createMenu} setOpen={setCreateMenu} Options={{
+            </div>
+            <ActionMenu open={actionMenu} setOpen={setActionMenu} Options={{
                     "New List": CreateList,
                     "New Folder": CreateFolder,
+                    "Delete": () => {},
+                    "Cancel": () => setActionMenu(false)
                 }}/>
-            </div></HoldWrapper>
             {open && <div className="List-Page-Folder-List">
                 {Object.keys(list.lists).map((lName) => {
-                    return <ListTab list={list.lists[lName]} listName={lName} key={lName} depth={depth+1}/>
+                    return <ListTab list={list.lists[lName]} listName={lName} 
+                    key={lName} depth={depth+1} path={`${path}.${lName}`}/>
                 })}
-                {createType && <NewItem type={createType}/>}
+                {/* {createType != null && <NewItem type={createType} path={path}/>} */}
             </div>}
             <div className="Down-Line-Up-Test"/>
         </div>}
@@ -159,7 +184,7 @@ function ListPage()
         <SourceTab source={"Firebase"}/>
         <div className="List-Page-List-Table">
             {Object.keys(safePath(userData, "lists")).map((listName) => {
-                return <ListTab listName={listName} list={userData.lists[listName]} key={listName}/>
+                return <ListTab listName={listName} list={userData.lists[listName]} key={listName} path={listName}/>
             })}
         </div>
     </div>

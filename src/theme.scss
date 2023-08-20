@@ -1,9 +1,16 @@
 $background-color: rgb(27, 27, 27);
 $line-color: red;
 
+$tab-height: 5.5vh;
+$font-scale: calc($tab-height / 4);
+
+$small-border: 1px solid $line-color;
+
 body {
     margin: 0px;
     background-color: $background-color;
+
+    user-select: none;
 
     font-family:'Lexend Deca';
 }
