@@ -192,10 +192,13 @@ $line-width: 1px;
 
 .List-Page-Action-Menu {
     position: absolute;
+    width: 30vw;
     right: 0;
     top: 0;
 
     z-index: 5;
+
+    color: white;
 }
 
 .List-Page-Action-Menu-Option {

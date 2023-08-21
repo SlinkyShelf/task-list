@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react"
 import useLongPress from "../../modules/long-press";
 
 import {createStore } from 'state-pool';
-import { readPath, ConvertListsPath, getListName } from "../../modules/helpers";
+import { readPath, ConvertListsPath, getListName, getParentPath, safePath } from "../../modules/helpers";
 
 const listPageStore = createStore();
 listPageStore.setState("action-menu", {
@@ -15,24 +15,21 @@ listPageStore.setState("action-menu", {
     "open": false
 })
 
+const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 500,
+};
+
 const colorDepth = ["red", "green", "blue", "orange"]
 
-function safePath(obj, path, end)
+function getTouchPos(e)
 {
-    const paths = path.split(".")
-    const emptyObj = {}
-
-    paths.map((p) => {
-        obj = obj[p] || emptyObj
-    })
-
-    if (end && (obj == emptyObj || typeof(obj) != typeof(end)))
-        return end
-
-    return obj
+    if (e.touches)
+        return {"x": e.touches[0].clientX, "y": e.touches[0].clientY}
+    return {"x": e.ClientX, "y": e.ClientY}
 }
 
-function ActionMenu({Options, open, setOpen})
+function ActionMenu({Options, open, setOpen, style})
 {
     const ref = useRef()
 
@@ -51,7 +48,7 @@ function ActionMenu({Options, open, setOpen})
           };
     }, [])
 
-    return (open && <div className="List-Page-Action-Menu" ref={ref} onBlur={() => console.log("Test")}>
+    return (open && <div className="List-Page-Action-Menu" ref={ref} style={style}>
         {Object.keys(Options).map((key) => {
             return <div className="List-Page-Action-Menu-Option" key={key} onClick={(e) => {
                 setOpen(false)
@@ -85,23 +82,23 @@ function ListTab({list, listName, depth, path})
 {
     depth = depth || 0
     const [open, setOpen] = useState(false)
+    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
 
     const longPressEvent = useLongPress(
-        () => {
-            setActionMenu(true)
+        (e) => {
+            const menu = {...actionMenu}
+            menu.type = list.type
+            menu.path = path
+            menu.open = true
+            menu.pos = getTouchPos(e)
+            setActionMenu(menu)
         }, 
         () => {
             setOpen(!open)
         }, defaultOptions);
 
     return <div className="List-Page-Tab-Container">
-        {/* <ActionMenu open={actionMenu} setOpen={setActionMenu} Options={{
-                    "New List": CreateList,
-                    "New Folder": CreateFolder,
-                    ...combinedOptions
-                }}/> */}
         {list.type == "folder" && <div className="List-Page-Folder List-Page-Tab">
-        {/* onClick={() => setOpen(!open)} onHold={() => setCreateMenu(true) */}
             <div className="List-Page-Title" {...longPressEvent}>
                 <div className="List-Page-Tab-Folder-Icon" />
                 {listName}
@@ -112,28 +109,38 @@ function ListTab({list, listName, depth, path})
                     return <ListTab list={list.lists[lName]} listName={lName} 
                     key={lName} depth={depth+1} path={`${path}.${lName}`}/>
                 })}
-                {/* {createType != null && <NewItem type={createType} path={path}/>} */}
             </div>}
             <div className="Down-Line-Up-Test"/>
         </div>}
 
         {list.type == "list" && <div>
-            {/* <div className="List-Page-Tab-List-Icon" /> */}
             <div className="List-Page-List List-Page-Tab" {...longPressEvent}>
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
                 {depth > 0 &&  <div className="Down-Line-Up"/>}
             </div>
-            {/* <ActionMenu open={actionMenu} setOpen={setActionMenu} Options={{
-                    ...combinedOptions
-                }}/> */}
         </div>}
     </div>
 }
 
 function SourceTab({source})
 {
-    return <div className="List-Page-Source-Tab">
+    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
+
+    const longPressEvent = useLongPress(
+        (e) => {
+            const menu = {...actionMenu}
+            menu.type = "base"
+            menu.path = source
+            menu.open = true
+            menu.pos = getTouchPos(e)
+            setActionMenu(menu)
+        },  
+        () => {
+            // setOpen(!open)
+        }, defaultOptions);
+
+    return <div className="List-Page-Source-Tab" {...longPressEvent}>
         {source}
         <div className="bottom-border"/>
     </div>
@@ -144,6 +151,7 @@ function ListPage()
     const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
     const [currentPage, setCurrentPage] = store.useState("current-page")
     const [editPath, setEditPath] = store.useState("list-edit-path")
+    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
 
     const drives = {
         "Firebase": {
@@ -152,17 +160,22 @@ function ListPage()
         }
     }
 
-
+    function openActionMenu(toggle)
+    {
+        const menu = {...actionMenu}
+        menu.open = toggle
+        setActionMenu(menu)
+    }
 
     function create(d)
     {
-        let {data, setData, target} = readPath(ConvertListsPath(path), drives)
+        let {data, setData, target} = readPath(ConvertListsPath(actionMenu.path), drives)
 
         const listName = FindName(target.lists, "Untitled")
 
         target.lists[listName] = d
         setData(data)
-        setEditPath(`${path}.${listName}`)
+        setEditPath(`${actionMenu.path}.${listName}`)
         setCurrentPage("list-edit")
     }   
 
@@ -184,67 +197,43 @@ function ListPage()
 
     function Delete()
     {
-        let parentPath
-        if (path.indexOf(".") != -1)
-            parentPath = path.substring(0, path.lastIndexOf("."))
-        else   
-            parentPath = path.split(":")[0]+":"
-
-        const actualPath = ConvertListsPath(parentPath)
-
+        const actualPath = ConvertListsPath(getParentPath(actionMenu.path))
         const {data, setData, target} = readPath(actualPath, drives)
-
-        
-        let ListName = getListName(path)
-
-        delete target.lists[ListName]
-
-        console.log(data)
-
+        delete target.lists[getListName(actionMenu.path)]
         setData(data)
     }
-    
 
     const defaultOptions = {
-        shouldPreventDefault: true,
-        delay: 500,
-    };
+        "Cancel": () => openActionMenu(false)
+    }
 
-    const longPressEvent = useLongPress(
-        () => {
-            setActionMenu(true)
-        }, 
-        () => {
-            setOpen(!open)
-        }, defaultOptions);
-
-    const combinedOptions = {
+    const editOptions = {
         "Edit": () => {
-            setEditPath(path)
+            setEditPath(actionMenu.path)
             setCurrentPage("list-edit")
         },
         "Delete": Delete,
-        "Cancel": () => setActionMenu(false)
     }
 
-    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
+    const createOptions = {
+        "New Folder": CreateFolder,
+        "New List": CreateList,
+    }
 
-    function openActionMenu(toggle)
-    {
-        const menu = {...actionMenu}
-        actionMenu.open = 
+    const menuOptions = {
+        "base": {...createOptions, ...defaultOptions},
+        "folder": {...createOptions, ...editOptions, ...defaultOptions},
+        "list": {...editOptions, ...defaultOptions}
     }
 
     return <div className="ListPage">
-        <ActionMenu style={{"left": actionMenu.pos.x, "top": actionMenu.pos.y}} 
-            open={actionMenu.open} setOpen={setActionMenu} Options={{
-            ...combinedOptions
-        }}/>
+        <ActionMenu style={{"left": actionMenu.pos.x+"px", "top": actionMenu.pos.y+"px"}} 
+            open={actionMenu.open} setOpen={openActionMenu} Options={menuOptions[actionMenu.type]}/>
         <SourceTab source={"Firebase"}/>
         <div className="List-Page-List-Table">
             {Object.keys(safePath(firebaseUserData, "lists")).map((listName) => {
-                return <ListTab listName={listName} list={userData.lists[listName]} key={listName} 
-                path={`Firebase:${listName}`}/>
+                return <ListTab listName={listName} list={firebaseUserData.lists[listName]} key={listName} 
+                path={`Firebase.${listName}`}/>
             })}
         </div>
     </div>

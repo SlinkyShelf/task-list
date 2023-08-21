@@ -1,28 +1,34 @@
 function getListName(path)
 {
     const pathSplit = path.split(".")
-    let ListName = pathSplit[pathSplit.length-1]
-    return ListName.substring(ListName.indexOf(":")+1)
+    return pathSplit[pathSplit.length-1]
+}
+
+function getParentPath(path)
+{
+    return path.substring(0, path.lastIndexOf("."))
 }
 
 function ConvertListsPath(path)
 {
-    const mainSplit = path.split(":")
+    return path.replace(".", ".lists.")
+}
 
-    if (mainSplit[1] == "")
-        return mainSplit[0]+":"
-    return mainSplit[0]+":"+"lists."+mainSplit[1].replace(".", ".lists.")
+function getDrive(path)
+{
+    return path.split(".")[0]
+}
+
+function removeDrive(path)
+{
+    return path.substring(path.indexOf(".")+1)
 }
 
 function readPath(path, drives)
 {
-    let data
-    let setData
-
-    let target
-    let pathSplit = path.split(":")
-    let drive = pathSplit[0]
-    path = pathSplit[1]
+    let data, setData, target
+    let drive = getDrive(path)
+    path = removeDrive(path)
 
     if (!drives[drive])
         console.log("Drives have no drive", drive, drives)
@@ -42,4 +48,19 @@ function readPath(path, drives)
     return { "data": data, "setData": setData, "target": target }
 }
 
-export { readPath, ConvertListsPath, getListName }
+function safePath(obj, path, end)
+{
+    const paths = path.split(".")
+    const emptyObj = {}
+
+    paths.map((p) => {
+        obj = obj[p] || emptyObj
+    })
+
+    if (end && (obj == emptyObj || typeof(obj) != typeof(end)))
+        return end
+
+    return obj
+}
+
+export { readPath, ConvertListsPath, getListName, getParentPath, safePath }
