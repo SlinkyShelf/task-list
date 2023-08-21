@@ -6,6 +6,7 @@ import useLongPress from "../../modules/long-press";
 
 import {createStore } from 'state-pool';
 import { readPath, ConvertListsPath, getListName, getParentPath, safePath } from "../../modules/helpers";
+import ActionMenu from "../../components/ActionMenu/ActionMenu";
 
 const listPageStore = createStore();
 listPageStore.setState("action-menu", {
@@ -27,38 +28,6 @@ function getTouchPos(e)
     if (e.touches)
         return {"x": e.touches[0].clientX, "y": e.touches[0].clientY}
     return {"x": e.ClientX, "y": e.ClientY}
-}
-
-function ActionMenu({Options, open, setOpen, style})
-{
-    const ref = useRef()
-
-    useEffect(() => {
-        function outsideClick(e)
-        {
-            if (ref.current && !ref.current.contains(e.target)) {
-                setOpen(false)
-            }
-        }
-
-        document.addEventListener("pointerdown", outsideClick)
-
-        return () => {
-            document.removeEventListener("pointerdown", outsideClick);
-          };
-    }, [])
-
-    return (open && <div className="List-Page-Action-Menu" ref={ref} style={style}>
-        {Object.keys(Options).map((key) => {
-            return <div className="List-Page-Action-Menu-Option" key={key} onClick={(e) => {
-                setOpen(false)
-                Options[key]()
-                e.preventDefault()
-            }}>
-                {key}
-            </div>
-        })}
-    </div>)
 }
 
 function FindName(list, defaultName)

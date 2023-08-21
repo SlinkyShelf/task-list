@@ -39,16 +39,21 @@ function ListEditPage()
 
         const {data, setData, target} = readPath(actualPath, drives)
 
+        const list = target.lists[title]
+
+        if (target.lists[editTitle] == list)
+        {
+            setEditingTitle(false)
+            return
+        }
+
         if (target.lists[editTitle])
         {
             return console.log("Title already exists")
         }
 
-        const list = target.lists[title]
         delete target.lists[title]
         target.lists[editTitle] = list
-
-        console.log(data, target)
 
         setTitle(editTitle)
         setEditingTitle(false)
@@ -57,13 +62,7 @@ function ListEditPage()
     }
 
     useEffect(() => {
-        const pathSplit = editPath.split(".")
-        const actualPath = ConvertListsPath(editPath)
-
-        const {data, setData, target} = readPath(actualPath, drives)
-
-        // let ListName = pathSplit[pathSplit.length-1]
-        // ListName = ListName.substring(ListName.indexOf(":")+1)
+        const {data, setData, target} = readPath(ConvertListsPath(editPath), drives)
         let ListName = getListName(editPath)
 
         setTitle(ListName)
@@ -73,7 +72,7 @@ function ListEditPage()
 
     return <div className="List-Edit">
         <div className="List-Edit-Header">
-            Create/Edit
+            Edit
             <div className="List-Edit-Back" onClick={() => setCurrentPage("list")}/>
         </div>
         <div className="List-Edit-Title-Label">Title</div>

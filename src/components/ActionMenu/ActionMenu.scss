@@ -1,0 +1,41 @@
+@use "../../theme.scss" as *;
+
+.Action-Menu {
+    position: absolute;
+    width: 30vw;
+    right: 0;
+    top: 0;
+
+    z-index: 5;
+
+    color: white;
+}
+
+.Action-Menu-Option {
+
+    user-select: none;
+
+    height: calc($tab-height * .75);
+    background-color: lighten($background-color, 0%);
+
+    border: $small-border;
+    border-top: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .25em;
+
+    font-size: calc($font-scale * 1.5);
+
+    &:first-child {
+        border-top: $small-border;
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
+    }
+
+    &:last-child {
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
+    }
+}

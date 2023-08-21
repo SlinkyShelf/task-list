@@ -20,10 +20,12 @@
 .List-Page-Source-Tab {
     // background-color: lighten(black, 20%);
     color: $line-color;
-    width: 100%;
+    // width: 100%;
     height: $tab-height;
 
     padding-left: calc(($tab-height - 1em) / 2);
+
+    border-bottom: $small-border;
 
     position: relative;
 
@@ -188,42 +190,4 @@ $line-width: 1px;
     bottom: calc($tab-height / 2);
     z-index: -1;
     left: calc($tab-indent / 2);
-}
-
-.List-Page-Action-Menu {
-    position: absolute;
-    width: 30vw;
-    right: 0;
-    top: 0;
-
-    z-index: 5;
-
-    color: white;
-}
-
-.List-Page-Action-Menu-Option {
-
-    user-select: none;
-
-    height: $tab-height;
-    background-color: lighten($background-color, 0%);
-
-    border: $small-border;
-    border-top: none;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: .25em;
-
-    &:first-child {
-        border-top: $small-border;
-        border-top-left-radius: 1em;
-        border-top-right-radius: 1em;
-    }
-
-    &:last-child {
-        border-bottom-left-radius: 1em;
-        border-bottom-right-radius: 1em;
-    }
 }
