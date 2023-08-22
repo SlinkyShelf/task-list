@@ -1,33 +1,40 @@
 const defaultFirebaseData = {
     "lists": {
-      "test-list-folder-1": {
-        "type": "folder",
-        "lists": {
-          "test-folder-1": {
-            "type": "folder",
-            "lists": {
-              "test-list": {
-                "type": "list"
-              },
-              "test-list-2": {
-                "type": "list"
-              }
-            }
-          },
-          "test-folder-2": {
-            "test-list": {
-                "type": "list"
-              },
-              "test-list-2": {
-                "type": "list"
-              }
-          }
+      "First List": {
+        "type": "list",
+        "tags": {
+
         }
       },
-      "test-list-folder-2": {
-        "type": "folder",
-        "lists": {}
-      } 
+    },
+    "tags": {
+      "School": {
+        "color": "red"
+      }
+    },
+    "tasks": {
+      "First Task": {
+        "task": {
+          "title": "test",
+          "subtasks": [
+            {
+              "title": "subtask",
+              "subtasks": {
+
+              }
+            }
+          ]
+        },
+        "metadata": {
+
+        },
+        "tags": {
+          "School": true
+        }
+      }
+    },
+    "settings": {
+
     }
   }
 

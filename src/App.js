@@ -9,18 +9,20 @@ import FirebaseStore from "./modules/firebase-store.js";
 
 import Footer from "./components/Footer/Footer.js";
 import SignInPage from "./pages/SignInPage/SignInPage.js";
-import ListPage from "./pages/ListPage/ListPage.js";
+import AllListsPage from "./pages/AllListsPage/AllListsPage.js";
 import ListEditPage from "./pages/ListEditPage/ListEditPage.js";
+import ListPage from "./pages/ListPage/ListPage.js";
 
 import VersionTag from "./components/VersionTag/VersionTag.js";
 
 import defaultFirebaseData from "./modules/default-firebase-data.js";
 
 // Pages: list, edit, settings, new-task
-store.setState("current-page", "list")
+store.setState("current-page", "all-lists")
 store.setState("firebase-user-data", {...defaultFirebaseData})
 
 store.setState("list-edit-path", "")
+store.setState("list-path", "")
 
 function MainContent({ user }) {
   const [currentPage] = store.useState("current-page")
@@ -28,7 +30,7 @@ function MainContent({ user }) {
   return <>
     <FirebaseStore coll="users" docName={user.uid} storename={"firebase-user-data"} def={{...defaultFirebaseData}}/>
 
-    {currentPage == "list"   && <ListPage/>}
+    {currentPage == "all-lists"   && <AllListsPage/>}
     {currentPage == "list-edit" && <ListEditPage/>}
     <Footer user={user} />
   </>

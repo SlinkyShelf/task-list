@@ -11,7 +11,7 @@ function getParentPath(path)
 
 function ConvertListsPath(path)
 {
-    return path.replace(".", ".lists.")
+    return path.replaceAll(".", ".lists.")
 }
 
 function getDrive(path)

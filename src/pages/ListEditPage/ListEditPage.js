@@ -73,7 +73,7 @@ function ListEditPage()
     return <div className="List-Edit">
         <div className="List-Edit-Header">
             Edit
-            <div className="List-Edit-Back" onClick={() => setCurrentPage("list")}/>
+            <div className="List-Edit-Back" onClick={() => setCurrentPage("all-lists")}/>
         </div>
         <div className="List-Edit-Title-Label">Title</div>
         <div className="List-Edit-Title-Container">
