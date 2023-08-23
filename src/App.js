@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, app, db } from "./modules/firebase-auth.js";
-import "./index.scss"
-import "./theme.scss"
+import "./scss/index.scss"
+import "./scss/theme.scss"
+import "./scss/positions.scss"
+import "./scss/icons.scss"
+import "./scss/components.scss"
 
 import store from "./modules/store.js"
 import FirebaseStore from "./modules/firebase-store.js";
@@ -32,6 +35,7 @@ function MainContent({ user }) {
 
     {currentPage == "all-lists"   && <AllListsPage/>}
     {currentPage == "list-edit" && <ListEditPage/>}
+    {currentPage == "list" && <ListPage/>}
     <Footer user={user} />
   </>
 }

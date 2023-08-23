@@ -1,37 +1,10 @@
-@use "../../theme.scss" as *;
-
-.bottom-border {
-    // width: 100%;
-    border-top: $small-border;
-    height: 0px;
-
-    position: absolute;
-    left: 0%;
-    bottom: 0%;
-}
+@use "../../scss/theme.scss" as *;
 
 @mixin rounded-red {
     background-color: lighten($background-color, 0%);
     border-radius: .4em;
     border: $line-color 1px solid;
     height: $tab-height;
-}
-
-.AllLists-Source-Tab {
-    // background-color: lighten(black, 20%);
-    color: $line-color;
-    // width: 100%;
-    height: $tab-height;
-
-    padding-left: calc(($tab-height - 1em) / 2);
-
-    border-bottom: $small-border;
-
-    position: relative;
-
-    font-size: calc($font-scale * 3);
-    display: flex;
-    align-items: center;
 }
 
 $List-Tab-Spacing: .5em;
@@ -42,35 +15,8 @@ $List-Tab-Spacing: .5em;
     margin-left: $List-Tab-Spacing;
 }
 
-.AllLists-New-Item {
-    display: flex;
-
-    align-items: center;
-
-    margin-top: $List-Tab-Spacing;
-    height: $tab-height;
-
-    @include rounded-red;
-}
-
 .New-Item-Icon {
     margin-left: .5em;
-    // margin-right: .5em;
-}
-
-.AllLists-New-Item-Input {
-    color: red;
-    background-color: transparent;
-    border: none;
-
-    font-size: calc($font-scale * 1.5);
-
-    // text-decoration: underline;
-    border-bottom: $small-border;
-
-    margin-left: .5em;
-
-    
 }
 
 .AllLists-Tab {
@@ -90,9 +36,6 @@ $List-Tab-Spacing: .5em;
 
 .AllLists-Folder {
     color: white;
-    // padding-left: 0em;
-
-    
 }
 
 @mixin icon {

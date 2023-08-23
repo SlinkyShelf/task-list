@@ -1,4 +1,4 @@
-@use "../../theme.scss" as *;
+@use "../../scss/theme.scss" as *;
 
 .List-Edit-Header {
     width: 100%;
@@ -45,16 +45,7 @@
     width: 60%
 }
 
-@mixin List-Icon {
-    @include icon;
-    font-size: calc($font-scale * 2.5);
-
-    height: 1em;
-    aspect-ratio: 1;
-}
-
 .List-Edit-Back {
-    @include List-Icon;
     background-image: url("../../imgs/back-arrow.png");
 
     filter: invert(75%);
@@ -64,14 +55,4 @@
     // translate: 0, -50%;
 
     left: .5em;
-}
-
-.List-Edit-Edit {
-    background-image: url("../../imgs/edit.png");
-    @include List-Icon;
-}
-
-.List-Edit-Check {
-    background-image: url("../../imgs/check.png");
-    @include List-Icon;
 }

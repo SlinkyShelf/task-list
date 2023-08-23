@@ -1,0 +1,31 @@
+@use "./theme.scss" as *;
+
+.bottom-border {
+    border-top: $small-border;
+    height: 0px;
+
+    position: absolute;
+    left: 0%;
+    bottom: 0%;
+}
+
+.Source-Tab {
+    color: $line-color;
+    height: $tab-height;
+
+    padding-left: calc(($tab-height - 1em) / 2);
+    border-bottom: $small-border;
+
+    position: relative;
+
+    font-size: $header-size;
+    display: flex;
+    align-items: center;
+}
+
+.Tab {
+    background-color: lighten($background-color, 0%);
+    border-radius: .4em;
+    border: $line-color 1px solid;
+    height: $tab-height;
+}

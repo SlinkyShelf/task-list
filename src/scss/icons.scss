@@ -1,0 +1,39 @@
+@mixin icon {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: invert(100%);
+}
+
+@mixin button-icon {
+    @include icon;
+
+    width: 5vh;
+    aspect-ratio: 1;
+    filter: invert(50%);
+}
+
+.icon-add {
+    background-image: url("../imgs/add.png");
+}
+
+.icon-edit {
+    background-image: url("../imgs/edit.png");
+}
+
+.icon-arrow {
+    background-image: url("../imgs/back-arrow.png");
+}
+
+.icon-folder {
+    background-image: url("../imgs/folder.png");
+}
+
+.icon-list {
+    background-image: url("../imgs/list.png");
+}
+
+.icon-check {
+    background-image: url("../imgs/check.png");
+}
+

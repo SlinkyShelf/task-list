@@ -3,21 +3,16 @@ $line-color: red;
 
 $tab-height: 5.5vh;
 $font-scale: calc($tab-height / 4);
+$font: 'Lexend Deca';
+
+$title-size: calc($font-scale * 3);
+$header-size: calc($font-scale * 2.5);
 
 $small-border: 1px solid $line-color;
 
 body {
     margin: 0px;
     background-color: $background-color;
-
     user-select: none;
-
-    font-family:'Lexend Deca';
-}
-
-@mixin icon {
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    filter: invert(100%);
+    font-family: $font;
 }

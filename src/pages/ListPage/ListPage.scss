@@ -1,0 +1,8 @@
+@use "../../scss/theme.scss" as *;
+
+.ListPage-Title {
+    text-align: center;
+    color: white;
+    font-size: calc($font-scale * 2);
+    margin-top: 5vh;
+}

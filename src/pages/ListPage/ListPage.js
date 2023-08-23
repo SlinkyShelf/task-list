@@ -9,9 +9,10 @@ function ListPage()
     const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
     const [currentPage, setCurrentPage] = store.useState("current-page")
     const [listPath, setListPath] = store.useState("list-path")
+    const [editPath, setEditPath] = store.useState("list-edit-path")
 
     const [listTitle, setListTitle] = useState("")
-    const [list, setList] = useState([])
+    const [list, setList] = useState({})
 
     const drives = {
         "Firebase": {
@@ -25,10 +26,17 @@ function ListPage()
         setList(target)
 
         setListTitle(getListName(listPath))
-    }, [])
+    }, [listPath, firebaseUserData])
 
     return <div className="ListPage">
-        <div className="ListPage-Title">{listTitle}</div>
+        <div className="List-Edit-Header">
+            {listTitle}
+            <div className="icon-back top-left" onClick={() => setCurrentPage("all-lists")}/>
+            <div className="icon-edit top-right" onClick={() => {
+                setEditPath(listPath)
+                setCurrentPage("list-edit")
+                }}/>
+        </div>
     </div>
 }
 

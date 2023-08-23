@@ -53,6 +53,7 @@ function ListTab({list, listName, depth, path})
     const [open, setOpen] = useState(false)
     const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
     const [currentPage, setCurrentPage] = store.useState("current-page")
+    const [listPath, setListPath] = store.useState("list-path")
 
     const longPressEvent = useLongPress(
         (e) => {
@@ -68,6 +69,7 @@ function ListTab({list, listName, depth, path})
                 setOpen(!open)
             else if (list.type == "list")
             {
+                setListPath(path)
                 setCurrentPage("list")
             }
         }, defaultOptions);
@@ -92,6 +94,7 @@ function ListTab({list, listName, depth, path})
 
         {list.type == "list" && <div>
             <div className="AllLists-List AllLists-Tab" {...longPressEvent}>
+                {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
                 {depth > 0 &&  <div className="Down-Line-Up"/>}
             </div>
@@ -113,10 +116,11 @@ function SourceTab({source})
             setActionMenu(menu)
         },  
         () => {
+            // if ()
             // setOpen(!open)
         }, defaultOptions);
 
-    return <div className="AllLists-Source-Tab" {...longPressEvent}>
+    return <div className="Source-Tab" {...longPressEvent}>
         {source}
         <div className="bottom-border"/>
     </div>

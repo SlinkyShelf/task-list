@@ -1,0 +1,13 @@
+$margin: 5vh;
+
+.top-right {
+    position: absolute;
+    right: $margin;
+    top: $margin;
+}
+
+.top-left {
+    position: absolute;
+    left: $margin;
+    top: $margin;
+}
