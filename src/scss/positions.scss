@@ -11,3 +11,23 @@ $margin: 5vh;
     left: $margin;
     top: $margin;
 }
+
+$font-margin: .5em;
+
+.mr-l {
+    margin-left: $font-margin;
+}
+
+.mr-r {
+    margin-right: $font-margin;
+}
+
+.mr-h {
+    margin-left: $font-margin;
+    margin-right: $font-margin;
+}
+
+.t-center {
+    text-align: center;
+    // justify-content: center;
+}

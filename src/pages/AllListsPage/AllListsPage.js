@@ -78,8 +78,8 @@ function ListTab({list, listName, depth, path})
 
     return <div className="AllLists-Tab-Container">
         {list.type == "folder" && <div className="AllLists-Folder AllLists-Tab">
-            <div className="AllLists-Title" {...longPressEvent}>
-                <div className="AllLists-Tab-Folder-Icon" />
+            <div className="AllLists-Title Tab" {...longPressEvent}>
+                <div className="mr-h icon-folder" />
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
             </div>
@@ -89,14 +89,13 @@ function ListTab({list, listName, depth, path})
                     key={lName} depth={depth+1} path={`${path}.${lName}`}/>
                 })}
             </div>
-            <div className="Down-Line-Up-Test" style={visibleStyle}/>
+            <div className="Down-Line-Up" style={visibleStyle}/>
         </div>}
 
         {list.type == "list" && <div>
-            <div className="AllLists-List AllLists-Tab" {...longPressEvent}>
+            <div className="AllLists-List Tab" {...longPressEvent}>
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
-                {depth > 0 &&  <div className="Down-Line-Up"/>}
             </div>
         </div>}
     </div>
@@ -122,7 +121,6 @@ function SourceTab({source})
 
     return <div className="Source-Tab" {...longPressEvent}>
         {source}
-        <div className="bottom-border"/>
     </div>
 }
 
@@ -211,7 +209,7 @@ function AllListsPage()
         <ActionMenu pos={actionMenu.pos} 
             open={actionMenu.open} setOpen={openActionMenu} Options={menuOptions[actionMenu.type]}/>
         <SourceTab source={"Firebase"}/>
-        <div className="AllLists-List-Table">
+        <div className="AllLists-List-Table mr-h">
             {Object.keys(safePath(firebaseUserData, "lists")).map((listName) => {
                 return <ListTab listName={listName} list={firebaseUserData.lists[listName]} key={listName} 
                 path={`Firebase.${listName}`}/>

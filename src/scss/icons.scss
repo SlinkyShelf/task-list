@@ -1,3 +1,5 @@
+@use "./theme.scss" as *;
+
 @mixin icon {
     background-position: center;
     background-size: contain;
@@ -8,32 +10,38 @@
 @mixin button-icon {
     @include icon;
 
-    width: 5vh;
+    width: calc($font-scale*2.5);
     aspect-ratio: 1;
-    filter: invert(50%);
+    // filter: invert(50%);
 }
 
 .icon-add {
+    @include button-icon;
     background-image: url("../imgs/add.png");
 }
 
 .icon-edit {
+    @include button-icon;
     background-image: url("../imgs/edit.png");
 }
 
-.icon-arrow {
-    background-image: url("../imgs/back-arrow.png");
+.icon-back {
+    @include button-icon;
+    background-image: url("../imgs/arrow.png");
 }
 
 .icon-folder {
+    @include button-icon;
     background-image: url("../imgs/folder.png");
 }
 
 .icon-list {
+    @include button-icon;
     background-image: url("../imgs/list.png");
 }
 
 .icon-check {
+    @include button-icon;
     background-image: url("../imgs/check.png");
 }
 

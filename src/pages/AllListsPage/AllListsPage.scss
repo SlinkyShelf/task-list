@@ -9,14 +9,10 @@
 
 $List-Tab-Spacing: .5em;
 
-.AllListse-List-Table {
+.AllLists-List-Table {
     font-size: calc($font-scale * 1.5);
     width: calc(100% - $List-Tab-Spacing * 2);
-    margin-left: $List-Tab-Spacing;
-}
-
-.New-Item-Icon {
-    margin-left: .5em;
+    // margin-left: $List-Tab-Spacing;
 }
 
 .AllLists-Tab {
@@ -26,7 +22,6 @@ $List-Tab-Spacing: .5em;
 
 .AllLists-List {
     color: white;
-    @include rounded-red;
 
     padding-left: 1em;
 
@@ -38,63 +33,13 @@ $List-Tab-Spacing: .5em;
     color: white;
 }
 
-@mixin icon {
-    $height: calc($tab-height * .8);
-    $side-spacing: calc(($tab-height - $height ) / 2 );
-    
-    height: $height;
-    aspect-ratio: 1;
-
-    // position: absolute;
-    right: $side-spacing;
-    top: $side-spacing;
-
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-
-    filter: invert(100%);
-}
-
-.AllLists-Tab-List-Icon {
-    background-image: url("../../imgs/list.png");
-
-    @include icon;
-}
-
-.AllLists-Tab-Folder-Icon {
-    background-image: url("../../imgs/folder.png");
-
-    margin-right: .5em;
-
-    @include icon;
-}
-
 .not-selected {
     filter : invert(100%) opacity(50%) ;
 }
 
-.AllLists-Tab-Add-Icon {
-    background-image: url("../../imgs/add.png");
-
-    position: absolute;
-
-    @include icon;
-}
-
-.List-Page-Title {
-    @include rounded-red;
-    padding-left: .5em;
-
-    position: relative;
-
-    display: flex;
-    align-items: center;
-}
-
 $tab-indent: 1.25em;
 
-.List-Page-Folder-List {
+.AllLists-Folder-List {
     margin-left: $tab-indent;
     // height: $tab-height;
 }
@@ -125,7 +70,7 @@ $line-width: 1px;
     z-index: -1;
 }
 
-.Down-Line-Up-Test {
+.Down-Line-Up {
     position: absolute;
     height: calc(100% - $tab-height / 2);
     width: 0px;

@@ -28,4 +28,11 @@
     border-radius: .4em;
     border: $line-color 1px solid;
     height: $tab-height;
+
+    margin-top: .5em;
+
+    display: flex;
+    align-items: center;
+    
+    position: relative;
 }

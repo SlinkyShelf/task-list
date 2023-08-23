@@ -44,15 +44,3 @@
     font-size: calc($font-scale * 2.5);
     width: 60%
 }
-
-.List-Edit-Back {
-    background-image: url("../../imgs/back-arrow.png");
-
-    filter: invert(75%);
-
-    position: absolute;
-    // top: 50%;
-    // translate: 0, -50%;
-
-    left: .5em;
-}
