@@ -9,6 +9,26 @@
     bottom: 0%;
 }
 
+.Title-Tab {
+    width: 100%;
+    height: $tab-height;
+
+    text-align: right;
+
+    color: $line-color;
+
+    padding-left: calc(($tab-height - 1em) / 2);
+
+    position: relative;
+
+    font-size: calc($font-scale * 2.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-bottom: $small-border;
+}
+
 .Source-Tab {
     color: $line-color;
     height: $tab-height;
@@ -35,4 +55,16 @@
     align-items: center;
     
     position: relative;
+}
+
+.style-tint {
+    color: $line-color;
+    filter: invert(24%) sepia(87%) saturate(5131%) hue-rotate(352deg) brightness(94%) contrast(130%);
+    // background-blend-mode: multiply;
+}
+
+.white-tint {
+    color: white;
+    // background-color: rgba(200,100,0,.5);
+    // background-blend-mode: multiply;
 }

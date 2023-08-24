@@ -1,12 +1,5 @@
 @use "../../scss/theme.scss" as *;
 
-@mixin rounded-red {
-    background-color: lighten($background-color, 0%);
-    border-radius: .4em;
-    border: $line-color 1px solid;
-    height: $tab-height;
-}
-
 $List-Tab-Spacing: .5em;
 
 .AllLists-List-Table {

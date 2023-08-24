@@ -22,6 +22,16 @@ $font-margin: .5em;
     margin-right: $font-margin;
 }
 
+.left {
+    position: absolute;
+    left: $font-margin;
+}
+
+.right {
+    position: absolute;
+    right: $font-margin;
+}
+
 .mr-h {
     margin-left: $font-margin;
     margin-right: $font-margin;

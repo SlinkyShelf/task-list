@@ -71,19 +71,19 @@ function ListEditPage()
     }, [])
 
     return <div className="List-Edit">
-        <div className="Source-Tab">
-            <div className="icon-back mr-r" onClick={() => setCurrentPage("all-lists")}/>
+        <div className="Title-Tab">
             Edit
+            <div className="icon-back left" onClick={() => setCurrentPage("all-lists")}/>
         </div>
         <div className="List-Edit-Title-Label">Title</div>
         <div className="List-Edit-Title-Container">
             {editingTitle && <>
                 <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="List-Edit-Title-Input"/>
-                <div className="List-Edit-Check" onClick={UpdateName}/>
+                <div className="icon-check" onClick={UpdateName}/>
             </>}
             {!editingTitle && <>
                 <div className="List-Edit-Title">{title}</div>
-                <div className="List-Edit-Edit" onClick={() => setEditingTitle(true)}/>
+                <div className="icon-edit" onClick={() => setEditingTitle(true)}/>
             </>}
         </div>
     </div>

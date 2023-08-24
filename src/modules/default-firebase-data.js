@@ -3,7 +3,7 @@ const defaultFirebaseData = {
       "First List": {
         "type": "list",
         "tags": {
-
+          "School": true
         }
       },
     },

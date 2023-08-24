@@ -63,4 +63,28 @@ function safePath(obj, path, end)
     return obj
 }
 
-export { readPath, ConvertListsPath, getListName, getParentPath, safePath }
+function getTouchPos(e)
+{
+    if (e.touches)
+        return {"x": e.touches[0].clientX, "y": e.touches[0].clientY}
+    return {"x": e.ClientX, "y": e.ClientY}
+}
+
+function findName(list, defaultName)
+{
+    if (!list[defaultName])
+        return defaultName
+
+    let newName = defaultName
+
+    let int = 1
+    while (list[newName])
+    {
+        newName = defaultName + " " + int
+        int += 1
+    }
+
+    return newName
+}
+
+export { readPath, ConvertListsPath, getListName, getParentPath, safePath, getTouchPos, findName }

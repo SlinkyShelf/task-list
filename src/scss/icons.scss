@@ -27,6 +27,7 @@
 
 .icon-back {
     @include button-icon;
+    rotate: 180deg;
     background-image: url("../imgs/arrow.png");
 }
 
