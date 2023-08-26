@@ -16,14 +16,12 @@ const defaultFirebaseData = {
       "First Task": {
         "task": {
           "title": "test",
-          "subtasks": [
-            {
+          "subtasks": {
+            "TestID": {
               "title": "subtask",
-              "subtasks": {
-
-              }
+              "subtasks": {}
             }
-          ]
+          }
         },
         "metadata": {
 

@@ -2,11 +2,51 @@
 
 .ListPage {
     color: white;
+    font-size: calc($font-scale * 2);
 }
 
-.ListPage-Title {
+.ListPage-List {
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+$checkbox-size: calc($tab-height * .7);
+
+.ListPage-Task-Title {
     text-align: center;
     color: white;
-    font-size: calc($font-scale * 2);
-    margin-top: 5vh;
+    font-size: calc($font-scale * 1.5);
+    // margin-top: 5vh;
+
+    display: flex;
+    align-items: center;
+    // flex-direction: column-reverse;
+
+    height: $tab-height;
+    // position: relative;
+}
+
+.ListPage-Task {
+    margin-top:  .5vh;
+
+}
+
+.ListPage-CheckBox {
+    height: $checkbox-size;
+    width: $checkbox-size;
+    border: $small-border;
+    border-radius: .25em;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.List-Page-CheckBox-Done {
+    width: 0;
+    height: 0;
+    border: $line-color calc($checkbox-size * .35) solid;
+    border-radius: 20%;
+    background-color: $line-color;
 }

@@ -16,17 +16,20 @@ listPageStore.setState("action-menu", {
     "open": false
 })
 
-function TaskTab({task})
+function TaskTab({task, path, toggleTask})
 {
     return <div className="ListPage-Task">
-        <div className="List-Page-Task-Title">
-            <div className="List-Page-CheckBox">{task.completed && <div className="List-Page-CheckBox-Done"/>}</div>
+        <div className="ListPage-Task-Title">
+            <div className="ListPage-CheckBox mr-r" onClick={() => {
+                toggleTask(path)
+            }}>{task.completed && <div className="List-Page-CheckBox-Done"/>}</div>
             {task.title}
         </div>
-        <div className="ListPage-Task-SubTasks">
-            {/* {task.subtasks.map((task, i) => {
-                return <TaskTab task={task} key={i}/>
-            })} */}
+        <div className="ListPage-Task-SubTasks mr-l">
+            {Object.keys(task.subtasks).map((taskId, i) => {
+                const newTask = task.subtasks[taskId]
+                return <TaskTab task={newTask} key={i} path={`${path}.subtasks.${taskId}`} toggleTask={toggleTask}/>
+            })}
         </div>
     </div>
 }
@@ -64,21 +67,28 @@ function ListPage()
         }
     }
 
+    function toggleTask(task_path)
+    {
+        let {data, setData, target: task} = readPath(task_path, drives)
+        task.completed = !task.completed
+        setData(data)
+
+        console.log(data)
+    }
+
     useEffect(() => {
         let {data, setData, target: _list} = readPath(ConvertListsPath(listPath), drives)
         setList(_list)
 
-        console.log(_list)
-
         const newTasks = {}
         Object.keys(data.tasks).map((key) => {
-            console.log("Task: "+key)
+            // console.log("Task: "+key)
             const task = data.tasks[key]
 
             let valid = false
 
             Object.keys(task.tags).map((tag) => {
-                console.log("Task Tags: "+tag, _list.tags[tag])
+                // console.log("Task Tags: "+tag, _list.tags[tag])
                 if (_list.tags[tag])
                     valid = true
             })
@@ -107,7 +117,8 @@ function ListPage()
 
         <div className="ListPage-List">
             {Object.keys(tasks).map((key) => {
-                return <TaskTab task={tasks[key].task} key={key}/>
+                return <TaskTab task={tasks[key].task} key={key} 
+                path={`Firebase.tasks.${key}.task`} toggleTask={toggleTask}/>
             })}
         </div>
     </div>
