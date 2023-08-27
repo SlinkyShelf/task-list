@@ -1,29 +1,83 @@
 import "./ListPage.scss"
 import store from "../../modules/store"
 
-import { readPath, ConvertListsPath, getListName } from "../../modules/helpers"
+import { readPath, ConvertListsPath, getListName, createId, findName } from "../../modules/helpers"
 import { useEffect, useState } from "react"
 
 import ActionMenu from "../../components/ActionMenu/ActionMenu"
+import { getTouchPos } from "../../modules/helpers"
+import useLongPress from "../../modules/long-press"
 
 import { createStore } from "state-pool"
 
 const listPageStore = createStore();
 listPageStore.setState("action-menu", {
-    "path": "",
+    "task": "",
     "pos": {"x": 0, "y": 0},
     "type": "header",
     "open": false
 })
+listPageStore.setState("renaming", "")
 
 function TaskTab({task, path, toggleTask})
 {
-    return <div className="ListPage-Task">
-        <div className="ListPage-Task-Title">
-            <div className="ListPage-CheckBox mr-r" onClick={() => {
+    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
+    const [renaming, setRenaming] = listPageStore.useState("renaming")
+    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
+
+    const [ newName, setNewName ] = useState("")
+
+    useEffect(() => {
+        setNewName(task.title)
+    }, [path])
+
+    const drives = {
+        "Firebase": {
+            "data": firebaseUserData,
+            "setData": setFirebaseUserData
+        }
+    }
+
+    function changeName()
+    {
+        let {data, setData, target: _task} = readPath(path, drives)
+
+        _task.title = newName;
+        setData(data)
+
+        setRenaming("")
+    }
+
+    const longPressEvent = useLongPress(
+        (e) => {
+            const menu = {...actionMenu}
+            menu.type = "task"
+            menu.open = true
+            menu.pos = getTouchPos(e)
+            menu.task = getListName(path)
+            setActionMenu(menu)
+        },  
+        () => {}, {shouldPreventDefault: false});
+
+    function isRenaming()
+    {
+        return renaming == getListName(path)
+    }
+
+    return <div className={`ListPage-Task ${isRenaming() && "renaming"}`} >
+        <div className="ListPage-Task-Title" {...(!isRenaming() && longPressEvent)}>
+            <div className="ListPage-CheckBox mr-h" onClick={(e) => {
+                if (isRenaming())
+                    return
                 toggleTask(path)
+                e.preventDefault()
             }}>{task.completed && <div className="List-Page-CheckBox-Done"/>}</div>
-            {task.title}
+            {!isRenaming() && task.title}
+            {isRenaming() && <div className="ListPage-task-Rename">
+                <input type="text" className="ListPage-task-Rename-Input" 
+                value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Task Name"/>
+                <div className="icon-check" onClick={changeName}/>
+            </div>}
         </div>
     </div>
 }
@@ -36,6 +90,7 @@ function ListPage()
     const [editPath, setEditPath] = store.useState("list-edit-path")
     const [tasks, setTasks] = useState({})
 
+    const [renaming, setRenaming] = listPageStore.useState("renaming")
     const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
 
     const [listTitle, setListTitle] = useState("")
@@ -55,16 +110,47 @@ function ListPage()
         setActionMenu(menu)
     }
 
+    const longPressEvent = useLongPress(
+        (e) => {
+            const menu = {...actionMenu}
+            menu.type = "header"
+            menu.open = true
+            menu.pos = getTouchPos(e)
+            setActionMenu(menu)
+        },  
+        () => {
+            // if ()
+            // setOpen(!open)
+        });
+
+    function newTask()
+    {
+        let {data, setData, target: _list} = readPath(ConvertListsPath(listPath), drives)
+
+        const newTask = {
+            "title": "New Task",
+            "metadata": {},
+            "tags": {..._list.tags}
+        }
+
+        const taskId = createId(data.tasks)
+        data.tasks[taskId] = newTask
+        setData(data)
+
+    }
+
     const menuOptions = {
-        // "task": {
-        //     "Add Subtask": () => {
+        "task": {
+            "Rename": () => {
+                setRenaming(actionMenu.task)
+            },
+            "Edit": () => {
 
-        //     }
-        // },
+            },
+            "New Task": newTask
+        },
         "header": {
-            "New Task": () => {
-
-            }
+            "New Task": newTask
         }
     }
 
@@ -102,7 +188,7 @@ function ListPage()
         <ActionMenu pos={actionMenu.pos} 
             open={actionMenu.open} setOpen={openActionMenu} Options={menuOptions[actionMenu.type]}/>
         <div className="Title-Tab white-tint">
-            <span>{listTitle}</span>
+            <span {...longPressEvent}>{listTitle}</span>
             <div className="icon-back left style-tint" onClick={() => setCurrentPage("all-lists")}/>
             <div className="icon-edit right style-tint" onClick={() => {
                 setEditPath(listPath)

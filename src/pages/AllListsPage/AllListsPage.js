@@ -7,6 +7,7 @@ import useLongPress from "../../modules/long-press";
 import {createStore } from 'state-pool';
 import { readPath, ConvertListsPath, getListName, getParentPath, safePath } from "../../modules/helpers";
 import ActionMenu from "../../components/ActionMenu/ActionMenu";
+import { getTouchPos } from "../../modules/helpers";
 
 const listPageStore = createStore();
 listPageStore.setState("action-menu", {
@@ -16,19 +17,7 @@ listPageStore.setState("action-menu", {
     "open": false
 })
 
-const defaultOptions = {
-    shouldPreventDefault: true,
-    delay: 500,
-};
-
 const colorDepth = ["red", "green", "blue", "orange"]
-
-function getTouchPos(e)
-{
-    if (e.touches)
-        return {"x": e.touches[0].clientX, "y": e.touches[0].clientY}
-    return {"x": e.ClientX, "y": e.ClientY}
-}
 
 function FindName(list, defaultName)
 {
@@ -72,7 +61,7 @@ function ListTab({list, listName, depth, path})
                 setListPath(path)
                 setCurrentPage("list")
             }
-        }, defaultOptions);
+        });
 
     const visibleStyle = {"display": open?"block":"none"}
 
@@ -117,7 +106,7 @@ function SourceTab({source})
         () => {
             // if ()
             // setOpen(!open)
-        }, defaultOptions);
+        },);
 
     return <div className="Source-Tab" {...longPressEvent}>
         {source}

@@ -12,10 +12,21 @@
 
 $checkbox-size: calc($tab-height * .7);
 
+$task-font-size: calc($font-scale * 1.5);
+
+.ListPage-Task {
+    height: $tab-height;
+    border-radius: .5em;
+
+    &.renaming {
+        background-color: lighten($background-color, 5%);
+    }
+}
+
 .ListPage-Task-Title {
     text-align: center;
     color: white;
-    font-size: calc($font-scale * 1.5);
+    font-size: $task-font-size;
     // margin-top: 5vh;
 
     display: flex;
@@ -49,4 +60,16 @@ $checkbox-size: calc($tab-height * .7);
     border: $line-color calc($checkbox-size * .35) solid;
     border-radius: 20%;
     background-color: $line-color;
+}
+
+.ListPage-task-Rename {
+    display: flex;
+}
+
+.ListPage-task-Rename-Input {
+    border: none;
+    color: white;
+    background: none;
+    font-size: $task-font-size;
+    // font-family: $font;
 }
