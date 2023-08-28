@@ -3,13 +3,14 @@ const defaultFirebaseData = {
       "First List": {
         "type": "list",
         "tags": {
-          "School": true
+          "fakeId": true
         }
       },
     },
     "tags": {
-      "School": {
-        "color": "red"
+      "fakeId": {
+        "name": "School",
+        "color": "#ff0000"
       }
     },
     "tasks": {
@@ -19,7 +20,7 @@ const defaultFirebaseData = {
 
         },
         "tags": {
-          "School": true
+          "fakeId": true
         }
       }
     },

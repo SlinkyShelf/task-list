@@ -118,10 +118,7 @@ function ListPage()
             menu.pos = getTouchPos(e)
             setActionMenu(menu)
         },  
-        () => {
-            // if ()
-            // setOpen(!open)
-        });
+        () => {});
 
     function newTask()
     {

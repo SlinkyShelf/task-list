@@ -15,6 +15,7 @@ import SignInPage from "./pages/SignInPage/SignInPage.js";
 import AllListsPage from "./pages/AllListsPage/AllListsPage.js";
 import ListEditPage from "./pages/ListEditPage/ListEditPage.js";
 import ListPage from "./pages/ListPage/ListPage.js";
+import TagsPage from "./pages/TagsPage/TagsPage.js";
 
 import VersionTag from "./components/VersionTag/VersionTag.js";
 
@@ -36,6 +37,7 @@ function MainContent({ user }) {
     {currentPage == "all-lists"   && <AllListsPage/>}
     {currentPage == "list-edit" && <ListEditPage/>}
     {currentPage == "list" && <ListPage/>}
+    {currentPage == "tags" && <TagsPage/>}
     <Footer user={user} />
   </>
 }

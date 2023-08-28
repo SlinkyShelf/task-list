@@ -1,0 +1,59 @@
+@use "../../scss/theme.scss" as *;
+
+.TagsPage {
+    font-size: calc($font-scale * 2);
+    color: white;
+}
+
+.TagsPage-Tag-List {
+    margin-top: .5em;
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
+.TagsPage-Tag {
+    height: $tab-height;
+    display: flex;
+    align-items: center;
+
+    font-size: calc($font-scale * 1.5);
+
+    border-radius: .5em;
+
+    background-color: lighten($background-color, 5%);
+}
+
+.TagsPage-Tag-Color {
+    $size: calc($tab-height * .5);
+
+    width: $size;
+    height: $size;
+
+    inline-size: $size;
+    block-size: $size;
+
+    // border-radius: 100%;
+    border: none;
+    outline: none;
+    appearance: none;
+    // box-sizing: content-box;
+    // block-size: 0px;
+    background-color: transparent;
+    // inline-size: 0px;
+
+    padding: 0px;
+
+    &::-webkit-color-swatch-wrapper {
+        padding: 0;
+        border-radius: 0;
+      }
+
+    &::-webkit-color-swatch {
+        padding: 0px;
+        // width: 100%;
+        // height: 100%;
+        border: none;
+        border-radius: 1em;
+      }
+
+}

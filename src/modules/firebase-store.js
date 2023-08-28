@@ -6,19 +6,35 @@ function FirebaseStore({coll, docName, storename})
 {
     const [data, setData] = store.useState(storename)
     const [gotData, setGotData] = useState(false)
-
+    const [hasUpdates, setHasUpdates] = useState(false)
+    const [queueTick, setQueueTick] = useState(0)
     useEffect(() => {
         getJsonData(coll, docName, ).then((d) => {
             if (d)
                 setData(d)
             setGotData(true)
         })
+
+        const interval = setInterval(() => setQueueTick(tick => tick+1), 5000)
+
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     useEffect(() => {
-        if (!gotData) {return}
+        if (hasUpdates)
+        {
+            console.log("Saving")
+            setHasUpdates(false)
+            storeData(coll, docName, data)
+            console.log("saved")
+        }
+    }, [queueTick])
 
-        storeData(coll, docName, data)
+    useEffect(() => {
+        if (!gotData) {return}
+        setHasUpdates(true)
     }, [data])
 
     return <></>
