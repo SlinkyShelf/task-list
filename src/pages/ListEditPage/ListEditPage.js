@@ -61,6 +61,13 @@ function ListEditPage()
         setData(data)
     }
 
+    function toggleTag(tag)
+    {
+        const {data, setData, target: _list} = readPath(ConvertListsPath(editPath), drives)
+        _list.tags[tag] = !_list.tags[tag]
+        setData(data)
+    }
+
     useEffect(() => {
         const {data, setData, target} = readPath(ConvertListsPath(editPath), drives)
         let ListName = getListName(editPath)
@@ -68,7 +75,7 @@ function ListEditPage()
         setTitle(ListName)
         setEditTitle(ListName)
         setListData(target)
-    }, [])
+    }, [firebaseUserData])
 
     return <div className="List-Edit">
         <div className="Title-Tab">
@@ -86,6 +93,19 @@ function ListEditPage()
                 <div className="icon-edit" onClick={() => setEditingTitle(true)}/>
             </>}
         </div>
+        
+        {listData.type == "list" && <div>
+            <div className="List-Edit-Tags-Container">
+                {Object.keys(firebaseUserData.tags).map((tag) => {
+                    const tagD = firebaseUserData.tags[tag]
+                    return <div className="List-Edit-Tag mr-h" onClick={() => toggleTag(tag)} key={tag}>
+                        <div className="List-Edit-Tag-Color mr-h" style={{backgroundColor: tagD.color}}/>
+                        <div className="List-Edit-Tag-Name">{tagD.name}</div>
+                        {listData.tags[tag] && <div className="icon-check right"/>}
+                    </div>
+                })}
+            </div>
+        </div>}
     </div>
 }
 
