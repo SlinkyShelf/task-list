@@ -27,8 +27,11 @@ function FirebaseStore({coll, docName, storename})
         {
             console.log("Saving")
             setHasUpdates(false)
-            storeData(coll, docName, data)
-            console.log("saved")
+            storeData(coll, docName, data).then(() => {
+                console.log("saved")
+            })
+
+            
         }
     }, [queueTick])
 

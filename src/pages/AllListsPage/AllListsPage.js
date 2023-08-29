@@ -136,7 +136,7 @@ function AllListsPage()
 
     function create(d)
     {
-        // console.log(ConvertListsPath(actionMenu.path), actionMenu.path)
+        console.log(ConvertListsPath(actionMenu.path), actionMenu.path)
         let {data, setData, target} = readPath(ConvertListsPath(actionMenu.path), drives)
 
         const listName = FindName(target.lists, "Untitled")

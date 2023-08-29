@@ -5,7 +5,12 @@ import { auth } from "../../modules/firebase-auth";
 function SignIn()
 {
     const provider = new GoogleAuthProvider()
-    signInWithPopup(auth, provider, browserPopupRedirectResolver)
+    signInWithPopup(auth, provider, browserPopupRedirectResolver).then((result) => {
+        console.log("Logged In", result);
+      })
+      .catch((error) => {
+        console.log("Caught error Popup closed");
+      });
 }
 
 function SignInPage()

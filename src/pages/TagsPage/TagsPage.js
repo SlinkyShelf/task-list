@@ -2,7 +2,7 @@ import store from "../../modules/store"
 import { createStore, useState } from "state-pool"
 import ActionMenu from "../../components/ActionMenu/ActionMenu"
 import useLongPress from "../../modules/long-press"
-import { readPath, getListName, getTouchPos } from "../../modules/helpers"
+import { readPath, getListName, getTouchPos, createId } from "../../modules/helpers"
 
 import "./TagsPage.scss"
 import { useEffect, useRef } from "react"
@@ -32,21 +32,6 @@ function updateData(path, callBack)
     setData(data)
 }
 
-function InstantColorInput({value, onchange})
-{
-    const colorEditorRef = useRef(null)
-
-    useEffect(() => {
-        if (!colorEditorRef.current) return;
-        console.log("focus")
-        colorEditorRef.current.focus()
-        
-
-    }, [colorEditorRef])
-
-    return <input type="color" className="InstantColorValue" ref={colorEditorRef}/>
-}
-
 function TagTab({tag, tagId, path})
 {
     const [ newName, setNewName ] = useState("")
@@ -57,7 +42,7 @@ function TagTab({tag, tagId, path})
 
     const colorRef = useRef(null)
 
-    const [newColor, setNewColor ] = useState("")
+    const [newColor, setNewColor ] = useState("#FF69B4")
 
     useEffect(() => {
         setNewName(tag.name)
@@ -65,7 +50,12 @@ function TagTab({tag, tagId, path})
     }, [tag, tagId])
 
     useEffect(() => {
+        if (colorRef.current)
+        {
+            colorRef.current.on = () => {
 
+            }
+        }
     }, [colorRef])
 
     const drives = {
@@ -73,12 +63,6 @@ function TagTab({tag, tagId, path})
             "data": firebaseUserData,
             "setData": setFirebaseUserData
         }
-    }
-
-    function changeColor(newColor)
-    {
-        setNewColor(newColor)
-        console.log("Changed")
     }
 
     function changeName()
@@ -111,9 +95,16 @@ function TagTab({tag, tagId, path})
         return colorEditing == getListName(path)
     }
 
+    function changeColor()
+    {
+        let {data, setData, target: _tag} = readPath(path, drives)
+        _tag.color = newColor;
+        setData(data)
+    }
+
     return <div className="TagsPage-Tag" {...(!(isRenaming() || isChangingColor()) && longPressEvent)}>
         <input type="color" className="TagsPage-Tag-Color mr-h" value={newColor} 
-            onChange={(e) => changeColor(e.target.value)} ref={colorRef}/>
+            onChange={(e) => setNewColor(e.target.value)} ref={colorRef} onBlur={changeColor}/>
         {!isRenaming() && <div className="TagsPage-Tag-Name">{tag.name}</div>}
         {isRenaming() && <div className="ListPage-task-Rename">
                 <input type="text" className="ListPage-task-Rename-Input" 
@@ -149,13 +140,34 @@ function TagsPage()
         },  
         () => {});
 
+    const drives = {
+        "Firebase": {
+            "data": firebaseUserData,
+            "setData": setFirebaseUserData
+        }
+    }
+
+    function newTag()
+    {
+        const newId = createId(firebaseUserData.tags)
+        const newTag = {
+            "name": "New Tag",
+            "color": "#ff0000"
+        }
+
+        let {data, setData, target: _tags} = readPath("Firebase.tags", drives) 
+        _tags[newId] = newTag
+        setRenaming(newId)
+        setData(data)
+    }
+
     const menuOptions = {
         "header": {
-            
+            "New Tag": newTag
         },
         "tag": {
             "rename": () => setRenaming(actionMenu.tag),
-            "Change Color": () => setColorEditing(actionMenu.tag)
+            // "Change Color": () => setColorEditing(actionMenu.tag)
         }
     }
 

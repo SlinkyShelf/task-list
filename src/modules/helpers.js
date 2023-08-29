@@ -14,6 +14,16 @@ function ConvertListsPath(path)
     return path.replaceAll(".", ".lists.")
 }
 
+function merge(array, merger)
+{
+    let str = ""
+    for (let i = 0; i < array.length; i++)
+    {
+        str += array[i] + (i == array.length-1 ? "":merger)
+    }
+    return str
+}
+
 function getDrive(path)
 {
     return path.split(".")[0]
@@ -21,7 +31,9 @@ function getDrive(path)
 
 function removeDrive(path)
 {
-    return path.substring(path.indexOf(".")+1)
+    const c = path.split(".")
+    c.shift()
+    return c.join(".")
 }
 
 function readPath(path, drives)
@@ -37,13 +49,12 @@ function readPath(path, drives)
     setData = drives[drive].setData
 
     target = data
-    if (path.indexOf(".") != -1)
-    {
-        const splitPath = path.split(".")
-        splitPath.map((p) => {
-            target = target[p]
-        })
-    }
+    const splitPath = path.split(".")
+    splitPath.map((p) => {
+        if (p == "")
+            return;
+        target = target[p]
+    })
 
     return { "data": data, "setData": setData, "target": target }
 }
