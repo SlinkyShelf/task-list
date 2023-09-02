@@ -15,7 +15,7 @@ const defaultFirebaseData = {
     },
     "tasks": {
       "First Task": {
-        "title": "test",
+        "name": "test",
         "metadata": {
 
         },

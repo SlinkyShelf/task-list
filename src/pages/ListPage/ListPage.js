@@ -28,7 +28,7 @@ function TaskTab({task, path, toggleTask})
     const [ newName, setNewName ] = useState("")
 
     useEffect(() => {
-        setNewName(task.title)
+        setNewName(task.name)
     }, [path])
 
     const drives = {
@@ -42,7 +42,7 @@ function TaskTab({task, path, toggleTask})
     {
         let {data, setData, target: _task} = readPath(path, drives)
 
-        _task.title = newName;
+        _task.name = newName;
         setData(data)
 
         setRenaming("")
@@ -72,7 +72,7 @@ function TaskTab({task, path, toggleTask})
                 toggleTask(path)
                 e.preventDefault()
             }}>{task.completed && <div className="List-Page-CheckBox-Done"/>}</div>
-            {!isRenaming() && task.title}
+            {!isRenaming() && task.name}
             {isRenaming() && <div className="ListPage-task-Rename">
                 <input type="text" className="ListPage-task-Rename-Input" 
                 value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Task Name"/>
@@ -88,6 +88,7 @@ function ListPage()
     const [currentPage, setCurrentPage] = store.useState("current-page")
     const [listPath, setListPath] = store.useState("list-path")
     const [editPath, setEditPath] = store.useState("list-edit-path")
+    const [taskEditPath, setTaskEditPath ] = store.useState("task-edit-path")
     const [tasks, setTasks] = useState({})
 
     const [renaming, setRenaming] = listPageStore.useState("renaming")
@@ -125,7 +126,7 @@ function ListPage()
         let {data, setData, target: _list} = readPath(ConvertListsPath(listPath), drives)
 
         const newTask = {
-            "title": "New Task",
+            "name": "New Task",
             "metadata": {},
             "tags": {..._list.tags}
         }
@@ -142,7 +143,8 @@ function ListPage()
                 setRenaming(actionMenu.task)
             },
             "Edit": () => {
-
+                setTaskEditPath("Firebase.tasks."+actionMenu.task)
+                setCurrentPage("task-edit")
             },
             "New Task": newTask
         },

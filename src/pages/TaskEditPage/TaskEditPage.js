@@ -1,12 +1,12 @@
-import "./ListEditPage.scss"
+import "./TaskEditPage.scss"
 import store from "../../modules/store"
 
 import { ConvertListsPath, readPath, getListName } from "../../modules/helpers"
 import { useEffect, useState } from "react"
 
-function ListEditPage()
+function TaskEditPage()
 {
-    const [editPath, setEditPath] = store.useState("list-edit-path")
+    const [editPath, setEditPath] = store.useState("task-edit-path")
     const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
 
     const drives = {
@@ -29,33 +29,10 @@ function ListEditPage()
 
     function UpdateName()
     {
-        let parentPath
-        if (editPath.indexOf(".") != -1)
-            parentPath = editPath.substring(0, editPath.lastIndexOf("."))
-        else   
-            parentPath = editPath.split(":")[0]+":"
+        
+        const {data, setData, target: _task} = readPath(editPath, drives)
 
-        const actualPath = ConvertListsPath(parentPath)
-
-        const {data, setData, target} = readPath(actualPath, drives)
-
-        const list = target.lists[title]
-
-        if (target.lists[editTitle] == list)
-        {
-            setEditingTitle(false)
-            return
-        }
-
-        if (target.lists[editTitle])
-        {
-            return console.log("Title already exists")
-        }
-
-        delete target.lists[title]
-        target.lists[editTitle] = list
-
-        setEditPath(actualPath+"."+editTitle)
+        _task.name = editTitle
         setTitle(editTitle)
         setEditingTitle(false)
 
@@ -64,19 +41,18 @@ function ListEditPage()
 
     function toggleTag(tag)
     {
-        const {data, setData, target: _list} = readPath(ConvertListsPath(editPath), drives)
-        _list.tags[tag] = !_list.tags[tag]
+        const {data, setData, target: _task} = readPath(editPath, drives)
+        _task.tags[tag] = !_task.tags[tag]
         setData(data)
     }
 
     useEffect(() => {
-        const {data, setData, target} = readPath(ConvertListsPath(editPath), drives)
-        let ListName = getListName(editPath)
+        const {data, setData, target} = readPath(editPath, drives)
 
-        setTitle(ListName)
-        setEditTitle(ListName)
+        setTitle(target.name)
+        setEditTitle(target.name)
         setListData(target)
-    }, [firebaseUserData, editPath])
+    }, [firebaseUserData])
 
     return <div className="List-Edit">
         <div className="Title-Tab">
@@ -95,19 +71,19 @@ function ListEditPage()
             </>}
         </div>
         
-        {listData && listData.type == "list" && <div>
+        <div>
             <div className="List-Edit-Tags-Container">
                 {Object.keys(firebaseUserData.tags).map((tag) => {
                     const tagD = firebaseUserData.tags[tag]
                     return <div className="List-Edit-Tag mr-h" onClick={() => toggleTag(tag)} key={tag}>
                         <div className="List-Edit-Tag-Color mr-h" style={{backgroundColor: tagD.color}}/>
                         <div className="List-Edit-Tag-Name">{tagD.name}</div>
-                        {listData.tags[tag] && <div className="icon-check right"/>}
+                        {listData.tags && listData.tags[tag] && <div className="icon-check right"/>}
                     </div>
                 })}
             </div>
-        </div>}
+        </div>
     </div>
 }
 
-export default ListEditPage
+export default TaskEditPage

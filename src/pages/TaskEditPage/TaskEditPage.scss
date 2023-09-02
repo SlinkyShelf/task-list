@@ -1,0 +1,72 @@
+@use "../../scss/theme.scss" as *;
+
+.List-Edit-Title-Label {
+    text-align: center;
+    font-size: calc($font-scale * 2.5);
+    color: $line-color;
+    margin-top: .5em;
+}
+
+.List-Edit-Title {
+    text-align: center;
+    font-size: calc($font-scale * 2.5);
+    color: white;
+}
+
+.List-Edit-Title-Container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.List-Edit-Title-Input {
+    font-size: calc($font-scale * 2.5);
+    width: 60%
+}
+
+.List-Edit-Tags-Container {
+    display: flex;
+
+    margin-top: .5em;
+
+    width: 50%;
+    margin-left: 25%;
+
+    border-radius: .25em;
+
+    background-color: lighten($background-color, 5%);
+
+    flex-direction: column;
+
+    color: white;
+}
+
+.List-Edit-Tag {
+    border-radius: .25em;
+    height: $tab-height;
+    background-color: lighten($background-color, 10%);
+
+    // flex: 1;
+
+    margin-top: .5em;
+
+    display: flex;
+    align-items: center;
+
+    &:last-child {
+        margin-bottom: .5em;
+    }
+
+    font-size: calc($font-scale * 1.5);
+
+    position: relative;
+}
+
+.List-Edit-Tag-Color {
+    $size: calc($tab-height * .4);
+    width: $size;
+    height: $size;
+
+    border-radius: 100%;
+}

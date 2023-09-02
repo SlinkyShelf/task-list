@@ -14,6 +14,7 @@ import Footer from "./components/Footer/Footer.js";
 import SignInPage from "./pages/SignInPage/SignInPage.js";
 import AllListsPage from "./pages/AllListsPage/AllListsPage.js";
 import ListEditPage from "./pages/ListEditPage/ListEditPage.js";
+import TaskEditPage from "./pages/TaskEditPage/TaskEditPage.js";
 import ListPage from "./pages/ListPage/ListPage.js";
 import TagsPage from "./pages/TagsPage/TagsPage.js";
 
@@ -28,6 +29,8 @@ store.setState("firebase-user-data", {...defaultFirebaseData})
 store.setState("list-edit-path", "")
 store.setState("list-path", "")
 
+store.setState("task-edit-path")
+
 function MainContent({ user }) {
   const [currentPage] = store.useState("current-page")
   
@@ -38,6 +41,7 @@ function MainContent({ user }) {
     {currentPage == "list-edit" && <ListEditPage/>}
     {currentPage == "list" && <ListPage/>}
     {currentPage == "tags" && <TagsPage/>}
+    {currentPage == "task-edit" && <TaskEditPage />}
     <Footer user={user} />
   </>
 }
