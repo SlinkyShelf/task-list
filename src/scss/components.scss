@@ -66,3 +66,9 @@
     // background-color: rgba(200,100,0,.5);
     // background-blend-mode: multiply;
 }
+
+.anti-footer {
+    height: calc(100vh - $footer-size);
+    overflow-y: scroll;
+    // background-color: blue;
+}

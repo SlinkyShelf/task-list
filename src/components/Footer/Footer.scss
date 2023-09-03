@@ -1,8 +1,13 @@
+@use "../../scss/theme.scss" as *;
+
 .Footer {
     width: 100%;
     position: absolute;
     bottom: 0%;
     color: white;
+
+    background-color: grey;
+    height: $footer-size;
 
     white-space: pre;
 }

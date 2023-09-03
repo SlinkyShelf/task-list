@@ -36,12 +36,13 @@ function MainContent({ user }) {
   
   return <>
     <FirebaseStore coll="users" docName={user.uid} storename={"firebase-user-data"} def={{...defaultFirebaseData}}/>
-
-    {currentPage == "all-lists"   && <AllListsPage/>}
-    {currentPage == "list-edit" && <ListEditPage/>}
-    {currentPage == "list" && <ListPage/>}
-    {currentPage == "tags" && <TagsPage/>}
-    {currentPage == "task-edit" && <TaskEditPage />}
+    <div className="anti-footer">
+      {currentPage == "all-lists"   && <AllListsPage/>}
+      {currentPage == "list-edit" && <ListEditPage/>}
+      {currentPage == "list" && <ListPage/>}
+      {currentPage == "tags" && <TagsPage/>}
+      {currentPage == "task-edit" && <TaskEditPage />}
+    </div>
     <Footer user={user} />
   </>
 }
