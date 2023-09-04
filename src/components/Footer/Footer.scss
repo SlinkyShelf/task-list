@@ -6,8 +6,29 @@
     bottom: 0%;
     color: white;
 
-    background-color: grey;
+    // background-color: grey;
     height: $footer-size;
 
     white-space: pre;
+
+    display: flex;
+}
+
+.Footer-Section {
+    border-left: $small-border;
+    border-top: $small-border;
+
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:first-child {
+        border-left: none;
+    }
+
+    & div {
+        scale: 1.4;
+    }
 }

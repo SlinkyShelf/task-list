@@ -46,3 +46,22 @@
     background-image: url("../imgs/check.png");
 }
 
+.icon-lines {
+    @include button-icon;
+    background-image: url("../imgs/lines.png");
+}
+
+.icon-folder {
+    @include button-icon;
+    background-image: url("../imgs/folder.svg");
+}
+
+.icon-settings {
+    @include button-icon;
+    background-image: url("../imgs/settings.png");
+}
+
+.icon-calender {
+    @include button-icon;
+    background-image: url("../imgs/calender.png");
+}
