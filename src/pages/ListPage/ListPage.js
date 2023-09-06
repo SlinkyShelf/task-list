@@ -171,7 +171,7 @@ function ListPage()
             let valid = false
 
             Object.keys(task.tags).map((tag) => {
-                if (_list.tags[tag])
+                if (_list.tags[tag] && task.tags[tag])
                     valid = true
             })
 

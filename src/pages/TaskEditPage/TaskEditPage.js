@@ -22,6 +22,8 @@ function TaskEditPage()
     const [ listData, setListData ] = useState({})
     const [currentPage, setCurrentPage] = store.useState("current-page")
 
+    const [taskDate, setTaskDate] = useState(new Date())
+
     function UpdateData(callback)
     {
         
@@ -82,6 +84,7 @@ function TaskEditPage()
                     </div>
                 })}
             </div>
+            <input type="date" value={taskDate} onChange={(e) => setTaskDate(e.target.value)}/>
         </div>
     </div>
 }
