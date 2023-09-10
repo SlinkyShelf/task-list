@@ -72,3 +72,55 @@
     overflow-y: scroll;
     // background-color: blue;
 }
+
+.Section {
+    $width: 70%;
+    $padding: 1em;
+
+    margin-top: 5vh;
+
+    background-color: lighten($background-color, 5%);
+    font-size: calc($font-scale * 1.5);
+
+    border-radius: 1.2em;
+    width: 70%;
+
+    // min-height: 20vh;
+
+    color: white;
+
+    padding: 1em;
+
+    // margin-left: calc(100% - $width / 2 - $padding/2);
+}
+
+.Section-Header {
+    font-size: calc($font-scale * 2);
+    text-align:  center;
+}
+
+.Section-Line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 1.5vh;
+} 
+
+.Section-Button-1 {
+
+    font-size: calc($font-scale * 1.5);
+    padding: 1em;
+    border-radius: 1em;
+
+    background-color: $pop-background-2;
+
+    margin-top: 1vh;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}

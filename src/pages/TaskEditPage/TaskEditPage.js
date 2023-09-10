@@ -24,6 +24,15 @@ function TaskEditPage()
 
     const [taskDate, setTaskDate] = useState(new Date())
 
+    function changeDate(newDate)
+    {
+        const {data, setData, target} = readPath(editPath, drives)
+
+        setTaskDate(newDate)
+        target.date = newDate
+        setData(target)
+    }
+
     function UpdateData(callback)
     {
         
@@ -53,10 +62,11 @@ function TaskEditPage()
 
         setTitle(target.name)
         setEditTitle(target.name)
+        setTaskDate(target.date)
         setListData(target)
     }, [firebaseUserData])
 
-    return <div className="List-Edit">
+    return <div className="List-Edit center">
         <div className="Title-Tab">
             Edit
             <div className="icon-back left" onClick={() => setCurrentPage("all-lists")}/>
@@ -73,7 +83,6 @@ function TaskEditPage()
             </>}
         </div>
         
-        <div>
             <div className="List-Edit-Tags-Container">
                 {Object.keys(firebaseUserData.tags).map((tag) => {
                     const tagD = firebaseUserData.tags[tag]
@@ -83,6 +92,15 @@ function TaskEditPage()
                         {listData.tags && listData.tags[tag] && <div className="icon-check right"/>}
                     </div>
                 })}
+            </div>
+
+        <div className="Section">
+            <div className="Section-Header">Date</div>
+            <div className="Section-Line">
+                <div className="Section-Info-1">Has Date?</div>
+                <div className="Section-CheckBox">
+                    <div className="Section-CheckBox-Center"></div>
+                </div>
             </div>
             <input type="date" value={taskDate} onChange={(e) => setTaskDate(e.target.value)}/>
         </div>
