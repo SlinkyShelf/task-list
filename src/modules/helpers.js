@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore"
+
 function getListName(path)
 {
     const pathSplit = path.split(".")
@@ -13,6 +15,14 @@ function ConvertListsPath(path)
 {
     return path.replaceAll(".", ".lists.")
 }
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  })
+
+export { dateFormatter }
 
 function merge(array, merger)
 {

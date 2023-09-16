@@ -119,8 +119,43 @@
     margin-top: 1vh;
 }
 
+.Section-CheckBox {
+    $size: calc($tab-height * .7);
+
+    border-radius: .25em;
+    border: white 1px solid;
+
+    height: $size;
+    width: $size;
+    background-color: $pop-background-2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Section-CheckBox-Check {
+    border-radius: .25em;
+
+    $size: calc($tab-height * .5);
+
+    height: $size;
+    width: $size;
+    background-color: white;    
+}
+
+.Section-Date {
+    font-size: calc($font-scale * 1.5);
+}
+
 .center {
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+
+.unactive {
+    user-select: none;
+    pointer-events: none;
+    filter: brightness(50%);
 }
