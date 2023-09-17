@@ -1,30 +1,32 @@
 import store from "../../modules/store"
 import { useState, useEffect } from "react"
-import { readPath, getListName, getTouchPos } from "../../modules/helpers"
+import { getListName, getTouchPos } from "../../modules/helpers"
+import { useGlobalData } from "../../modules/data-handler"
 import useLongPress from "../../modules/long-press"
 
-function TaskTab({task, path, toggleTask, pageStore})
+function TaskTab({task, path, pageStore})
 {
     const [actionMenu, setActionMenu] = pageStore.useState("action-menu")
     const [renaming, setRenaming] = pageStore.useState("renaming")
-    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
 
     const [ newName, setNewName ] = useState("")
+
+    const { readData } = useGlobalData()
+
+    function toggleTask(path)
+    {
+        let {data, setData, target: task} = readData(path)
+        task.completed = !task.completed
+        setData(data)
+    }
 
     useEffect(() => {
         setNewName(task.name)
     }, [path])
 
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
-
     function changeName()
     {
-        let {data, setData, target: _task} = readPath(path, drives)
+        let {data, setData, target: _task} = readData(path)
 
         _task.name = newName;
         setData(data)
@@ -59,7 +61,7 @@ function TaskTab({task, path, toggleTask, pageStore})
             {!isRenaming() && task.name}
             {isRenaming() && <div className="ListPage-task-Rename">
                 <input type="text" className="ListPage-task-Rename-Input" 
-                value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Task Name"/>
+                    value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Task Name"/>
                 <div className="icon-check" onClick={changeName}/>
             </div>}
         </div>

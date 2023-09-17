@@ -1,6 +1,6 @@
 import store from "../../modules/store"
 import { createStore, useState } from "state-pool"
-import ActionMenu from "../../components/ActionMenu/ActionMenu"
+import {ActionMenu} from "../../components/ActionMenu/ActionMenu"
 import useLongPress from "../../modules/long-press"
 import { readPath, getListName, getTouchPos, createId } from "../../modules/helpers"
 

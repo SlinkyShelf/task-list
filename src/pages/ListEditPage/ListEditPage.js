@@ -3,29 +3,19 @@ import store from "../../modules/store"
 
 import { ConvertListsPath, readPath, getListName } from "../../modules/helpers"
 import { useEffect, useState } from "react"
+import { useGlobalData } from "../../modules/data-handler"
 
 function ListEditPage()
 {
     const [editPath, setEditPath] = store.useState("list-edit-path")
     const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
-
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
+    const {readData, dataUpdates} = useGlobalData()
 
     const [title, setTitle] = useState("")
     const [editTitle, setEditTitle] = useState("")
     const [editingTitle, setEditingTitle] = useState(false)
     const [ listData, setListData ] = useState({})
     const [currentPage, setCurrentPage] = store.useState("current-page")
-
-    function UpdateData(callback)
-    {
-        
-    }
 
     function UpdateName()
     {
@@ -37,7 +27,7 @@ function ListEditPage()
 
         const actualPath = ConvertListsPath(parentPath)
 
-        const {data, setData, target} = readPath(actualPath, drives)
+        const {data, setData, target} = readData(actualPath)
 
         const list = target.lists[title]
 
@@ -64,19 +54,19 @@ function ListEditPage()
 
     function toggleTag(tag)
     {
-        const {data, setData, target: _list} = readPath(ConvertListsPath(editPath), drives)
+        const {data, setData, target: _list} = readData(ConvertListsPath(editPath))
         _list.tags[tag] = !_list.tags[tag]
         setData(data)
     }
 
     useEffect(() => {
-        const {data, setData, target} = readPath(ConvertListsPath(editPath), drives)
+        const {data, setData, target} = readData(ConvertListsPath(editPath))
         let ListName = getListName(editPath)
 
         setTitle(ListName)
         setEditTitle(ListName)
         setListData(target)
-    }, [firebaseUserData, editPath])
+    }, [...dataUpdates, editPath])
 
     return <div className="List-Edit">
         <div className="Title-Tab">
@@ -86,7 +76,8 @@ function ListEditPage()
         <div className="List-Edit-Title-Label">Title</div>
         <div className="List-Edit-Title-Container">
             {editingTitle && <>
-                <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="List-Edit-Title-Input"/>
+                <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} 
+                    className="List-Edit-Title-Input"/>
                 <div className="icon-check" onClick={UpdateName}/>
             </>}
             {!editingTitle && <>

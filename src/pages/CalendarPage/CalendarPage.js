@@ -1,21 +1,17 @@
 import "./CalendarPage.scss"
 import store from "../../modules/store"
 import { createStore } from "state-pool"
-import ActionMenu from "../../components/ActionMenu/ActionMenu"
+import {ActionMenu, ActionMenuState} from "../../components/ActionMenu/ActionMenu"
 import { readPath, createId, getTouchPos, ConvertListsPath } from "../../modules/helpers"
 import TaskTab from "../../components/TaskTab/TaskTab"
 import { useState, useEffect } from "react"
 import useLongPress from "../../modules/long-press"
 import { Timestamp } from "firebase/firestore"
+import { useGlobalData } from "../../modules/data-handler"
 
 const pageStore = createStore()
 
-pageStore.setState("action-menu", {
-    "task": "",
-    "pos": {"x": 0, "y": 0},
-    "type": "header",
-    "open": false
-})
+pageStore.setState("action-menu", ActionMenuState())
 pageStore.setState("renaming", "")
 
 function getDateIndex(d)
@@ -32,43 +28,16 @@ function CalendarPage()
 {
     const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
     const [currentPage, setCurrentPage] = store.useState("current-page")
-    const [editPath, setEditPath] = store.useState("list-edit-path")
     const [taskEditPath, setTaskEditPath ] = store.useState("task-edit-path")
-    const [tasks, setTasks] = useState({})
 
     const [renaming, setRenaming] = pageStore.useState("renaming")
     const [actionMenu, setActionMenu] = pageStore.useState("action-menu")
 
-    const [listTitle, setListTitle] = useState("")
-    const [list, setList] = useState({})
-
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
-
-    function openActionMenu(toggle)
-    {
-        const menu = {...actionMenu}
-        menu.open = toggle
-        setActionMenu(menu)
-    }
-
-    const longPressEvent = useLongPress(
-        (e) => {
-            const menu = {...actionMenu}
-            menu.type = "header"
-            menu.open = true
-            menu.pos = getTouchPos(e)
-            setActionMenu(menu)
-        },  
-        () => {});
+    const { readData } = useGlobalData()
 
     function newTask()
     {
-        let {data, setData, target: _task} = readPath("Firebase.tasks."+actionMenu.task, drives)
+        let {data, setData, target: _task} = readData("Firebase.tasks."+actionMenu.task)
 
         const newTask = {
             "name": "New Task",
@@ -98,13 +67,6 @@ function CalendarPage()
         "header": {
             "New Task": newTask
         }
-    }
-
-    function toggleTask(path)
-    {
-        let {data, setData, target: task} = readPath(path, drives)
-        task.completed = !task.completed
-        setData(data)
     }
 
     const [dates, setDates] = useState([])
@@ -153,16 +115,15 @@ function CalendarPage()
 
     return <div className="CalendarPage">
         {dates.map((d, i) => {
-            return <div className="">
+            return <div className="" key={i}>
                 <div className="Source-Tab">{d.date.toLocaleDateString()}</div>
                 {d.tasks.map((id) => {
                     return <TaskTab task={firebaseUserData.tasks[id]} key={id} 
-                        path={"Firebase.tasks."+id} toggleTask={toggleTask} pageStore={pageStore}/>
+                        path={"Firebase.tasks."+id} pageStore={pageStore}/>
                 })}
             </div>
         })}
-        <ActionMenu pos={actionMenu.pos} 
-            open={actionMenu.open} setOpen={openActionMenu} Options={menuOptions[actionMenu.type]}/>
+        <ActionMenu state={actionMenu} setState={setActionMenu} options={menuOptions}/>
     </div>
 }
 

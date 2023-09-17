@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore"
+import { readPath } from "./data-handler"
 
 function getListName(path)
 {
@@ -44,29 +45,6 @@ function removeDrive(path)
     const c = path.split(".")
     c.shift()
     return c.join(".")
-}
-
-function readPath(path, drives)
-{
-    let data, setData, target
-    let drive = getDrive(path)
-    path = removeDrive(path)
-
-    if (!drives[drive])
-        console.log("Drives have no drive", drive, drives)
-
-    data = JSON.parse(JSON.stringify(drives[drive].data))
-    setData = drives[drive].setData
-
-    target = data
-    const splitPath = path.split(".")
-    splitPath.map((p) => {
-        if (p == "")
-            return;
-        target = target[p]
-    })
-
-    return { "data": data, "setData": setData, "target": target }
 }
 
 function safePath(obj, path, end)

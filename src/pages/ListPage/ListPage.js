@@ -1,28 +1,23 @@
 import "./ListPage.scss"
 import store from "../../modules/store"
 
-import { readPath, ConvertListsPath, getListName, createId, findName } from "../../modules/helpers"
+import { ConvertListsPath, getListName, createId, findName } from "../../modules/helpers"
 import { useEffect, useState } from "react"
 
-import ActionMenu from "../../components/ActionMenu/ActionMenu"
+import { ActionMenu, ActionMenuState } from "../../components/ActionMenu/ActionMenu"
 import { getTouchPos } from "../../modules/helpers"
 import useLongPress from "../../modules/long-press"
 import TaskTab from "../../components/TaskTab/TaskTab"
 
 import { createStore } from "state-pool"
+import { useGlobalData } from "../../modules/data-handler"
 
 const listPageStore = createStore();
-listPageStore.setState("action-menu", {
-    "task": "",
-    "pos": {"x": 0, "y": 0},
-    "type": "header",
-    "open": false
-})
+listPageStore.setState("action-menu", ActionMenuState())
 listPageStore.setState("renaming", "")
 
 function ListPage()
 {
-    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
     const [currentPage, setCurrentPage] = store.useState("current-page")
     const [listPath, setListPath] = store.useState("list-path")
     const [editPath, setEditPath] = store.useState("list-edit-path")
@@ -35,19 +30,7 @@ function ListPage()
     const [listTitle, setListTitle] = useState("")
     const [list, setList] = useState({})
 
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
-
-    function openActionMenu(toggle)
-    {
-        const menu = {...actionMenu}
-        menu.open = toggle
-        setActionMenu(menu)
-    }
+    const { readData, dataUpdates } = useGlobalData()
 
     const longPressEvent = useLongPress(
         (e) => {
@@ -61,7 +44,7 @@ function ListPage()
 
     function newTask()
     {
-        let {data, setData, target: _list} = readPath(ConvertListsPath(listPath), drives)
+        let {data, setData, target: _list} = readData(ConvertListsPath(listPath))
 
         const newTask = {
             "name": "New Task",
@@ -91,15 +74,8 @@ function ListPage()
         }
     }
 
-    function toggleTask(path)
-    {
-        let {data, setData, target: task} = readPath(path, drives)
-        task.completed = !task.completed
-        setData(data)
-    }
-
     useEffect(() => {
-        let {data, setData, target: _list} = readPath(ConvertListsPath(listPath), drives)
+        let {data, setData, target: _list} = readData(ConvertListsPath(listPath))
         setList(_list)
 
         const newTasks = {}
@@ -119,11 +95,10 @@ function ListPage()
         setTasks(newTasks)
 
         setListTitle(getListName(listPath))
-    }, [listPath, firebaseUserData])
+    }, [listPath, ...dataUpdates])
 
     return <div className="ListPage">
-        <ActionMenu pos={actionMenu.pos} 
-            open={actionMenu.open} setOpen={openActionMenu} Options={menuOptions[actionMenu.type]}/>
+        <ActionMenu state={actionMenu} setState={setActionMenu} options={menuOptions}/>
         <div className="Title-Tab white-tint">
             <span {...longPressEvent}>{listTitle}</span>
             <div className="icon-back left style-tint" onClick={() => setCurrentPage("all-lists")}/>
@@ -136,7 +111,7 @@ function ListPage()
         <div className="ListPage-List">
             {Object.keys(tasks).map((key) => {
                 return <TaskTab task={tasks[key]} key={key} 
-                path={"Firebase.tasks."+key} toggleTask={toggleTask} pageStore={listPageStore}/>
+                path={"Firebase.tasks."+key} pageStore={listPageStore}/>
             })}
         </div>
     </div>

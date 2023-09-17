@@ -5,17 +5,13 @@ import { useEffect, useState, useRef } from "react"
 import useLongPress from "../../modules/long-press";
 
 import {createStore } from 'state-pool';
-import { readPath, ConvertListsPath, getListName, getParentPath, safePath } from "../../modules/helpers";
-import ActionMenu from "../../components/ActionMenu/ActionMenu";
+import { ConvertListsPath, getListName, getParentPath, safePath } from "../../modules/helpers";
+import {ActionMenu, ActionMenuState} from "../../components/ActionMenu/ActionMenu";
 import { getTouchPos } from "../../modules/helpers";
+import { useGlobalData } from "../../modules/data-handler";
 
 const listPageStore = createStore();
-listPageStore.setState("action-menu", {
-    "path": "",
-    "pos": {"x": 0, "y": 0},
-    "type": "folder",
-    "open": false
-})
+listPageStore.setState("action-menu", ActionMenuState())
 
 const colorDepth = ["red", "green", "blue", "orange"]
 
@@ -120,12 +116,7 @@ function AllListsPage()
     const [editPath, setEditPath] = store.useState("list-edit-path")
     const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
 
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
+    const { readData } = useGlobalData()
 
     function openActionMenu(toggle)
     {
@@ -137,7 +128,7 @@ function AllListsPage()
     function create(d)
     {
         console.log(ConvertListsPath(actionMenu.path), actionMenu.path)
-        let {data, setData, target} = readPath(ConvertListsPath(actionMenu.path), drives)
+        let {data, setData, target} = readData(ConvertListsPath(actionMenu.path))
 
         const listName = FindName(target.lists, "Untitled")
 
@@ -166,7 +157,7 @@ function AllListsPage()
     function Delete()
     {
         const actualPath = ConvertListsPath(getParentPath(actionMenu.path))
-        const {data, setData, target} = readPath(actualPath, drives)
+        const {data, setData, target} = readData(actualPath)
         delete target.lists[getListName(actionMenu.path)]
         setData(data)
     }
@@ -195,8 +186,7 @@ function AllListsPage()
     }
 
     return <div className="AllLists">
-        <ActionMenu pos={actionMenu.pos} 
-            open={actionMenu.open} setOpen={openActionMenu} Options={menuOptions[actionMenu.type]}/>
+        <ActionMenu state={actionMenu} setState={setActionMenu} options={menuOptions}/>
         <SourceTab source={"Firebase"}/>
         <div className="AllLists-List-Table mr-h">
             {Object.keys(safePath(firebaseUserData, "lists")).map((listName) => {
