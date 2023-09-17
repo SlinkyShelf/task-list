@@ -18,6 +18,7 @@ import TaskEditPage from "./pages/TaskEditPage/TaskEditPage.js";
 import ListPage from "./pages/ListPage/ListPage.js";
 import TagsPage from "./pages/TagsPage/TagsPage.js";
 import SettingsPage from "./pages/SettingsPage/SettingsPage.js";
+import CalendarPage from "./pages/CalendarPage/CalendarPage.js";
 
 import VersionTag from "./components/VersionTag/VersionTag.js";
 
@@ -44,6 +45,7 @@ function MainContent({ user }) {
       {currentPage == "tags" && <TagsPage/>}
       {currentPage == "task-edit" && <TaskEditPage />}
       {currentPage == "settings" && <SettingsPage user={user} />}
+      {currentPage == "calendar" && <CalendarPage/>}
     </div>
     <Footer user={user} />
   </>

@@ -44,7 +44,7 @@ function TaskEditPage()
 
     function changeDate(newDate)
     {
-        newDate = Timestamp.fromDate(new Date(newDate))
+        newDate = Timestamp.fromDate(new Date(newDate.replace(/-/g, '/')))
         const {data, setData, target} = readPath(editPath, drives)
 
         setTaskDate(newDate)
@@ -80,7 +80,6 @@ function TaskEditPage()
     }
 
     useEffect(() => {
-        console.log(editPath)
         const {data, setData, target} = readPath(editPath, drives)
 
         setTitle(target.name)

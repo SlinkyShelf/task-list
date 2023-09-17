@@ -16,7 +16,7 @@ function Footer({user})
             <div className="icon-folder" onClick={() => setCurrentPage("all-lists")}></div>
         </div>
         <div className="Footer-Section">
-            <div className="icon-calender" onClick={() => setCurrentPage("calender")}></div>
+            <div className="icon-calender" onClick={() => setCurrentPage("calendar")}></div>
         </div>
         <div className="Footer-Section">
             <div className="icon-settings" onClick={() => setCurrentPage("settings")}></div>

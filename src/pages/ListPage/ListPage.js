@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import ActionMenu from "../../components/ActionMenu/ActionMenu"
 import { getTouchPos } from "../../modules/helpers"
 import useLongPress from "../../modules/long-press"
+import TaskTab from "../../components/TaskTab/TaskTab"
 
 import { createStore } from "state-pool"
 
@@ -18,69 +19,6 @@ listPageStore.setState("action-menu", {
     "open": false
 })
 listPageStore.setState("renaming", "")
-
-function TaskTab({task, path, toggleTask})
-{
-    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
-    const [renaming, setRenaming] = listPageStore.useState("renaming")
-    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
-
-    const [ newName, setNewName ] = useState("")
-
-    useEffect(() => {
-        setNewName(task.name)
-    }, [path])
-
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
-
-    function changeName()
-    {
-        let {data, setData, target: _task} = readPath(path, drives)
-
-        _task.name = newName;
-        setData(data)
-
-        setRenaming("")
-    }
-
-    const longPressEvent = useLongPress(
-        (e) => {
-            const menu = {...actionMenu}
-            menu.type = "task"
-            menu.open = true
-            menu.pos = getTouchPos(e)
-            menu.task = getListName(path)
-            setActionMenu(menu)
-        },  
-        () => {}, {shouldPreventDefault: false});
-
-    function isRenaming()
-    {
-        return renaming == getListName(path)
-    }
-
-    return <div className={`ListPage-Task ${isRenaming() && "renaming"}`} >
-        <div className="ListPage-Task-Title" {...(!isRenaming() && longPressEvent)}>
-            <div className="ListPage-CheckBox mr-h" onClick={(e) => {
-                if (isRenaming())
-                    return
-                toggleTask(path)
-                e.preventDefault()
-            }}>{task.completed && <div className="List-Page-CheckBox-Done"/>}</div>
-            {!isRenaming() && task.name}
-            {isRenaming() && <div className="ListPage-task-Rename">
-                <input type="text" className="ListPage-task-Rename-Input" 
-                value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Task Name"/>
-                <div className="icon-check" onClick={changeName}/>
-            </div>}
-        </div>
-    </div>
-}
 
 function ListPage()
 {
@@ -198,7 +136,7 @@ function ListPage()
         <div className="ListPage-List">
             {Object.keys(tasks).map((key) => {
                 return <TaskTab task={tasks[key]} key={key} 
-                path={"Firebase.tasks."+key} toggleTask={toggleTask}/>
+                path={"Firebase.tasks."+key} toggleTask={toggleTask} pageStore={listPageStore}/>
             })}
         </div>
     </div>
