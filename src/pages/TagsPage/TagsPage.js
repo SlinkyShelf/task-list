@@ -17,28 +17,13 @@ pagestore.setState("action-menu", {
 pagestore.setState("renaming", "")
 pagestore.setState("color-editing", "")
 
-function updateData(path, callBack)
-{
-    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
-
-    let {data, setData, target} = readPath(path, drives)
-    callBack(data, target)
-    setData(data)
-}
-
 function TagTab({tag, tagId, path})
 {
     const [ newName, setNewName ] = useState("")
     const [actionMenu, setActionMenu] = pagestore.useState("action-menu")
     const [renaming, setRenaming] = pagestore.useState("renaming")
     const [colorEditing, setColorEditing] = pagestore.useState("color-editing")
-    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
+    const [userData, setUserData] = store.useState("user-data")
 
     const colorRef = useRef(null)
 

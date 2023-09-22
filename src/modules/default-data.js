@@ -1,7 +1,29 @@
-const defaultFirebaseData = {
-    "lists": {
+const defaultTag = {
+  "name": "School",
+  "color": "#ff0000"
+}
+
+const defaultTask = {
+  "name": "test",
+  "metadata": {
+
+  },
+  "tags": {
+    "fakeId": true
+  }
+}
+
+const defaultTaskList = {
+  "type": "task-list",
+  "tags": {
+    // "fakeId": true
+  }
+}
+
+const defaultFrameData = {
+    "documents": {
       "First List": {
-        "type": "list",
+        "type": "task-list",
         "tags": {
           "fakeId": true
         }
@@ -29,4 +51,4 @@ const defaultFirebaseData = {
     }
   }
 
-export default defaultFirebaseData
+export { defaultFrameData }

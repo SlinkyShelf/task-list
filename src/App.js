@@ -22,11 +22,14 @@ import CalendarPage from "./pages/CalendarPage/CalendarPage.js";
 
 import VersionTag from "./components/VersionTag/VersionTag.js";
 
-import defaultFirebaseData from "./modules/default-firebase-data.js";
+import defaultUserData from "./modules/default-user-data.js";
+import LocalStore from "./modules/local-store.js";
+import { rawClone } from "./modules/data-handler.js";
 
 // Pages: list, edit, settings, new-task
 store.setState("current-page", "all-lists")
-store.setState("firebase-user-data", {...defaultFirebaseData})
+// store.setState("firebase-user-data", {...defaultUserData})
+store.setState("user-data", rawClone(defaultUserData))
 
 store.setState("list-edit-path", "")
 store.setState("list-path", "")
@@ -37,7 +40,7 @@ function MainContent({ user }) {
   const [currentPage] = store.useState("current-page")
   
   return <>
-    <FirebaseStore coll="users" docName={user.uid} storename={"firebase-user-data"} def={{...defaultFirebaseData}}/>
+    {/* <FirebaseStore coll="users" docName={user.uid} storename={"firebase-user-data"} def={{...defaultFirebaseData}}/> */}
     <div className="anti-footer">
       {currentPage == "all-lists"   && <AllListsPage/>}
       {currentPage == "list-edit" && <ListEditPage/>}
@@ -47,7 +50,7 @@ function MainContent({ user }) {
       {currentPage == "settings" && <SettingsPage user={user} />}
       {currentPage == "calendar" && <CalendarPage/>}
     </div>
-    <Footer user={user} />
+    <Footer/>
   </>
 }
 
@@ -56,8 +59,9 @@ function App() {
 
   return (
     <div className="App">
-      {(user == undefined) && <SignInPage />}
-      {user && <MainContent user={user} />}
+      {/* {(user == undefined) && <SignInPage />} */}
+      {/* {user && <MainContent user={user} />} */}
+      <MainContent/>
       <VersionTag/>
     </div>
   );

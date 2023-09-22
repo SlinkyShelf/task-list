@@ -62,4 +62,11 @@ function readPath(path, drives)
     return { "data": data, "setData": setData, "target": target }
 }
 
-export { readPath, useGlobalData, rawClone }
+function useUpdates()
+{   
+    const updateLocal = useCallback(() => {
+
+    }, [])
+}
+
+export { readPath, useGlobalData, rawClone, useUpdates }
