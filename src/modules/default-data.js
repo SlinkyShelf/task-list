@@ -1,3 +1,6 @@
+function objClone(obj)
+{return JSON.parse(JSON.stringify(obj))}
+
 const defaultTag = {
   "name": "School",
   "color": "#ff0000"
@@ -16,8 +19,12 @@ const defaultTask = {
 const defaultTaskList = {
   "type": "task-list",
   "tags": {
-    // "fakeId": true
+    
   }
+}
+
+const defaultSettings = {
+
 }
 
 const defaultFrameData = {
@@ -46,9 +53,21 @@ const defaultFrameData = {
         }
       }
     },
-    "settings": {
-
-    }
   }
 
-export { defaultFrameData }
+const defaultUserData = {
+  "frames": {
+
+  },
+  "settings": objClone(defaultSettings)
+}
+
+export { 
+  defaultFrameData, 
+  defaultSettings, 
+  defaultUserData,  
+  defaultTaskList, 
+  defaultTag, 
+  defaultTask, 
+  objClone 
+}

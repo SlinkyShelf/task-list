@@ -1,11 +1,11 @@
 import "./Footer.scss"
+import { useState } from "react";
 
 import store from "../../modules/store";
 
 function Footer()
 {
-    const [userData, setUserData] = store.useState("user-data")
-    const [currentPage, setCurrentPage] = store.useState("current-page")
+    const [currentPage, setCurrentPage] = useState("")
 
     return <div className="Footer">
         <div className="Footer-Section">

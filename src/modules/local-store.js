@@ -3,7 +3,10 @@ import store from "./store.js";
 
 function getJsonData(key)
 {
-    return JSON.parse(localStorage.getItem(key))
+    const raw = localStorage.getItem(key)
+    if (raw == null || raw == "")
+        return null
+    return JSON.parse(raw)
 }
 
 function storeData(key, data)
@@ -16,7 +19,9 @@ function LocalStore({docName, storename})
     const [data, setData] = store.useState(storename)
     const [gotData, setGotData] = useState(false)
     useEffect(() => {
-        setData(getJsonData(docName))
+        let d = getJsonData(docName)
+        if (d != null)
+            setData(d)
         setGotData(true)
     }, [])
 

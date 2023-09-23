@@ -43,18 +43,18 @@ function TagTab({tag, tagId, path})
         }
     }, [colorRef])
 
-    const drives = {
-        "Firebase": {
-            "data": firebaseUserData,
-            "setData": setFirebaseUserData
-        }
-    }
+    // const drives = {
+    //     "Firebase": {
+    //         "data": firebaseUserData,
+    //         "setData": setFirebaseUserData
+    //     }
+    // }
 
     function changeName()
     {
-        let {data, setData, target: _tag} = readPath(path, drives)
-        _tag.name = newName;
-        setData(data)
+        // let {data, setData, target: _tag} = readPath(path, drives)
+        // _tag.name = newName;
+        // setData(data)
 
         setRenaming("")
     }
@@ -82,9 +82,9 @@ function TagTab({tag, tagId, path})
 
     function changeColor()
     {
-        let {data, setData, target: _tag} = readPath(path, drives)
-        _tag.color = newColor;
-        setData(data)
+        // let {data, setData, target: _tag} = readPath(path, drives)
+        // _tag.color = newColor;
+        // setData(data)
     }
 
     return <div className="TagsPage-Tag" {...(!(isRenaming() || isChangingColor()) && longPressEvent)}>

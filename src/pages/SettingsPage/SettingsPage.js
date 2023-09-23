@@ -4,7 +4,7 @@ import "./SettingsPage.scss"
 
 import store from "../../modules/store";
 
-import defaultUserData from "../../modules/default-user-data.js";
+import {defaultUserData} from "../../modules/default-data.js";
 import { rawClone } from "../../modules/data-handler";
 
 function SettingsPage({user})
