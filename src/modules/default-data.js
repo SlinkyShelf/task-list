@@ -28,6 +28,8 @@ const defaultSettings = {
 }
 
 const defaultFrameData = {
+  "title": "Frame Title",
+  "type": "local",
     "documents": {
       "First List": {
         "type": "task-list",

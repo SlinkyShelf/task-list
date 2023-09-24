@@ -37,6 +37,11 @@ $font-margin: .5em;
     margin-right: $font-margin;
 }
 
+.mr-v {
+    margin-top: $font-margin;
+    margin-bottom: $font-margin;
+}
+
 .t-center {
     text-align: center;
     // justify-content: center;

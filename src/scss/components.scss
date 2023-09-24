@@ -79,7 +79,8 @@
     $width: 70%;
     $padding: 1em;
 
-    margin-top: 5vh;
+    margin-top: 2.5vh;
+    margin-bottom: 2.5vh;
 
     background-color: lighten($background-color, 5%);
     font-size: calc($font-scale * 1.5);
@@ -98,6 +99,7 @@
 
 .Section-Header {
     font-size: calc($font-scale * 2);
+    color: white;
     text-align:  center;
 }
 
@@ -110,10 +112,49 @@
     margin-top: 1.5vh;
 } 
 
+.Section-TextInput {
+    // width: 50%;
+    font-size: calc($font-scale * 1.5);
+    display: flex;
+    width: 50%;
+}
+
+@mixin input-padding {
+    $h-padding: 1.25em;
+    $v-padding: .7em;
+
+    padding-left: $h-padding;
+    padding-right: $h-padding;
+    padding-bottom: $v-padding;
+    padding-top: $v-padding;
+}
+
+.Section-DropDown {
+    background-color: $pop-background-2;
+    color: white;
+    font-size: calc($font-scale * 1.5);
+    border: none;
+
+    font-family: $font;
+
+    border-radius: 1em;
+
+    @include input-padding;
+}
+
 .Section-Button-1 {
 
+    color: white;
+
     font-size: calc($font-scale * 1.5);
-    padding: 1em;
+
+    
+    @include input-padding;
+
+    display: flex;
+
+
+    
     border-radius: 1em;
 
     background-color: $pop-background-2;
