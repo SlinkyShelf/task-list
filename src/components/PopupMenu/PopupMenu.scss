@@ -1,0 +1,69 @@
+@use "../../scss/theme.scss" as *;
+
+.PopupMenu {
+    $width: 90vw;
+    $height: 80vh;
+
+
+    width: $width;
+    height: $height;
+
+    left: calc((100vw - $width) / 2);
+
+    border-radius: 2em;
+    border: $small-border;
+
+    // border
+
+    background-color: lighten($background-color, 2%);
+
+    position: absolute;
+
+    transition: all .5s;
+
+    &.open {
+        bottom: calc((100% - $height) / 2);
+    }
+
+    &.closed {
+        bottom: -125vh;
+    }
+}
+
+.PopupMenu-Filter {
+    position: absolute;
+    width: 100vw;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+
+    background-color: rgba(0, 0, 0, 0.699);
+
+    transition: all .5s;
+
+    
+
+    &.open {
+        // pointer-events: none;
+    }
+
+    &.closed {
+        pointer-events: none;
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
+.Popup-Close {
+    position: absolute;
+    left: 2vh;
+    top: 2vh;
+}
+
+.PopupMenu-Title {
+    color: white;
+    font-size: $sub-header-size;
+
+    text-align: center;
+
+    margin-top: 2vh;
+}

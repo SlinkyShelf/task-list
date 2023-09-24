@@ -1,0 +1,29 @@
+@use "../../scss/theme.scss" as *;
+
+.AddButton {
+    position: absolute;
+    right: 5vw;
+    bottom: 5vw;
+
+    width: 10vh;
+    height: 10vh;
+
+    background-color: lighten($pop-background-1, 0%);
+
+    border-radius: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.AddButton-Icon {
+    background-image: url("../../imgs/add.png");
+    width: 80%;
+    height: 80%;
+
+    filter: invert(50%);
+
+    background-position: center;
+    background-size: contain;
+}
