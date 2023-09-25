@@ -24,15 +24,43 @@
 }
 
 .FramesPage-Frame {
-    $size: 30vw;
+    $size: 35vw;
     $margin: calc((100vw - $size * 2) / 4);
     width: $size;
     height: $size;
     border-radius: 10%;
-    border: $small-border;
+    // border: $small-border;
+
+    font-size: calc($font-scale * 1.3);
+
+    box-shadow: $shadow;
+
+    background-color: $pop-background-1;
+
+    position: relative;
 
     // margin-left: $margin;
     // margin-right: $margin;
     // margin-top: $margin;
     // margin-bottom: $margin;
+}
+
+$frame-edge-spacing: .7em;
+.FramesPage-Frame-Title {
+    position: absolute;
+    bottom: $frame-edge-spacing;
+    left: $frame-edge-spacing;
+
+    color: white;
+    text-shadow: $shadow;
+}
+
+.FramesPage-Frame-Type {
+    position: absolute;
+    left: $frame-edge-spacing;
+    top: $frame-edge-spacing;
+}
+
+.FramesPage-Frame-TripleDot {
+    background-color: $pop-background-2;
 }

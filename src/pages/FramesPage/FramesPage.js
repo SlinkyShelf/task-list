@@ -13,19 +13,23 @@ function Frame({path})
 {
     const [frameData, setFrameData] = useState({})
 
-    useEffect(() => {
+    const { readPath } = useGlobalData()
 
+    useEffect(() => {
+        const {data, setData, target} = readPath(path)
+        setFrameData(target)
     }, [path])
 
     return <div className="FramesPage-Frame">
-
+        <div className="FramesPage-Frame-Title">{frameData.title}</div>
+        <div className="FramesPage-Frame-Type icon-folder"/>
     </div>
 }
 
 function FramesPage()
 {
     const {dataUpdates, readPath, localUserData, firebaseUserData} = useGlobalData()
-    const [frames, setFrames] = useState([""])
+    const [frames, setFrames] = useState([])
 
     const [newFrameTitle, setNewFrameTitle] = useState("Untitled")
     const [editTitle, setEditTitle] = useState(false)
@@ -35,11 +39,11 @@ function FramesPage()
 
     useEffect(() => {
         const newFrames = []
-        Object.keys(localUserData.frames).map((frame, id) => {
+        Object.keys(localUserData.frames).map((id) => {
             newFrames.push("local:frames/"+id)
         })
 
-        Object.keys(firebaseUserData.frames).map((frame, id) => {
+        Object.keys(firebaseUserData.frames).map((id) => {
             newFrames.push("firebase:frames/"+id)
         })
 
@@ -77,6 +81,7 @@ function FramesPage()
         setEditTitle(false)
         setNewFrameTitle("Untitled")
         setNewFrameType("local")
+        setPopupOpen(false)
     }
 
     return <div className="FramesPage">
@@ -85,6 +90,7 @@ function FramesPage()
             {frames.map((path) => {
                 return <Frame path={path} key={path}/>
             })}
+            <div className="FramesPage-Frame" style={{filter: "opacity(0%)"}}></div>
         </div>
         <AddButton onClick={() => {setPopupOpen(true); console.log("Pressed")}}/>
         <PopupMenu open={popupOpen} setOpen={setPopupOpen} title="New Frame">

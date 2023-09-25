@@ -86,7 +86,7 @@ function findName(list, defaultName)
     return newName
 }
 
-const base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+const base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-"
 function createId(checkTable)
 {
     let id = ""

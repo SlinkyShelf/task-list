@@ -94,6 +94,8 @@
 
     padding: 1em;
 
+    box-shadow: $shadow;
+
     // margin-left: calc(100% - $width / 2 - $padding/2);
 }
 
@@ -117,6 +119,8 @@
     font-size: calc($font-scale * 1.5);
     display: flex;
     width: 50%;
+
+    box-shadow: $shadow;
 }
 
 @mixin input-padding {
@@ -140,6 +144,8 @@
     border-radius: 1em;
 
     @include input-padding;
+
+    box-shadow: $shadow;
 }
 
 .Section-Button-1 {
@@ -160,6 +166,8 @@
     background-color: $pop-background-2;
 
     margin-top: 1vh;
+
+    box-shadow: $shadow;
 }
 
 .Section-CheckBox {
