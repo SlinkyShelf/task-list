@@ -1,8 +1,8 @@
 import "./TripleDot.scss"
 
-function TripleDot({style, menu})
+function TripleDot({style, onClick})
 {
-    <div className="TripleDot" style={style}>
+    return <div className="TripleDot" style={style} onClick={onClick}>
         <div className="dot"/>
         <div className="dot"/>
         <div className="dot"/>
