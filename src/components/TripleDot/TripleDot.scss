@@ -1,0 +1,31 @@
+@use "../../scss/theme.scss" as *;
+
+.TripleDot {
+    background-color: $pop-background-2;
+
+    position: absolute;
+    top: $frame-edge-spacing;
+    right: $frame-edge-spacing;
+
+    width: 25%;
+    height: 25%;
+    border-radius: 5em;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    & .dot {
+        width: 1vw;
+        height: 1vw;
+        background-color: white;
+        border-radius: 100%;
+
+        margin-right: 15%;
+
+        &:last-child {
+            margin-right: 0%;
+        }
+    }
+}

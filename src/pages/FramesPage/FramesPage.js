@@ -9,6 +9,8 @@ import PopupMenu from "../../components/PopupMenu/PopupMenu"
 import { defaultFrameData, objClone } from "../../modules/default-data"
 import { createId } from "../../modules/helpers"
 
+import TripleDot from "../../components/TripleDot/TripleDot"
+
 function Frame({path})
 {
     const [frameData, setFrameData] = useState({})
@@ -23,6 +25,7 @@ function Frame({path})
     return <div className="FramesPage-Frame">
         <div className="FramesPage-Frame-Title">{frameData.title}</div>
         <div className="FramesPage-Frame-Type icon-folder"/>
+        <TripleDot/>
     </div>
 }
 
