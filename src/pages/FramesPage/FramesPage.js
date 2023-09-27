@@ -10,17 +10,18 @@ import { defaultFrameData, objClone } from "../../modules/default-data"
 import { createId } from "../../modules/helpers"
 
 import TripleDot from "../../components/TripleDot/TripleDot"
+import { getLastId, popId } from "../../modules/path-functions"
 
 function Frame({path, edit})
 {
     const [frameData, setFrameData] = useState({})
 
-    const { readPath } = useGlobalData()
+    const { readPath, dataUpdates } = useGlobalData()
 
     useEffect(() => {
         const {data, setData, target} = readPath(path)
         setFrameData(target)
-    }, [path])
+    }, [path, ...dataUpdates])
 
     return <div className="FramesPage-Frame">
         <div className="FramesPage-Frame-Title">{frameData.title}</div>
@@ -31,16 +32,21 @@ function Frame({path, edit})
 
 function TitleEditSection({title, setTitle})
 {
+    const [tempTitle, setTempTitle] = useState("")
     const [editTitle, setEditTitle] = useState(false)
+
+    useEffect(() => {
+        setTempTitle(title)
+    }, [title])
 
     return <div className="Section">
         <div className="Section-Header">Title</div>
         {editTitle?
         <div className="Section-Line">
-            <input className="Section-TextInput" value={title} 
-                onChange={(e) => setTitle(e.target.value)}/>
+            <input className="Section-TextInput" value={tempTitle} 
+                onChange={(e) => setTempTitle(e.target.value)}/>
             <div className="Section-Button-1" 
-                onClick={() => setEditTitle(false)}>Apply</div>
+                onClick={() => {setEditTitle(false); setTitle(tempTitle)}}>Apply</div>
         </div>:<div className="Section-Line">
             <div className="Section-Info-1">{title}</div>
             <div className="Section-Button-1" 
@@ -52,15 +58,44 @@ function TitleEditSection({title, setTitle})
 
 function EditFramePopup({open, setOpen, path})
 {
-    const [frameData, setFrameData] = useState({})
-    const [frameTitle, setFrameTitle] = useState("Untitled")
+    const [frameData, setFrameData] = useState(objClone(defaultFrameData))
     
-    const {readPath} = useGlobalData()
+    const {readPath, dataUpdates} = useGlobalData()
+
+    function updateFrameTitle(newTitle)
+    {
+        const {data, setData, target} = readPath(path)
+        target.title = newTitle
+        setData(data)
+    }
+
+    useEffect(() => {
+        if (!path) {return;}
+
+        const {target} = readPath(path)
+
+        setFrameData(target)
+    }, [...dataUpdates, path])
+
+    function deleteFrame()
+    {
+        if (window.confirm(`Delete Frame \"${frameData.title}\"?`))
+        {
+            const id = getLastId(path)
+            const popedPath = popId(path)
+
+            const {data, setData, target} = readPath(popedPath)
+            delete target[id]
+            setData(data)
+            setOpen(false)
+        }
+    }
 
 
-    return (path && <PopupMenu open={open} setOpen={setOpen} title="Edit Frame">
-        <TitleEditSection title={frameTitle} setTitle={setFrameTitle}/>
-    </PopupMenu>)
+    return <PopupMenu open={open} setOpen={setOpen} title={"Edit Frame: "+frameData.title}>
+        <TitleEditSection title={frameData.title} setTitle={updateFrameTitle}/>
+        <div className="Section-Button-1 red" onClick={deleteFrame}>Delete</div>
+    </PopupMenu>
 }
 
 function CreateFramePopup({open, setOpen})
@@ -144,6 +179,8 @@ function FramesPage()
         console.log(localUserData, firebaseUserData)
 
         setFrames(newFrames)
+
+        console.log("newFrames: ", newFrames)
     }, [...dataUpdates])
 
     function edit(path)

@@ -32,6 +32,9 @@ function useGlobalData()
         const driveArgs = driveSplit[0].split(".")
         const driveName = driveArgs[0]
 
+        if (!drives[driveName])
+            console.warn("Invalid Drive: \""+driveName+"\" in \""+path+"\"")
+
         const driveData = objClone(drives[driveName].data)
         let target = driveData
 

@@ -168,6 +168,10 @@
     margin-top: 1vh;
 
     box-shadow: $shadow;
+
+    &.red {
+        background-color: $important-background;
+    }
 }
 
 .Section-CheckBox {
