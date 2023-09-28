@@ -190,12 +190,15 @@ function FramesPage()
     }
 
     return <div className="FramesPage">
+        <div className="FramePage-Grid-Container">
         <div className="Title-Tab">Frames</div>
-        <div className="FramePage-Frame-Grid">
-            {frames.map((path) => {
-                return <Frame path={path} key={path} edit={edit}/>
-            })}
-            <div className="FramesPage-Frame" style={{filter: "opacity(0%)"}}></div>
+            <div className="FramePage-Frame-Grid">
+                {frames.map((path) => {
+                    return <Frame path={path} key={path} edit={edit}/>
+                })}
+                <div className="FramesPage-Frame" style={{filter: "opacity(0%)"}}></div>
+            </div>
+            <div/><div/>
         </div>
         <AddButton onClick={() => {setPopupOpen(true); console.log("Pressed")}}/>
         <CreateFramePopup open={popupOpen} setOpen={setPopupOpen}/>

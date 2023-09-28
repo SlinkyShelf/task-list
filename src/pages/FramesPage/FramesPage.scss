@@ -3,6 +3,20 @@
 .FramesPage {
     display: grid;
     flex-direction: column;
+
+    overflow-y: hidden;
+}
+
+.FramePage-Grid-Container {
+    width: 100%;
+    height: calc(100vh - $footer-size);
+    overflow-y: auto;
+
+    align-items: center;
+
+    display: flex;
+    // justify-content: center;
+    flex-direction: column;
 }
 
 .FramePage-Frame-Grid {
@@ -15,6 +29,10 @@
 
     gap: $gap;
     justify-self: center;
+
+    // position: relative;
+
+    // height: 600px;
 
     // justify-content: center;
 

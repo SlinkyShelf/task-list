@@ -69,7 +69,7 @@
 
 .anti-footer {
     height: calc(100vh - $footer-size);
-    overflow-y: scroll;
+    overflow-y: hidden;
 
     position: relative;
     // background-color: blue;
