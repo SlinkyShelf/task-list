@@ -35,8 +35,12 @@ const defaultFrameData = {
         "type": "task-list",
         "tags": {
           "fakeId": true
-        }
+        },
       },
+      "First-Folder": {
+        "type": "folder",
+        "dir": {}
+      }
     },
     "tags": {
       "fakeId": {

@@ -60,7 +60,7 @@ function App() {
   const [stateUser, setStateUser ] = store.useState("user")
 
   useEffect(() => {
-    setStateUser(user)
+    // setStateUser(user)
   }, [user])
 
   return (

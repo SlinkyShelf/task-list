@@ -9,7 +9,7 @@
 
 .FramePage-Grid-Container {
     width: 100%;
-    height: calc(100vh - $footer-size);
+    height: calc(100vh - $footer-size - $tab-height);
     overflow-y: auto;
 
     align-items: center;
@@ -39,6 +39,7 @@
     // width: 100%;
 
     margin-top: $gap;
+    margin-bottom: $gap;
 }
 
 .FramesPage-Frame {

@@ -1,4 +1,4 @@
-import "./AllListsPage.scss"
+import "./DocumentsPage.scss"
 import store from "../../modules/store"
 import { useEffect, useState, useRef } from "react"
 
@@ -8,7 +8,8 @@ import {createStore } from 'state-pool';
 import { ConvertListsPath, getListName, getParentPath, safePath } from "../../modules/helpers";
 import {ActionMenu, ActionMenuState} from "../../components/ActionMenu/ActionMenu";
 import { getTouchPos } from "../../modules/helpers";
-import { useGlobalData } from "../../modules/data-handler";
+import useGlobalData from "../../hooks/useGlobalData";
+import { defaultFrameData, objClone } from "../../modules/default-data";
 
 const listPageStore = createStore();
 listPageStore.setState("action-menu", ActionMenuState())
@@ -32,13 +33,11 @@ function FindName(list, defaultName)
     return newName
 }
 
-function ListTab({list, listName, depth, path})
+function ListTab({list, listName, depth, path, setDirPath})
 {
     depth = depth || 0
     const [open, setOpen] = useState(false)
     const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
-    const [currentPage, setCurrentPage] = store.useState("current-page")
-    const [listPath, setListPath] = store.useState("list-path")
 
     const longPressEvent = useLongPress(
         (e) => {
@@ -51,33 +50,37 @@ function ListTab({list, listName, depth, path})
         }, 
         () => {
             if (list.type == "folder")
-                setOpen(!open)
+            {
+                console.log(path)
+                setDirPath(path)
+
+            }
             else if (list.type == "list")
             {
-                setListPath(path)
-                setCurrentPage("list")
+                // setListPath(path)
+                // setCurrentPage("list")
             }
         });
 
-    const visibleStyle = {"display": open?"block":"none"}
+    // const visibleStyle = {"display": open?"block":"none"}
 
     return <div className="AllLists-Tab-Container">
         {list.type == "folder" && <div className="AllLists-Folder AllLists-Tab">
             <div className="AllLists-Title Tab" {...longPressEvent}>
                 <div className="mr-h icon-folder" />
                 {listName}
-                {depth > 0 &&  <div className="Down-Line-Side"/>}
+                {/* {depth > 0 &&  <div className="Down-Line-Side"/>} */}
             </div>
-            <div className="AllLists-Folder-List" style={visibleStyle}>
+            {/* <div className="AllLists-Folder-List" style={visibleStyle}>
                 {Object.keys(list.lists).map((lName) => {
                     return <ListTab list={list.lists[lName]} listName={lName} 
                     key={lName} depth={depth+1} path={`${path}.${lName}`}/>
                 })}
-            </div>
-            <div className="Down-Line-Up" style={visibleStyle}/>
+            </div> */}
+            {/* <div className="Down-Line-Up" style={visibleStyle}/> */}
         </div>}
 
-        {list.type == "list" && <div>
+        {list.type == "task-list" && <div>
             <div className="AllLists-List Tab" {...longPressEvent}>
                 {listName}
                 {depth > 0 &&  <div className="Down-Line-Side"/>}
@@ -86,37 +89,38 @@ function ListTab({list, listName, depth, path})
     </div>
 }
 
-function SourceTab({source})
+function convertToDocPath(path)
 {
-    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
-
-    const longPressEvent = useLongPress(
-        (e) => {
-            const menu = {...actionMenu}
-            menu.type = "base"
-            menu.path = source
-            menu.open = true
-            menu.pos = getTouchPos(e)
-            setActionMenu(menu)
-        },  
-        () => {
-            // if ()
-            // setOpen(!open)
-        },);
-
-    return <div className="Source-Tab" {...longPressEvent}>
-        {source}
-    </div>
+    return path.replace("/", "/dir/")
 }
 
-function AllListsPage()
-{
-    const [firebaseUserData, setFirebaseUserData] = store.useState("firebase-user-data")
-    const [currentPage, setCurrentPage] = store.useState("current-page")
-    const [editPath, setEditPath] = store.useState("list-edit-path")
-    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
+function polishPath(path)
+{   
+    if (path.indexOf("/") == 0)
+        return path.substring(1)
+}
 
-    const { readData } = useGlobalData()
+function DocumentsPage({framePath, close})
+{
+    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
+    const [frameData, setFrameData] = useState(objClone(defaultFrameData))
+    const [dirPath, setDirPath] = useState("")
+    const [dir, setDir] = useState({})
+
+    const { readPath, dataUpdates } = useGlobalData()
+
+    useEffect(() => {
+        let {target} = readPath(framePath)
+
+        setFrameData(target)
+    }, [...dataUpdates])
+
+    useEffect(() => {
+        const pathToRead = `${framePath}/documents/${convertToDocPath(dirPath)}`
+        console.log(pathToRead)
+        let {target} = readPath(pathToRead)
+        setDir(target)
+    }, [dirPath, frameData])
 
     function openActionMenu(toggle)
     {
@@ -128,14 +132,14 @@ function AllListsPage()
     function create(d)
     {
         console.log(ConvertListsPath(actionMenu.path), actionMenu.path)
-        let {data, setData, target} = readData(ConvertListsPath(actionMenu.path))
+        let {data, setData, target} = readPath(ConvertListsPath(actionMenu.path))
 
         const listName = FindName(target.lists, "Untitled")
 
         target.lists[listName] = d
         setData(data)
-        setEditPath(`${actionMenu.path}.${listName}`)
-        setCurrentPage("list-edit")
+        // setEditPath(`${actionMenu.path}.${listName}`)
+        // setCurrentPage("list-edit")
     }   
 
     function CreateList()
@@ -157,7 +161,7 @@ function AllListsPage()
     function Delete()
     {
         const actualPath = ConvertListsPath(getParentPath(actionMenu.path))
-        const {data, setData, target} = readData(actualPath)
+        const {data, setData, target} = readPath(actualPath)
         delete target.lists[getListName(actionMenu.path)]
         setData(data)
     }
@@ -168,8 +172,8 @@ function AllListsPage()
 
     const editOptions = {
         "Edit": () => {
-            setEditPath(actionMenu.path)
-            setCurrentPage("list-edit")
+            // setEditPath(actionMenu.path)
+            // setCurrentPage("list-edit")
         },
         "Delete": Delete,
     }
@@ -185,16 +189,26 @@ function AllListsPage()
         "list": {...editOptions, ...defaultOptions}
     }
 
-    return <div className="AllLists">
+    const dirData = dirPath == ""?frameData.documents:dir.dir
+
+    return <div className="AllLists page">
         <ActionMenu state={actionMenu} setState={setActionMenu} options={menuOptions}/>
-        <SourceTab source={"Firebase"}/>
+        <div className="Title-Tab">
+            Documents
+            <div className="page-back icon-back" onClick={close}/>
+        </div>
+        <div className="DocumentPage-Path">
+            {/* Temp */}
+            <span>{frameData.title || ""}</span>
+            {`${dirPath}/`}
+        </div>
         <div className="AllLists-List-Table mr-h">
-            {Object.keys(safePath(firebaseUserData, "lists")).map((listName) => {
-                return <ListTab listName={listName} list={firebaseUserData.lists[listName]} key={listName} 
-                path={`Firebase.${listName}`}/>
+            {Object.keys(dirData).map((listName) => {
+                return <ListTab listName={listName} list={dirData[listName]} key={listName} 
+                path={polishPath(`${dirPath}/${listName}`)} setDirPath={setDirPath}/>
             })}
         </div>
     </div>
 }
 
-export default AllListsPage
+export default DocumentsPage

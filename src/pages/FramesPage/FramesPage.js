@@ -11,8 +11,9 @@ import { createId } from "../../modules/helpers"
 
 import TripleDot from "../../components/TripleDot/TripleDot"
 import { getLastId, popId } from "../../modules/path-functions"
+import DocumentsPage from "../DocumentsPage/DocumentsPage"
 
-function Frame({path, edit})
+function Frame({path, edit, setDocPagePath})
 {
     const [frameData, setFrameData] = useState({})
 
@@ -23,7 +24,7 @@ function Frame({path, edit})
         setFrameData(target)
     }, [path, ...dataUpdates])
 
-    return <div className="FramesPage-Frame">
+    return <div className="FramesPage-Frame" onClick={() => setDocPagePath(path)}>
         <div className="FramesPage-Frame-Title">{frameData.title}</div>
         <div className="FramesPage-Frame-Type icon-folder"/>
         <TripleDot onClick={() => edit(path)}/>
@@ -161,6 +162,8 @@ function FramesPage()
     const {dataUpdates, readPath, localUserData, firebaseUserData} = useGlobalData()
     const [frames, setFrames] = useState([])
 
+    const [docsPagePath, setDocPagePath] = useState()
+
     const [popupOpen, setPopupOpen] = useState(false)
 
     const [editing, setEditing] = useState()
@@ -179,8 +182,6 @@ function FramesPage()
         console.log(localUserData, firebaseUserData)
 
         setFrames(newFrames)
-
-        console.log("newFrames: ", newFrames)
     }, [...dataUpdates])
 
     function edit(path)
@@ -189,20 +190,21 @@ function FramesPage()
         setEditing(path)
     }
 
-    return <div className="FramesPage">
+    return <div className="FramesPage page">
+        {/* <div className="Title-Tab">Frames</div> */}
         <div className="FramePage-Grid-Container">
-        <div className="Title-Tab">Frames</div>
             <div className="FramePage-Frame-Grid">
                 {frames.map((path) => {
-                    return <Frame path={path} key={path} edit={edit}/>
+                    return <Frame path={path} key={path} edit={edit} setDocPagePath={setDocPagePath}/>
                 })}
                 <div className="FramesPage-Frame" style={{filter: "opacity(0%)"}}></div>
             </div>
-            <div/><div/>
         </div>
         <AddButton onClick={() => {setPopupOpen(true); console.log("Pressed")}}/>
         <CreateFramePopup open={popupOpen} setOpen={setPopupOpen}/>
         <EditFramePopup open={editPopupOpen} setOpen={setEditPopupOpen} path={editing}/>
+
+        {docsPagePath && <DocumentsPage framePath={docsPagePath} close={() => setDocPagePath(null)}/>}
     </div>
 }
 

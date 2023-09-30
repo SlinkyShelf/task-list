@@ -20,10 +20,14 @@ $List-Tab-Spacing: .5em;
 
     display: flex;
     align-items: center;
+
+    // margin-top: 0px;
 }
 
 .AllLists-Folder {
     color: white;
+
+    // margin-top: 0px;
 }
 
 .not-selected {
@@ -71,4 +75,20 @@ $line-width: 1px;
     bottom: calc($tab-height / 2);
     z-index: -1;
     left: calc($tab-indent / 2);
+}
+
+.DocumentPage-Path {
+    display: inline-block;
+    color: white;
+    font-size: calc($font-scale * 1.5);
+    padding-left: 1em;
+    padding-top: .25em;
+    padding-bottom: .25em;
+
+    width: 100%;
+
+
+    background-color: $pop-background-1;
+
+    box-shadow: $shadow;
 }
