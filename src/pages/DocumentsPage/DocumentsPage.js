@@ -11,6 +11,8 @@ import { getTouchPos } from "../../modules/helpers";
 import useGlobalData from "../../hooks/useGlobalData";
 import { defaultFrameData, objClone } from "../../modules/default-data";
 
+import DocTab from "../../components/DocTab/DocTab";
+
 const listPageStore = createStore();
 listPageStore.setState("action-menu", ActionMenuState())
 
@@ -33,62 +35,6 @@ function FindName(list, defaultName)
     return newName
 }
 
-function ListTab({list, listName, depth, path, setDirPath})
-{
-    depth = depth || 0
-    const [open, setOpen] = useState(false)
-    const [actionMenu, setActionMenu] = listPageStore.useState("action-menu")
-
-    const longPressEvent = useLongPress(
-        (e) => {
-            const menu = {...actionMenu}
-            menu.type = list.type
-            menu.path = path
-            menu.open = true
-            menu.pos = getTouchPos(e)
-            setActionMenu(menu)
-        }, 
-        () => {
-            if (list.type == "folder")
-            {
-                console.log(path)
-                setDirPath(path)
-
-            }
-            else if (list.type == "list")
-            {
-                // setListPath(path)
-                // setCurrentPage("list")
-            }
-        });
-
-    // const visibleStyle = {"display": open?"block":"none"}
-
-    return <div className="AllLists-Tab-Container">
-        {list.type == "folder" && <div className="AllLists-Folder AllLists-Tab">
-            <div className="AllLists-Title Tab" {...longPressEvent}>
-                <div className="mr-h icon-folder" />
-                {listName}
-                {/* {depth > 0 &&  <div className="Down-Line-Side"/>} */}
-            </div>
-            {/* <div className="AllLists-Folder-List" style={visibleStyle}>
-                {Object.keys(list.lists).map((lName) => {
-                    return <ListTab list={list.lists[lName]} listName={lName} 
-                    key={lName} depth={depth+1} path={`${path}.${lName}`}/>
-                })}
-            </div> */}
-            {/* <div className="Down-Line-Up" style={visibleStyle}/> */}
-        </div>}
-
-        {list.type == "task-list" && <div>
-            <div className="AllLists-List Tab" {...longPressEvent}>
-                {listName}
-                {depth > 0 &&  <div className="Down-Line-Side"/>}
-            </div>
-        </div>}
-    </div>
-}
-
 function convertToDocPath(path)
 {
     return path.replace("/", "/dir/")
@@ -106,21 +52,25 @@ function DocumentsPage({framePath, close})
     const [frameData, setFrameData] = useState(objClone(defaultFrameData))
     const [dirPath, setDirPath] = useState("")
     const [dir, setDir] = useState({})
+    const [dirDir, setDirDir] = useState({})
 
     const { readPath, dataUpdates } = useGlobalData()
 
-    useEffect(() => {
-        let {target} = readPath(framePath)
-
-        setFrameData(target)
-    }, [...dataUpdates])
-
-    useEffect(() => {
-        const pathToRead = `${framePath}/documents/${convertToDocPath(dirPath)}`
-        console.log(pathToRead)
+    function updateDirPath(newPath)
+    {
+        setDirPath(newPath)
+        const pathToRead = `${framePath}/documents/${convertToDocPath(newPath)}`
+        console.log(newPath, pathToRead)
         let {target} = readPath(pathToRead)
         setDir(target)
-    }, [dirPath, frameData])
+        setDirDir(newPath == ""?frameData.documents:target.dir)
+    }
+
+    useEffect(() => {
+        let {target} = readPath(framePath)
+        setFrameData(target)
+        updateDirPath(dirPath)
+    }, [...dataUpdates])
 
     function openActionMenu(toggle)
     {
@@ -189,8 +139,6 @@ function DocumentsPage({framePath, close})
         "list": {...editOptions, ...defaultOptions}
     }
 
-    const dirData = dirPath == ""?frameData.documents:dir.dir
-
     return <div className="AllLists page">
         <ActionMenu state={actionMenu} setState={setActionMenu} options={menuOptions}/>
         <div className="Title-Tab">
@@ -200,12 +148,21 @@ function DocumentsPage({framePath, close})
         <div className="DocumentPage-Path">
             {/* Temp */}
             <span>{frameData.title || ""}</span>
-            {`${dirPath}/`}
+            {`/${dirPath}`}
         </div>
         <div className="AllLists-List-Table mr-h">
-            {Object.keys(dirData).map((listName) => {
-                return <ListTab listName={listName} list={dirData[listName]} key={listName} 
-                path={polishPath(`${dirPath}/${listName}`)} setDirPath={setDirPath}/>
+            {Object.keys(dirDir).map((docName) => {
+                const docData = dirDir[docName]
+                function openDoc()
+                {
+                    if (docData.type == "folder")
+                    {
+                        updateDirPath(polishPath(`${dirPath}/${docName}`))
+                    }
+                }
+
+                return <DocTab docName={docName} docData={docData} key={docName} 
+                    open={openDoc}/>
             })}
         </div>
     </div>
