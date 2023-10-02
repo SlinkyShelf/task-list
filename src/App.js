@@ -6,6 +6,7 @@ import "./scss/theme.scss"
 import "./scss/positions.scss"
 import "./scss/icons.scss"
 import "./scss/components.scss"
+import "./scss/sections.scss"
 
 import store from "./modules/store.js"
 import FirebaseStore from "./modules/firebase-store.js";

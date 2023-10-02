@@ -1,5 +1,29 @@
 @use "../../scss/theme.scss" as *;
 
+$closed-height: -125vh;
+$opened-height: 0%;
+
+@keyframes slide-open {
+    from {
+        height: $closed-height;
+    }
+
+    to {
+        height: $opened-height;
+    }
+}
+
+@keyframes slide-closed {
+    from {
+        height: $closed-height;
+    }
+
+    to {
+        height: $opened-height;
+    }
+}
+
+
 .PopupMenu {
     $width: 100vw;
     $height: 85vh;
@@ -26,7 +50,21 @@
     align-items: center;
     flex-direction: column;
 
+    // &::before {
+    //     &.open {
+    //         bottom: -125vh;
+    //     }
+    // }
+
+    // &::after {
+    //     &.open {
+    //         bottom: 0%;
+    //     }
+        
+    // }
+
     &.open {
+        // animation: slide-open .25s;
         bottom: 0%;
     }
 

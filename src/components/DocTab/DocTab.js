@@ -17,7 +17,7 @@ function DocTab({docName, docData, open})
 
         <div className="AllLists-List Tab" onClick={open}>
             <div className={`${iconClass} mr-r`} />
-            {docName}
+            {docData.title || "Error: No Title"}
         </div>
     </div>
 }

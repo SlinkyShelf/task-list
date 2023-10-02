@@ -1,0 +1,129 @@
+@use "./theme.scss" as *;
+
+.Section {
+    $width: 70%;
+    $padding: 1em;
+
+    margin-top: 2.5vh;
+    margin-bottom: 2.5vh;
+
+    background-color: lighten($background-color, 5%);
+    font-size: calc($font-scale * 1.5);
+
+    border-radius: 1.2em;
+    width: 70%;
+
+    // min-height: 20vh;
+
+    color: white;
+
+    padding: 1em;
+
+    box-shadow: $shadow;
+
+    // margin-left: calc(100% - $width / 2 - $padding/2);
+}
+
+.Section-Header {
+    font-size: calc($font-scale * 2);
+    color: white;
+    text-align:  center;
+}
+
+.Section-Line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 1.5vh;
+} 
+
+.Section-TextInput {
+    // width: 50%;
+    font-size: calc($font-scale * 1.5);
+    display: flex;
+    width: 50%;
+
+    box-shadow: $shadow;
+}
+
+@mixin input-padding {
+    $h-padding: 1.25em;
+    $v-padding: .7em;
+
+    padding-left: $h-padding;
+    padding-right: $h-padding;
+    padding-bottom: $v-padding;
+    padding-top: $v-padding;
+}
+
+.Section-DropDown {
+    background-color: $pop-background-2;
+    color: white;
+    font-size: calc($font-scale * 1.5);
+    border: none;
+
+    font-family: $font;
+
+    border-radius: 1em;
+
+    @include input-padding;
+
+    box-shadow: $shadow;
+}
+
+.Section-Button-1 {
+
+    color: white;
+
+    font-size: calc($font-scale * 1.5);
+
+    
+    @include input-padding;
+
+    display: flex;
+
+
+    
+    border-radius: 1em;
+
+    background-color: $pop-background-2;
+
+    margin-top: 1vh;
+
+    box-shadow: $shadow;
+
+    &.red {
+        background-color: $important-background;
+    }
+}
+
+.Section-CheckBox {
+    $size: calc($tab-height * .7);
+
+    border-radius: .25em;
+    border: white 1px solid;
+
+    height: $size;
+    width: $size;
+    background-color: $pop-background-2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Section-CheckBox-Check {
+    border-radius: .25em;
+
+    $size: calc($tab-height * .5);
+
+    height: $size;
+    width: $size;
+    background-color: white;    
+}
+
+.Section-Date {
+    font-size: calc($font-scale * 1.5);
+}

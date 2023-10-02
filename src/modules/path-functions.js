@@ -13,8 +13,34 @@ function popId(path)
 
 function getDrive(path)
 {
-    const driveSplit = path.split(":")
-    return driveSplit[0].split(".")[0]
+    return getFullDrive(path).split(".")[0]
 }
 
-export {getDrive, popId, getLastId}
+function getFullDrive(path)
+{
+    return path.split(":")[0]
+}
+
+function convertToLightPath(path)
+{
+    const lightPath = []
+    const split = path.split("/")
+    for (let i = 3; i < split.length; i+=2)
+    {   
+        lightPath.push(split[i])
+    }
+    return lightPath
+}
+
+function getFrameId(path)
+{
+    const split = path.split("/")
+    return split[1]
+}
+
+function getFramePath(path)
+{
+    return getFullDrive(path)+":"+"frames/"+getFrameId(path)
+}
+
+export {getDrive, popId, getLastId, convertToLightPath, getFrameId, getFullDrive, getFramePath}

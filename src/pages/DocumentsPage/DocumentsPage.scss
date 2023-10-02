@@ -81,11 +81,15 @@ $line-width: 1px;
     display: inline-block;
     color: white;
     font-size: calc($font-scale * 1.5);
-    padding-left: 1em;
+
+    $h-padding: 1em;
+
+    padding-left: $h-padding;
+    padding-right: $h-padding;
     padding-top: .25em;
     padding-bottom: .25em;
 
-    width: 100%;
+    width: calc(100vw - $h-padding * 2);
 
 
     background-color: $pop-background-1;

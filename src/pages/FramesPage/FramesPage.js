@@ -13,6 +13,8 @@ import TripleDot from "../../components/TripleDot/TripleDot"
 import { getLastId, popId } from "../../modules/path-functions"
 import DocumentsPage from "../DocumentsPage/DocumentsPage"
 
+import { TitleEditSection } from "../../components/SectionPresets/SectionPresets"
+
 function Frame({path, edit, setDocPagePath})
 {
     const [frameData, setFrameData] = useState({})
@@ -28,32 +30,6 @@ function Frame({path, edit, setDocPagePath})
         <div className="FramesPage-Frame-Title">{frameData.title}</div>
         <div className="FramesPage-Frame-Type icon-folder"/>
         <TripleDot onClick={() => edit(path)}/>
-    </div>
-}
-
-function TitleEditSection({title, setTitle})
-{
-    const [tempTitle, setTempTitle] = useState("")
-    const [editTitle, setEditTitle] = useState(false)
-
-    useEffect(() => {
-        setTempTitle(title)
-    }, [title])
-
-    return <div className="Section">
-        <div className="Section-Header">Title</div>
-        {editTitle?
-        <div className="Section-Line">
-            <input className="Section-TextInput" value={tempTitle} 
-                onChange={(e) => setTempTitle(e.target.value)}/>
-            <div className="Section-Button-1" 
-                onClick={() => {setEditTitle(false); setTitle(tempTitle)}}>Apply</div>
-        </div>:<div className="Section-Line">
-            <div className="Section-Info-1">{title}</div>
-            <div className="Section-Button-1" 
-                onClick={() => setEditTitle(true)}>Edit</div>
-        </div>}
-        
     </div>
 }
 
@@ -190,6 +166,10 @@ function FramesPage()
         setEditing(path)
     }
 
+    const addMenu = [
+        {"onClick": () => setPopupOpen(true)}
+    ]
+
     return <div className="FramesPage page">
         {/* <div className="Title-Tab">Frames</div> */}
         <div className="FramePage-Grid-Container">
@@ -200,7 +180,7 @@ function FramesPage()
                 <div className="FramesPage-Frame" style={{filter: "opacity(0%)"}}></div>
             </div>
         </div>
-        <AddButton onClick={() => {setPopupOpen(true); console.log("Pressed")}}/>
+        <AddButton menu={addMenu}/>
         <CreateFramePopup open={popupOpen} setOpen={setPopupOpen}/>
         <EditFramePopup open={editPopupOpen} setOpen={setEditPopupOpen} path={editing}/>
 
