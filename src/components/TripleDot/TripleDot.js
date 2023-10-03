@@ -1,8 +1,8 @@
 import "./TripleDot.scss"
 
-function TripleDot({style, onClick})
+function TripleDot({style, onClick, extraClasses})
 {
-    return <div className="TripleDot" style={style} onClick={(e) => {
+    return <div className={`TripleDot ${extraClasses}`} style={style} onClick={(e) => {
         onClick()
         e.stopPropagation()
         e.preventDefault()

@@ -1,6 +1,7 @@
 import "./DocTab.scss"
+import TripleDot from "../TripleDot/TripleDot"
 
-function DocTab({docName, docData, open})
+function DocTab({docName, docData, open, edit})
 {
     let iconClass = ""
     switch (docData.type)
@@ -15,9 +16,10 @@ function DocTab({docName, docData, open})
 
     return <div className="AllLists-Tab-Container">
 
-        <div className="AllLists-List Tab" onClick={open}>
+        <div className="AllLists-List Tab" onClick={open || (() => {})}>
             <div className={`${iconClass} mr-r`} />
             {docData.title || "Error: No Title"}
+            <TripleDot onClick={edit || (() => {})} extraClasses={"cr"}/>
         </div>
     </div>
 }

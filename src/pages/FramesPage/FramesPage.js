@@ -29,7 +29,7 @@ function Frame({path, edit, setDocPagePath})
     return <div className="FramesPage-Frame" onClick={() => setDocPagePath(path)}>
         <div className="FramesPage-Frame-Title">{frameData.title}</div>
         <div className="FramesPage-Frame-Type icon-folder"/>
-        <TripleDot onClick={() => edit(path)}/>
+        <TripleDot onClick={() => edit(path)} extraClasses={"tr"}/>
     </div>
 }
 

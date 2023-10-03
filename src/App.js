@@ -27,7 +27,6 @@ import VersionTag from "./components/VersionTag/VersionTag.js";
 
 import {defaultUserData, objClone} from "./modules/default-data.js";
 import LocalStore from "./modules/local-store.js";
-import { rawClone } from "./modules/data-handler.js";
 
 store.setState("firebase-user-data", objClone(defaultUserData))
 store.setState("local-user-data", objClone(defaultUserData))

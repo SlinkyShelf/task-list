@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import { readPath } from "./data-handler"
+// import { readPath } from "./data-handler"
 
 function getListName(path)
 {
@@ -102,4 +102,4 @@ function createId(checkTable)
 
 export { createId, base64 }
 
-export { readPath, ConvertListsPath, getListName, getParentPath, safePath, getTouchPos, findName }
+export { ConvertListsPath, getListName, getParentPath, safePath, getTouchPos, findName }

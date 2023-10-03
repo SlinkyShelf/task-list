@@ -12,6 +12,7 @@ import DocumentTypes from "../../modules/document-types";
 import { createId } from "../../modules/helpers";
 import AddButton from "../../components/AddButton/AddButton";
 import PopupMenu from "../../components/PopupMenu/PopupMenu";
+import { getLastId, popId } from "../../modules/path-functions";
 
 function DocumentsPage({framePath, close})
 {
@@ -19,8 +20,11 @@ function DocumentsPage({framePath, close})
 
     const [openDoc, setOpenDoc] = useState()
 
+    const [popUpOpen, setPopupOpen] = useState()
     const [popTitle, setPopTitle] = useState()
     const [newType, setNewType] = useState() 
+    const [editPath, setEditPath] = useState()
+    const [editDoc, setEditDoc] = useState({})
 
     const { readPath, dataUpdates } = useGlobalData()
 
@@ -33,7 +37,8 @@ function DocumentsPage({framePath, close})
         {"onClick": () => setNewType("folder"), "iconClass": "icon-folder"}
     ]
 
-    let NewTypeDoc = newType && DocumentTypes[newType].Create
+    const NewTypeDoc = newType && DocumentTypes[newType].Create
+    const EditDoc = editPath && editDoc.type && DocumentTypes[editDoc.type].Edit
 
     function createNewDoc(newDoc)
     {
@@ -45,7 +50,31 @@ function DocumentsPage({framePath, close})
         setNewType(null)
     }
 
+    function editDocFunc(newDoc)
+    {
+        const {target, data, setData} = readPath(popId(editPath))
+        const id = getLastId(editPath)
+        target[id] = newDoc
+        setData(data)
+
+        closePopup()
+    }
     
+    useEffect(() => {
+        if (!editPath) {return}
+
+        const {target, data, setData} = readPath(editPath)
+        console.log(target)
+        setEditDoc(target)
+    }, [editPath])
+
+    function closePopup()
+    {
+        setEditPath(null)
+        setEditDoc({})
+        setPopTitle("")
+        setNewType(null)
+    }
 
     return <div className="AllLists page">
         <div className="Title-Tab">
@@ -65,13 +94,20 @@ function DocumentsPage({framePath, close})
                 }
 
                 return <DocTab docName={docName} docData={docData} key={docName} 
-                    open={openDoc}/>
+                    open={openDoc} edit={() => setEditPath(framePath+"/documents/"+docName)}/>
             })}
         </div>
         
         <AddButton menu={addMenu}/>
-        <PopupMenu open={newType} setOpen={() => setNewType(null)} title={popTitle}>
-            {newType && <NewTypeDoc create={createNewDoc} close={() => setNewType(null)} setTitle={setPopTitle}/>}
+        <PopupMenu open={newType || editPath} setOpen={closePopup} title={popTitle}>
+            {newType && <NewTypeDoc create={createNewDoc} close={closePopup} setTitle={setPopTitle}/>}
+            {editPath && editDoc.type && <EditDoc 
+                setDoc={editDocFunc} 
+                doc={editDoc} 
+                frameData={frameData}
+                docPath={editPath}
+                setTitle={setPopTitle}
+                close={closePopup}/>}
         </PopupMenu>
         {openDoc && <DocumentPage documentPath={framePath+"/documents/"+openDoc} close={() => setOpenDoc(null)}/>}
     </div>

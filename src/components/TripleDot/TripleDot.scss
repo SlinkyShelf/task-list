@@ -6,11 +6,18 @@ $frame-edge-spacing: .7em;
     background-color: $pop-background-2;
 
     position: absolute;
-    top: $frame-edge-spacing;
-    right: $frame-edge-spacing;
 
-    width: 25%;
-    height: 25%;
+    &.tr { 
+        top: $frame-edge-spacing;
+        right: $frame-edge-spacing;
+    }
+
+    &.cr {
+        right: $frame-edge-spacing;
+    }
+
+    width: 1.7em;
+    height: 1.7em;
     border-radius: 5em;
 
     display: flex;

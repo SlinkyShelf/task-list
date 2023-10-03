@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react"
 import { convertToLightPath, getDrive, getFrameName } from "../modules/path-functions"
-import PopupMenu from "../components/PopupMenu/PopupMenu"
+import { getLastId, popId } from "../modules/path-functions"
 import DocTab from "../components/DocTab/DocTab"
 import { TitleEditSection } from "../components/SectionPresets/SectionPresets"
+import { objClone } from "../modules/default-data"
+import useGlobalData from "../hooks/useGlobalData"
+import useDocHelpers from "../hooks/useDocHelpers"
 
 const folderIcon = "icon-folder"
 
@@ -15,17 +18,20 @@ function Path({path, frameData})
         let frameSet = frameData.documents
 
         lightPath.map((p) => {
-            frameSet
-            display.push(frameSet[p])
+            display.push("/")
+            display.push(frameSet[p].title)
+            frameSet = frameSet[p].dir
         })
+
+        return display
     }
 
     return <div className="DocumentPage-Path">
         {/* Temp */}
         <span>{frameData.title}</span>
-        {generatePathChildren().map((dis) => {
-            return (dis == "/"?<span>/</span>:
-            <span>dis</span>)
+        {generatePathDisplay().map((dis, i) => {
+            return (dis == "/"?<span key={i}>/</span>:
+            <span key={i}>{dis}</span>)
         })}
     </div>
 }
@@ -36,7 +42,7 @@ function FolderDoc({docData, docName, docPath, close, frameData})
 
     return <div className="FolderDoc page">
         <div className="Title-Tab">
-            {docName}
+            {docData.title || "Error: No Title"}
             <div className="page-back icon-back" onClick={close}/>
         </div>
         <Path path={docPath} frameData={frameData}/>
@@ -91,11 +97,42 @@ function FolderCreate({create, setTitle})
     </>
 }
 
-function FolderEdit({doc, setDoc, setTitle})
+function FolderEdit({doc, setDoc, setTitle, docPath, close})
 {
-    return <div>
+    const [docTitle, setDocTitle] = useState("Loading...")
 
-    </div>
+    const {readPath} = useGlobalData()
+
+    const {deletePath} = useDocHelpers()
+
+    useEffect(() => {
+        setTitle("Edit: "+doc.title)
+        setDocTitle(doc.title)
+    }, [doc])
+
+    function applyEdits()
+    {
+        const newDoc = objClone(doc)
+        newDoc.title = docTitle
+        setDoc(newDoc)
+    }
+    
+    function deleteFrame()
+    {
+        if (window.confirm(`Delete Folder \"${doc.title}\"?`))
+        {
+            deletePath(docPath)
+            close()
+        }
+    }
+
+
+
+    return <>
+        <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
+        <div className="Section-Button-1" onClick={applyEdits}>Apply Edits</div>
+        <div className="Section-Button-1 red" onClick={deleteFrame}>Delete</div>
+    </>
 }
 
 export { FolderDoc, folderIcon, FolderCreate, FolderEdit }
