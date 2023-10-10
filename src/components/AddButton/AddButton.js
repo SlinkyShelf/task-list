@@ -13,8 +13,8 @@ function AddButton({menu})
         <div onClick={() => setOpen(!open)} className="AddButton">
             <div className="AddButton-Icon"></div>
         </div>
-        {open && menu.map((menuItem) => {
-            return <div onClick={menuItem.onClick} className="AddButton">
+        {open && menu.map((menuItem, i) => {
+            return <div onClick={menuItem.onClick} className="AddButton" key={i}>
                 <div className={menuItem.iconClass || "AddButton-Icon"}></div>
             </div>
         })}

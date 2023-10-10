@@ -14,19 +14,31 @@ function storeData(key, data)
     return localStorage.setItem(key, JSON.stringify(data))
 }
 
-function LocalStore({docName, storename})
+function LocalStore({docName, storename, defaultData})
 {
     const [data, setData] = store.useState(storename)
     const [gotData, setGotData] = useState(false)
     useEffect(() => {
         let d = getJsonData(docName)
         if (d != null)
+        {
+            console.log("Loaded data ", d)
             setData(d)
+        } else {
+            console.log("No data found")
+            setData(defaultData)
+        }
         setGotData(true)
     }, [])
 
     useEffect(() => {
         if (!gotData) {return}
+
+        console.log("Stored ", data, " to ", docName)
+
+        if (data == null)
+            return console.warn("Data tried to set to null")
+
         storeData(docName, data)
     }, [data])
 

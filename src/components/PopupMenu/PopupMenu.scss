@@ -42,7 +42,7 @@ $opened-height: 0%;
 
     background-color: lighten($background-color, 2%);
 
-    position: absolute;
+    // position: absolute;
 
     transition: all .25s;
 
@@ -65,11 +65,11 @@ $opened-height: 0%;
 
     &.open {
         // animation: slide-open .25s;
-        bottom: 0%;
+        margin-top: 15vh;
     }
 
     &.closed {
-        bottom: -125vh;
+        margin-top: 100vh;
     }
 }
 

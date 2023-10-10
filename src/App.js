@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, app, db } from "./modules/firebase-auth.js";
+import Runner from "./DocumentTypes/Runner.js";
 import "./scss/index.scss"
 import "./scss/theme.scss"
 import "./scss/positions.scss"
@@ -12,14 +13,6 @@ import store from "./modules/store.js"
 import FirebaseStore from "./modules/firebase-store.js";
 
 import Footer from "./components/Footer/Footer.js";
-// import SignInPage from "./pages/SignInPage/SignInPage.js";
-// import AllListsPage from "./pages/AllListsPage/AllListsPage.js";
-// import ListEditPage from "./pages/ListEditPage/ListEditPage.js";
-// import TaskEditPage from "./pages/TaskEditPage/TaskEditPage.js";
-// import ListPage from "./pages/ListPage/ListPage.js";
-// import TagsPage from "./pages/TagsPage/TagsPage.js";
-// import SettingsPage from "./pages/SettingsPage/SettingsPage.js";
-// import CalendarPage from "./pages/CalendarPage/CalendarPage.js";
 
 import FramesPage from "./pages/FramesPage/FramesPage.js";
 
@@ -42,14 +35,6 @@ function MainContent({ user }) {
   return <>
     <div className="anti-footer">
       <FramesPage/>
-      {/* {currentPage == "all-lists"   && <AllListsPage/>}
-      {currentPage == "list-edit" && <ListEditPage/>}
-      {currentPage == "list" && <ListPage/>}
-      {currentPage == "tags" && <TagsPage/>}
-      {currentPage == "task-edit" && <TaskEditPage />}
-      {currentPage == "settings" && <SettingsPage user={user} />}
-      {currentPage == "calendar" && <CalendarPage/>}
-      {currentPage == "frames" && <CalendarPage/>} */}
     </div>
     <Footer/>
   </>
@@ -65,7 +50,7 @@ function App() {
 
   return (
     <div className="App">
-      <LocalStore storename={"local-user-data"} docName={"user-data"}/>
+      <LocalStore storename={"local-user-data"} docName={"user-data"} defaultData={objClone(defaultUserData)}/>
       {user && <FirebaseStore coll="users" 
         docName={user.uid} 
         storename={"firebase-user-data"} 

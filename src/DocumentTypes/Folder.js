@@ -6,39 +6,24 @@ import { TitleEditSection } from "../components/SectionPresets/SectionPresets"
 import { objClone } from "../modules/default-data"
 import useGlobalData from "../hooks/useGlobalData"
 import useDocHelpers from "../hooks/useDocHelpers"
+import AddButton from "../components/AddButton/AddButton"
+import getAddTypesMenu from "../modules/AddDocMenu"
+import DocumentTypes from "../modules/document-types"
+import CreateDoc from "../components/CreateDoc/CreateDoc"
+import EditDoc from "../components/EditDoc/EditDoc"
+import DocumentPage from "../pages/DocumentPage/DocumentPage"
+import Path from "../components/DocPath/DocPath"
 
-const folderIcon = "icon-folder"
+const icon = "icon-folder"
 
-function Path({path, frameData})
+function Doc({docData, docPath, close, frameData})
 {
-    function generatePathDisplay()
-    {
-        const display = []
-        const lightPath = convertToLightPath(path)
-        let frameSet = frameData.documents
+    const [openDoc, setOpenDoc] = useState()
 
-        lightPath.map((p) => {
-            display.push("/")
-            display.push(frameSet[p].title)
-            frameSet = frameSet[p].dir
-        })
+    const [newType, setNewType] = useState() 
+    const [editPath, setEditPath] = useState()
 
-        return display
-    }
-
-    return <div className="DocumentPage-Path">
-        {/* Temp */}
-        <span>{frameData.title}</span>
-        {generatePathDisplay().map((dis, i) => {
-            return (dis == "/"?<span key={i}>/</span>:
-            <span key={i}>{dis}</span>)
-        })}
-    </div>
-}
-
-function FolderDoc({docData, docName, docPath, close, frameData})
-{
-    const [openDir, setOpenDir] = useState()
+    const addMenu = getAddTypesMenu(setNewType)
 
     return <div className="FolderDoc page">
         <div className="Title-Tab">
@@ -47,30 +32,30 @@ function FolderDoc({docData, docName, docPath, close, frameData})
         </div>
         <Path path={docPath} frameData={frameData}/>
         <div className="AllLists-List-Table mr-h">
-            {Object.keys(docData.dir).map((docName) => {
-                const docData = docData.dir[docName]
-                function d()
-                {
-                    console.log("Click")
-                    if (docData.type == "folder")
-                    {
-                        setOpenDir(docName)
-                    }
-                }
+            {Object.keys(docData.dir).map((dn) => {
+                const dd = docData.dir[dn]
 
-                return <DocTab docName={docName} docData={docData} key={docName} 
-                    open={d}/>
+                return <DocTab 
+                    docName={dn} 
+                    docData={dd} 
+                    key={dn} 
+                    open={() => setOpenDoc(dn)} 
+                    edit={(p) => setEditPath(docPath+"/dir/"+dn)}
+                    />
             })}
+            <div/>
         </div>
-        {openDir && <FolderDoc
-            docName={openDir}
-            documentPath={docPath+"/dir/"+openDir}
-            docData={docData.dir[openDir]}
-            close={() => setOpenDir(null)}/>}
+
+
+        <AddButton menu={addMenu}/>
+        <CreateDoc frameData={frameData} dirPath={docPath+"/dir"} docType={newType} setDocType={setNewType}/>
+        <EditDoc frameData={frameData} docPath={editPath} setDocPath={setEditPath}/>
+
+        {openDoc && <DocumentPage documentPath={docPath+"/dir/"+openDoc} close={() => setOpenDoc(null)}/>}
     </div>
 }
 
-function FolderCreate({create, setTitle})
+function Create({create, setTitle})
 {
     const [docTitle, setDocTitle] = useState("New Folder")
 
@@ -97,7 +82,7 @@ function FolderCreate({create, setTitle})
     </>
 }
 
-function FolderEdit({doc, setDoc, setTitle, docPath, close})
+function Edit({doc, setDoc, setTitle, docPath, close})
 {
     const [docTitle, setDocTitle] = useState("Loading...")
 
@@ -135,4 +120,15 @@ function FolderEdit({doc, setDoc, setTitle, docPath, close})
     </>
 }
 
-export { FolderDoc, folderIcon, FolderCreate, FolderEdit }
+const Folder = {
+    "icon": icon,
+    "Doc": Doc,
+    "Create": Create,
+    "Edit": Edit
+}
+
+DocumentTypes["folder"] = Folder
+
+console.log("Added to types", DocumentTypes)
+
+export default Folder

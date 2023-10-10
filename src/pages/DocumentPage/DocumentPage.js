@@ -3,7 +3,7 @@ import useGlobalData from "../../hooks/useGlobalData"
 
 import "./DocumentPage.scss"
 
-import { FolderDoc } from "../../DocumentTypes/Folder"
+import Folder from "../../DocumentTypes/Folder"
 import { getFramePath, getLastId } from "../../modules/path-functions"
 
 function DocumentPage({documentPath, close})
@@ -23,7 +23,6 @@ function DocumentPage({documentPath, close})
 
     const pageData = {
         "docData":docData, 
-        "docName": getLastId(documentPath),
         "docPath": documentPath,
 
         "frameData": frameData,
@@ -33,7 +32,7 @@ function DocumentPage({documentPath, close})
     }
 
     return <div className="page">
-        {docData.type == "folder" && <FolderDoc {...pageData}/>}
+        {docData.type == "folder" && <Folder.Doc {...pageData}/>}
     </div>
 }
 

@@ -65,3 +65,8 @@
     @include button-icon;
     background-image: url("../imgs/calender.png");
 }
+
+.icon-x {
+    @include button-icon;
+    background-image: url("../imgs/x.png");
+}

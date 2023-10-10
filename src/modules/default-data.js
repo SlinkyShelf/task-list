@@ -2,7 +2,7 @@ function objClone(obj)
 {return JSON.parse(JSON.stringify(obj))}
 
 const defaultTag = {
-  "name": "School",
+  "title": "School",
   "color": "#ff0000"
 }
 
@@ -17,6 +17,7 @@ const defaultTask = {
 }
 
 const defaultTaskList = {
+  "title": "Untitled",
   "type": "task-list",
   "tags": {
     
@@ -31,33 +32,13 @@ const defaultFrameData = {
   "title": "Frame Title",
   "type": "local",
     "documents": {
-      "First List": {
-        "type": "task-list",
-        "tags": {
-          "fakeId": true
-        },
-      },
-      "First-Folder": {
-        "type": "folder",
-        "dir": {}
-      }
+      
     },
     "tags": {
-      "fakeId": {
-        "name": "School",
-        "color": "#ff0000"
-      }
+      
     },
     "tasks": {
-      "First Task": {
-        "name": "test",
-        "metadata": {
-
-        },
-        "tags": {
-          "fakeId": true
-        }
-      }
+      
     },
   }
 

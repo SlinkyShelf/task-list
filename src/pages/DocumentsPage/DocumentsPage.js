@@ -8,11 +8,11 @@ import { defaultFrameData, objClone } from "../../modules/default-data";
 import DocTab from "../../components/DocTab/DocTab";
 import DocumentPage from "../DocumentPage/DocumentPage";
 
-import DocumentTypes from "../../modules/document-types";
-import { createId } from "../../modules/helpers";
 import AddButton from "../../components/AddButton/AddButton";
-import PopupMenu from "../../components/PopupMenu/PopupMenu";
-import { getLastId, popId } from "../../modules/path-functions";
+
+import CreateDoc from "../../components/CreateDoc/CreateDoc";
+import EditDoc from "../../components/EditDoc/EditDoc";
+import getAddTypesMenu from "../../modules/AddDocMenu";
 
 function DocumentsPage({framePath, close})
 {
@@ -20,11 +20,8 @@ function DocumentsPage({framePath, close})
 
     const [openDoc, setOpenDoc] = useState()
 
-    const [popUpOpen, setPopupOpen] = useState()
-    const [popTitle, setPopTitle] = useState()
     const [newType, setNewType] = useState() 
     const [editPath, setEditPath] = useState()
-    const [editDoc, setEditDoc] = useState({})
 
     const { readPath, dataUpdates } = useGlobalData()
 
@@ -33,48 +30,7 @@ function DocumentsPage({framePath, close})
         setFrameData(target)
     }, [...dataUpdates])
 
-    const addMenu = [
-        {"onClick": () => setNewType("folder"), "iconClass": "icon-folder"}
-    ]
-
-    const NewTypeDoc = newType && DocumentTypes[newType].Create
-    const EditDoc = editPath && editDoc.type && DocumentTypes[editDoc.type].Edit
-
-    function createNewDoc(newDoc)
-    {
-        const {target: frameData, setData, data} = readPath(framePath)
-        const newId = createId(frameData.documents)
-        frameData.documents[newId] = newDoc
-
-        setData(data)
-        setNewType(null)
-    }
-
-    function editDocFunc(newDoc)
-    {
-        const {target, data, setData} = readPath(popId(editPath))
-        const id = getLastId(editPath)
-        target[id] = newDoc
-        setData(data)
-
-        closePopup()
-    }
-    
-    useEffect(() => {
-        if (!editPath) {return}
-
-        const {target, data, setData} = readPath(editPath)
-        console.log(target)
-        setEditDoc(target)
-    }, [editPath])
-
-    function closePopup()
-    {
-        setEditPath(null)
-        setEditDoc({})
-        setPopTitle("")
-        setNewType(null)
-    }
+    const addMenu = getAddTypesMenu(setNewType)
 
     return <div className="AllLists page">
         <div className="Title-Tab">
@@ -97,18 +53,10 @@ function DocumentsPage({framePath, close})
                     open={openDoc} edit={() => setEditPath(framePath+"/documents/"+docName)}/>
             })}
         </div>
-        
+
         <AddButton menu={addMenu}/>
-        <PopupMenu open={newType || editPath} setOpen={closePopup} title={popTitle}>
-            {newType && <NewTypeDoc create={createNewDoc} close={closePopup} setTitle={setPopTitle}/>}
-            {editPath && editDoc.type && <EditDoc 
-                setDoc={editDocFunc} 
-                doc={editDoc} 
-                frameData={frameData}
-                docPath={editPath}
-                setTitle={setPopTitle}
-                close={closePopup}/>}
-        </PopupMenu>
+        <CreateDoc frameData={frameData} dirPath={framePath+"/documents"} docType={newType} setDocType={setNewType}/>
+        <EditDoc frameData={frameData} docPath={editPath} setDocPath={setEditPath}/>
         {openDoc && <DocumentPage documentPath={framePath+"/documents/"+openDoc} close={() => setOpenDoc(null)}/>}
     </div>
 }
