@@ -16,6 +16,9 @@ function Path({path, frameData})
         const lightPath = convertToLightPath(path)
         let frameSet = frameData.documents
 
+        if (lightPath.length == 0)
+            display.push(["/"])
+
         lightPath.map((p) => {
             display.push(["/"])
             display.push([frameSet[p].title, p])
@@ -49,7 +52,6 @@ function Path({path, frameData})
     return <div className="DocumentPage-Path">
         {/* Temp */}
         <span onClick={returnToFrame}>{frameData.title}</span>
-
         {generatePathDisplay().map((dis, i) => {
             return (dis[0] == "/"?<Slash key={i}/>:
             <span key={i} onClick={() => returnToPath(dis[1])}>{dis[0]}</span>)

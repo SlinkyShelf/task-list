@@ -93,6 +93,16 @@
     filter: brightness(50%);
 }
 
+@keyframes page-open {
+    from {
+        left: 100%;
+    }
+
+    to {
+        left: 0%;
+    }
+}
+
 .page {
     position: absolute;
     width: 100%;
@@ -102,6 +112,10 @@
     top: 0%;
 
     background-color: $background-color;
+
+    animation: page-open .75s;
+
+    box-shadow: $shadow;
 }
 
 .page-back {
