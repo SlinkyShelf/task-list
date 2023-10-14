@@ -32,7 +32,6 @@ function Path({path, frameData})
 
     function returnToPath(path)
     {
-        console.log(pages)
         const newPages = []
         for (let i = 0; i < pages.length; i++)
         {

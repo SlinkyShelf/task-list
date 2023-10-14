@@ -33,7 +33,9 @@ function CreateDoc({docType, setDocType, dirPath, frameData})
             create={createNewDoc} 
             close={close} 
             setTitle={setPopTitle} 
-            frameData={frameData}/>}
+            frameData={frameData}
+            dirPath={dirPath}/>
+            }
     </PopupMenu>
 }
 

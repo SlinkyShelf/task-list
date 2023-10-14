@@ -9,6 +9,7 @@ import { objClone } from "../modules/default-data";
 import usePages from "../hooks/usePages";
 import EditDoc from "../components/EditDoc/EditDoc";
 import AddButton from "../components/AddButton/AddButton";
+import { getFramePath } from "../modules/path-functions";
 
 const icon = "icon-list"
 
@@ -104,15 +105,16 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
             </select>
             <div className="Section-Button-1" onClick={AddTag}>Add</div>
         </div>
-        <div className="Section-Button-1" onClick={() => addPage("tag-edit")}>Edit Tags</div>
+        <div className="Section-Button-1" onClick={openTagEdit}>Edit Tags</div>
         
     </div>
 }
 
-function Create({create, setTitle, frameData})
+function Create({create, setTitle, frameData, dirPath})
 {
     const [docTitle, setDocTitle] = useState("New Task List")
     const [tags, setTags] = useState({})
+    const {addPage} = usePages()
 
     function make()
     {
@@ -127,10 +129,15 @@ function Create({create, setTitle, frameData})
     useEffect(() => {
         setTitle("Create Task List")
     }, [])
+
+    function openTagEdit()
+    {
+        addPage("tags", {"framePath": getFramePath(dirPath)})
+    }
     
     return <>
         <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
-        <TagPicker frameData={frameData} setTags={setTags} tags={tags}/>
+        <TagPicker frameData={frameData} setTags={setTags} tags={tags} openTagEdit={openTagEdit}/>
         <div className="Section-Button-1" onClick={make}>Create</div>
     </>
 }
@@ -139,6 +146,7 @@ function Edit({doc, setDoc, setTitle, docPath, close, frameData})
 {
     const [docTitle, setDocTitle] = useState("Loading...")
     const [tags, setTags] = useState({})
+    const {addPage} = usePages()
 
     const {deletePath} = useDocHelpers()
 
@@ -163,11 +171,15 @@ function Edit({doc, setDoc, setTitle, docPath, close, frameData})
         }
     }
 
-
+    function openTagEdit()
+    {
+        console.log("Add page")
+        addPage("tags", {"framePath": getFramePath(docPath)})
+    }
 
     return <>
         <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
-        <TagPicker frameData={frameData} setTags={setTags} tags={tags}/>
+        <TagPicker frameData={frameData} setTags={setTags} tags={tags} openTagEdit={openTagEdit}/>
         <div className="Section-Button-1" onClick={applyEdits}>Apply Edits</div>
         <div className="Section-Button-1 red" onClick={deleteFrame}>Delete</div>
     </>
