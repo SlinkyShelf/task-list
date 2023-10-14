@@ -7,6 +7,8 @@ import useGlobalData from "../hooks/useGlobalData";
 import { useEffect, useState } from "react";
 import { objClone } from "../modules/default-data";
 import usePages from "../hooks/usePages";
+import EditDoc from "../components/EditDoc/EditDoc";
+import AddButton from "../components/AddButton/AddButton";
 
 const icon = "icon-list"
 
@@ -14,6 +16,7 @@ function Doc({docData, docPath, close, frameData})
 {
     const [tasks, setTasks] = useState({})
     const [taskEdit, setTaskEdit] = useState()
+    const [editDoc, setEditDoc] = useState()
 
     const {addPage, goBack} = usePages()
 
@@ -35,6 +38,10 @@ function Doc({docData, docPath, close, frameData})
         setTasks(newTasks)
     }, [frameData])
 
+    const addMenu = [
+        {"onClick": () => setEditDoc(docPath), "iconClass": "icon-settings"}
+    ]
+
     return <div className="FolderDoc page">
         <div className="Title-Tab">
             {docData.title || "Error: No Title"}
@@ -51,6 +58,9 @@ function Doc({docData, docPath, close, frameData})
                 </div>})
             }
         </div>
+        
+        <AddButton menu={addMenu}/>
+        <EditDoc frameData={frameData} docPath={editDoc} setDocPath={setEditDoc}/>
     </div>
 }
 
@@ -94,10 +104,8 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
             </select>
             <div className="Section-Button-1" onClick={AddTag}>Add</div>
         </div>
-        {(openTagEdit || true) && <div className="Section-Button-1" onClick={() => addPage("")}>EditTags</div>}
-        {/* {tagEditOpen && <div className="page">
-            <div>Page Test</div>
-            </div>} */}
+        <div className="Section-Button-1" onClick={() => addPage("tag-edit")}>Edit Tags</div>
+        
     </div>
 }
 
@@ -127,11 +135,10 @@ function Create({create, setTitle, frameData})
     </>
 }
 
-function Edit({doc, setDoc, setTitle, docPath, close})
+function Edit({doc, setDoc, setTitle, docPath, close, frameData})
 {
     const [docTitle, setDocTitle] = useState("Loading...")
-
-    const {readPath} = useGlobalData()
+    const [tags, setTags] = useState({})
 
     const {deletePath} = useDocHelpers()
 
@@ -160,6 +167,7 @@ function Edit({doc, setDoc, setTitle, docPath, close})
 
     return <>
         <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
+        <TagPicker frameData={frameData} setTags={setTags} tags={tags}/>
         <div className="Section-Button-1" onClick={applyEdits}>Apply Edits</div>
         <div className="Section-Button-1 red" onClick={deleteFrame}>Delete</div>
     </>

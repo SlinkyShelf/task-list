@@ -46,7 +46,7 @@ const defaultUserData = {
   "frames": {
 
   },
-  "settings": objClone(defaultSettings)
+  "settings": objClone(defaultSettings),
 }
 
 export { 

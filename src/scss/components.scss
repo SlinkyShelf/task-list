@@ -11,20 +11,20 @@
 
 .Title-Tab {
     width: 100%;
-    height: $tab-height;
+    height: 6vh;
 
     text-align: right;
 
-    color: $line-color;
+    color: grey;
 
     position: relative;
 
-    font-size: calc($font-scale * 2.5);
+    font-size: calc($font-scale * 2);
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-bottom: $small-border;
+    // border-bottom: $small-border;
 }
 
 .Source-Tab {

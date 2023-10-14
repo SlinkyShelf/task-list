@@ -42,7 +42,8 @@ function DocumentsPage({framePath})
         </div>
         <div className="DocumentPage-Path">
             {/* Temp */}
-            <span>{frameData.title || ""}/</span>
+            <span>{frameData.title || ""}</span>
+            <span className="slash">/</span>
         </div>
         <div className="AllLists-List-Table mr-h">
             {Object.keys(frameData.documents).map((docName) => {

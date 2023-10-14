@@ -80,7 +80,7 @@ $line-width: 1px;
 .DocumentPage-Path {
     display: inline-block;
     color: white;
-    font-size: calc($font-scale * 1.5);
+    font-size: calc($font-scale * 1.25);
 
     $h-padding: 1em;
 
@@ -95,4 +95,14 @@ $line-width: 1px;
     background-color: $pop-background-1;
 
     box-shadow: $shadow;
+
+    & span:first-child {
+        color: rgb(184, 137, 9);
+    }
+
+    & .slash {
+        margin-left: .25em;
+        margin-right: .25em;
+        color: grey;
+    }
 }

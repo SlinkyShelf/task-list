@@ -21,15 +21,11 @@ import FramesPage from "./pages/FramesPage/FramesPage.js";
 import VersionTag from "./components/VersionTag/VersionTag.js";
 
 import {defaultUserData, objClone} from "./modules/default-data.js";
-import LocalStore from "./modules/local-store.js";
+import {LocalStore, setDefault} from "./modules/local-store.js";
 
-store.setState("firebase-user-data", objClone(defaultUserData))
-store.setState("local-user-data", objClone(defaultUserData))
+store.setState("firebase-user-data", setDefault(defaultUserData))
+store.setState("local-user-data", setDefault(defaultUserData))
 
-store.setState("list-edit-path", "")
-store.setState("list-path", "")
-
-store.setState("task-edit-path")
 store.setState("user", null)
 
 store.setState("pages", [])
@@ -39,14 +35,14 @@ store.setState("pages", [])
 function MainContent({ user }) {
   const [pages, setPages] = store.useState("pages")
   return <>
-    <div className="anti-footer">
+    {/* <div className="anti-footer"> */}
       <FramesPage/>
-      {pages.map((page) => {
+      {pages.map((page, i) => {
         const Page =  AllPages[page.type]
-        return <Page {...page.attributes}/>
+        return <Page {...page.attributes} key={i}/>
       })}
-    </div>
-    <Footer/>
+    {/* </div> */}
+    {/* <Footer/> */}
   </>
 }
 

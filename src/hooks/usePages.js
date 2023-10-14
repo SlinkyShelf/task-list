@@ -21,7 +21,7 @@ function usePages()
         setPages(newPages)
     }
 
-    return { addPage, goBack }
+    return { addPage, goBack, pages, setPages }
 }
 
 export default usePages

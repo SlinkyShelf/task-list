@@ -40,6 +40,8 @@ $opened-height: 0%;
 
     // border
 
+    overflow-y: scroll;
+
     background-color: lighten($background-color, 2%);
 
     position: absolute;

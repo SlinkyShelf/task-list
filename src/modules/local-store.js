@@ -1,12 +1,27 @@
 import { useState, useEffect } from "react";
 import store from "./store.js";
 
+function objClone(obj)
+{return JSON.parse(JSON.stringify(obj))}
+
+function setDefault(data)
+{
+    const newData = objClone(data)
+    newData.default = true
+    return newData
+}
+
 function getJsonData(key)
 {
     const raw = localStorage.getItem(key)
     if (raw == null || raw == "")
         return null
-    return JSON.parse(raw)
+
+    try {
+        return JSON.parse(raw)
+    } catch(e) {
+        return null
+    }
 }
 
 function storeData(key, data)
@@ -19,17 +34,20 @@ function LocalStore({docName, storename, defaultData})
     const [data, setData] = store.useState(storename)
     const [gotData, setGotData] = useState(false)
     useEffect(() => {
+        if (!data.default) {return;}
+
+
         let d = getJsonData(docName)
         if (d != null)
         {
             console.log("Loaded data ", d)
             setData(d)
         } else {
-            console.log("No data found")
-            setData(defaultData)
+            console.log("No data found!!!")
+            setData(objClone(defaultData))
         }
         setGotData(true)
-    }, [])
+    }, [data])
 
     useEffect(() => {
         if (!gotData) {return}
@@ -45,4 +63,4 @@ function LocalStore({docName, storename, defaultData})
     return <></>
 }
 
-export default LocalStore
+export { LocalStore, setDefault }
