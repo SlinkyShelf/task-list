@@ -3,7 +3,7 @@ import useGlobalData from "../../hooks/useGlobalData"
 
 import "./DocumentPage.scss"
 
-import Folder from "../../DocumentTypes/Folder"
+import DocumentTypes from "../../modules/document-types"
 import { getFramePath, getLastId } from "../../modules/path-functions"
 
 function DocumentPage({documentPath, close})
@@ -26,13 +26,15 @@ function DocumentPage({documentPath, close})
         "docPath": documentPath,
 
         "frameData": frameData,
-
-        "close": close,
         // "driveData": data
     }
 
+    const ready = docData && docData.type
+
+    const Doc = ready && DocumentTypes[docData.type].Doc
+
     return <div className="page">
-        {docData.type == "folder" && <Folder.Doc {...pageData}/>}
+        {ready && <Doc {...pageData}/>}
     </div>
 }
 

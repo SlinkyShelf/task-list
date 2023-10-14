@@ -13,22 +13,30 @@ import CreateDoc from "../components/CreateDoc/CreateDoc"
 import EditDoc from "../components/EditDoc/EditDoc"
 import DocumentPage from "../pages/DocumentPage/DocumentPage"
 import Path from "../components/DocPath/DocPath"
+import usePages from "../hooks/usePages"
 
 const icon = "icon-folder"
 
-function Doc({docData, docPath, close, frameData})
+function Doc({docData, docPath, frameData})
 {
-    const [openDoc, setOpenDoc] = useState()
-
     const [newType, setNewType] = useState() 
     const [editPath, setEditPath] = useState()
 
+    const {addPage, goBack} = usePages()
+
     const addMenu = getAddTypesMenu(setNewType)
+
+    function openDoc(dn)
+    {
+        addPage("document", {
+            "documentPath": docPath+"/dir/"+dn
+        })
+    }
 
     return <div className="FolderDoc page">
         <div className="Title-Tab">
             {docData.title || "Error: No Title"}
-            <div className="page-back icon-back" onClick={close}/>
+            <div className="page-back icon-back" onClick={goBack}/>
         </div>
         <Path path={docPath} frameData={frameData}/>
         <div className="AllLists-List-Table mr-h">
@@ -39,7 +47,7 @@ function Doc({docData, docPath, close, frameData})
                     docName={dn} 
                     docData={dd} 
                     key={dn} 
-                    open={() => setOpenDoc(dn)} 
+                    open={() => openDoc(dn)} 
                     edit={(p) => setEditPath(docPath+"/dir/"+dn)}
                     />
             })}
@@ -51,7 +59,7 @@ function Doc({docData, docPath, close, frameData})
         <CreateDoc frameData={frameData} dirPath={docPath+"/dir"} docType={newType} setDocType={setNewType}/>
         <EditDoc frameData={frameData} docPath={editPath} setDocPath={setEditPath}/>
 
-        {openDoc && <DocumentPage documentPath={docPath+"/dir/"+openDoc} close={() => setOpenDoc(null)}/>}
+        {/* {openDoc && <DocumentPage documentPath={docPath+"/dir/"+openDoc} close={() => setOpenDoc(null)}/>} */}
     </div>
 }
 

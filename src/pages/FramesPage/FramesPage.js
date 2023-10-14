@@ -14,6 +14,7 @@ import { getLastId, popId } from "../../modules/path-functions"
 import DocumentsPage from "../DocumentsPage/DocumentsPage"
 
 import { TitleEditSection } from "../../components/SectionPresets/SectionPresets"
+import usePages from "../../hooks/usePages"
 
 function Frame({path, edit, setDocPagePath})
 {
@@ -145,6 +146,8 @@ function FramesPage()
     const [editing, setEditing] = useState()
     const [editPopupOpen, setEditPopupOpen] = useState(false)
 
+    const {addPage} = usePages()
+
     useEffect(() => {
         const newFrames = []
         Object.keys(localUserData.frames).map((id) => {
@@ -170,12 +173,19 @@ function FramesPage()
         {"onClick": () => setPopupOpen(true)}
     ]
 
+    function openFrame(path)
+    {
+        addPage("documents", {
+            "framePath": path
+        })
+    }
+
     return <div className="FramesPage page">
         {/* <div className="Title-Tab">Frames</div> */}
         <div className="FramePage-Grid-Container">
             <div className="FramePage-Frame-Grid">
                 {frames.map((path) => {
-                    return <Frame path={path} key={path} edit={edit} setDocPagePath={setDocPagePath}/>
+                    return <Frame path={path} key={path} edit={edit} setDocPagePath={openFrame}/>
                 })}
                 <div className="FramesPage-Frame" style={{filter: "opacity(0%)"}}></div>
             </div>
@@ -184,7 +194,7 @@ function FramesPage()
         <CreateFramePopup open={popupOpen} setOpen={setPopupOpen}/>
         <EditFramePopup open={editPopupOpen} setOpen={setEditPopupOpen} path={editing}/>
 
-        {docsPagePath && <DocumentsPage framePath={docsPagePath} close={() => setDocPagePath(null)}/>}
+        {/* {docsPagePath && <DocumentsPage framePath={docsPagePath} close={() => setDocPagePath(null)}/>} */}
     </div>
 }
 

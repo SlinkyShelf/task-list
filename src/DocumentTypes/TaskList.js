@@ -6,6 +6,7 @@ import useDocHelpers from "../hooks/useDocHelpers";
 import useGlobalData from "../hooks/useGlobalData";
 import { useEffect, useState } from "react";
 import { objClone } from "../modules/default-data";
+import usePages from "../hooks/usePages";
 
 const icon = "icon-list"
 
@@ -13,6 +14,8 @@ function Doc({docData, docPath, close, frameData})
 {
     const [tasks, setTasks] = useState({})
     const [taskEdit, setTaskEdit] = useState()
+
+    const {addPage, goBack} = usePages()
 
     useEffect(() => {
         const newTasks = {}
@@ -35,7 +38,7 @@ function Doc({docData, docPath, close, frameData})
     return <div className="FolderDoc page">
         <div className="Title-Tab">
             {docData.title || "Error: No Title"}
-            <div className="page-back icon-back" onClick={close}/>
+            <div className="page-back icon-back" onClick={goBack}/>
         </div>
         <Path path={docPath} frameData={frameData}/>
 
@@ -65,6 +68,8 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
         setTags(newTags)
     }
 
+    const {addPage, goBack} = usePages()
+
     function RemoveTag(key)
     {
 
@@ -89,10 +94,10 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
             </select>
             <div className="Section-Button-1" onClick={AddTag}>Add</div>
         </div>
-        {(openTagEdit || true) && <div className="Section-Button-1" onClick={() => setTagEditOpen(true)}/>}
-        {tagEditOpen && <div className="page">
+        {(openTagEdit || true) && <div className="Section-Button-1" onClick={() => addPage("")}>EditTags</div>}
+        {/* {tagEditOpen && <div className="page">
             <div>Page Test</div>
-            </div>}
+            </div>} */}
     </div>
 }
 

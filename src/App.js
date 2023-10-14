@@ -14,6 +14,8 @@ import FirebaseStore from "./modules/firebase-store.js";
 
 import Footer from "./components/Footer/Footer.js";
 
+import AllPages from "./pages/all-pages.js";
+
 import FramesPage from "./pages/FramesPage/FramesPage.js";
 
 import VersionTag from "./components/VersionTag/VersionTag.js";
@@ -30,11 +32,19 @@ store.setState("list-path", "")
 store.setState("task-edit-path")
 store.setState("user", null)
 
+store.setState("pages", [])
+
+
+
 function MainContent({ user }) {
-  
+  const [pages, setPages] = store.useState("pages")
   return <>
     <div className="anti-footer">
       <FramesPage/>
+      {pages.map((page) => {
+        const Page =  AllPages[page.type]
+        return <Page {...page.attributes}/>
+      })}
     </div>
     <Footer/>
   </>

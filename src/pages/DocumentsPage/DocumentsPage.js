@@ -13,12 +13,15 @@ import AddButton from "../../components/AddButton/AddButton";
 import CreateDoc from "../../components/CreateDoc/CreateDoc";
 import EditDoc from "../../components/EditDoc/EditDoc";
 import getAddTypesMenu from "../../modules/AddDocMenu";
+import usePages from "../../hooks/usePages";
 
-function DocumentsPage({framePath, close})
+function DocumentsPage({framePath})
 {
     const [frameData, setFrameData] = useState(objClone(defaultFrameData))
 
     const [openDoc, setOpenDoc] = useState()
+
+    const {addPage, goBack} = usePages()
 
     const [newType, setNewType] = useState() 
     const [editPath, setEditPath] = useState()
@@ -35,7 +38,7 @@ function DocumentsPage({framePath, close})
     return <div className="AllLists page">
         <div className="Title-Tab">
             Documents
-            <div className="page-back icon-back" onClick={close}/>
+            <div className="page-back icon-back" onClick={goBack}/>
         </div>
         <div className="DocumentPage-Path">
             {/* Temp */}
@@ -46,7 +49,9 @@ function DocumentsPage({framePath, close})
                 const docData = frameData.documents[docName]
                 function openDoc()
                 {
-                    setOpenDoc(docName)
+                    addPage("document", {
+                        "documentPath": framePath+"/documents/"+docName
+                    })
                 }
 
                 return <DocTab docName={docName} docData={docData} key={docName} 
@@ -57,7 +62,6 @@ function DocumentsPage({framePath, close})
         <AddButton menu={addMenu}/>
         <CreateDoc frameData={frameData} dirPath={framePath+"/documents"} docType={newType} setDocType={setNewType}/>
         <EditDoc frameData={frameData} docPath={editPath} setDocPath={setEditPath}/>
-        {openDoc && <DocumentPage documentPath={framePath+"/documents/"+openDoc} close={() => setOpenDoc(null)}/>}
     </div>
 }
 
