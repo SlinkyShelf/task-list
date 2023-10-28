@@ -90,7 +90,7 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
         <div className="Section-Header">Tags</div>
         <div>
             {Object.keys(tags).map((key) => {
-                return <div className="AllLists-List Tab">
+                return <div className="AllLists-List Tab" key={key}>
                     {frameData.tags[key].title}
                     <div className="icon-x cr" onClick={() => RemoveTag(key)}/>
                 </div>
@@ -100,7 +100,7 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
             <select className="Section-DropDown" value={selectedTag} 
                 onChange={(e) => setSelectedTag(e.target.value)}>
                 {Object.keys(frameData.tags).map((key) => {
-                    return <option value={key}>{frameData.tags[key].title}</option>
+                    return <option key={key} value={key}>{frameData.tags[key].title}</option>
                 })}
             </select>
             <div className="Section-Button-1" onClick={AddTag}>Add</div>
