@@ -13,40 +13,8 @@ import { useEffect, useRef } from "react"
 import usePages from "../../hooks/usePages"
 import AddButton from "../../components/AddButton/AddButton"
 import Path from "../../components/DocPath/DocPath"
-import { TitleEditSection } from "../../components/SectionPresets/SectionPresets"
-import { defaultTag } from "../../modules/default-data"
 
-function TagTab({tag, tagId, edit})
-{
-    const [ newName, setNewName ] = useState("")
-
-    const colorRef = useRef(null)
-
-    const [newColor, setNewColor ] = useState("#FF69B4")
-
-    useEffect(() => {
-        setNewName(tag.name)
-        setNewColor(tag.color)
-    }, [tag, tagId])
-
-    useEffect(() => {
-        if (colorRef.current)
-        {
-            colorRef.current.on = () => {
-
-            }
-        }
-    }, [colorRef])
-
-    // onBlur={changeColor}
-
-    return <div className="TagsPage-Tag">
-        <input type="color" className="TagsPage-Tag-Color mr-h" value={newColor} 
-            onChange={(e) => setNewColor(e.target.value)} ref={colorRef} disabled/>
-        <div className="TagsPage-Tag-Name">{tag.name}</div>
-        <TripleDot extraClasses="cr mr-r" onClick={edit}/>
-    </div>
-}
+import { CreateTag, EditTag, TagTab } from "../../Items/Tags"
 
 function TagsPage({framePath})
 {
@@ -92,85 +60,6 @@ function TagsPage({framePath})
         <CreateTag open={newTagOpen} setOpen={setNewTagOpen} framePath={framePath}/>
         <EditTag tagPath={tagEditPath} setTagPath={setTagEditPath}/>
     </div>
-}
-
-const defaultColor = "#FF69B4"
-
-function ColorEditSection({color, setColor, title})
-{
-    const [newColor, setNewColor] = useState(defaultColor)
-    const [editing, setEditing] = useState(false)
-
-    const colorRef = useRef(null)
-
-    return <div className="Section">
-        <div className="Section-Header">{title || "Color"}</div>
-        <div className="Section-Line">
-            <input type="color" className="TagsPage-Tag-Color mr-h" value={newColor} 
-                onChange={(e) => setNewColor(e.target.value)} ref={colorRef} disabled={!editing}/>
-                
-            <div className="Section-Button-1" 
-                onClick={() => {setEditing(false); setColor(tempTitle)}}>Apply</div>
-        </div>
-    </div>
-}
-
-function CreateTag({open, setOpen, framePath})
-{
-    const [tagTitle, setTagTitle] = useState("New Tag")
-    const [tagColor, setTagColor] = useState(defaultColor)
-    const {readPath} = useGlobalData()
-
-    function Create()
-    {
-        const {target: frameData, data, setData} = readPath(framePath)
-
-        const newId = createId(frameData.tags)
-        const newTag = {
-            "name": tagTitle,
-            "color": tagColor
-        }
-
-        frameData.tags[newId] = newTag
-        setData(data)
-
-        setOpen(false)
-    }
-
-    return <PopupMenu open={open} setOpen={setOpen}>
-        <TitleEditSection title={tagTitle} setTitle={setTagTitle} />
-        <div className="Section-Button-1" onClick={Create}>Create</div>
-        <div className="Section-Button-1" onClick={() => setOpen(false)}>Cancel</div>
-    </PopupMenu>
-}
-
-function EditTag({tagPath, setTagPath})
-{
-    const [tagData, setTagData] = useState(defaultTag)
-    const [tagTitle, setTagTitle] = useState("New Tag")
-    const [tagColor, setTagColor] = useState(defaultColor) 
-    const {readPath, dataUpdates} = useGlobalData()
-
-    function Apply()
-    {
-        const {target, data, setData} = readPath(tagPath)
-        target.title = tagTitle
-        setData(data)
-        setTagPath(null)
-    }
-
-    useEffect(() => {
-        if (!tagPath) {return;}
-
-        const {target} = readPath(tagPath)
-        setTagData(target)
-    }, [...dataUpdates, tagPath])
-
-    return <PopupMenu open={tagPath} setOpen={(c) => {setTagPath(c?tagPath:null)}}>
-        <TitleEditSection title={tagTitle} setTitle={setTagTitle} />
-        <div className="Section-Button-1" onClick={Apply}>Apply</div>
-        <div className="Section-Button-1" onClick={() => setTagPath(null)}>Cancel</div>
-    </PopupMenu>
 }
 
 export default TagsPage

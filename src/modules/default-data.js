@@ -7,7 +7,7 @@ const defaultTag = {
 }
 
 const defaultTask = {
-  "name": "test",
+  "title": "test",
   "metadata": {
 
   },

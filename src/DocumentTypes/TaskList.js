@@ -11,6 +11,8 @@ import EditDoc from "../components/EditDoc/EditDoc";
 import AddButton from "../components/AddButton/AddButton";
 import { getFramePath } from "../modules/path-functions";
 
+import { CreateTask, EditTask } from "../Items/Task";
+
 const icon = "icon-list"
 
 function Doc({docData, docPath, close, frameData})
@@ -18,6 +20,7 @@ function Doc({docData, docPath, close, frameData})
     const [tasks, setTasks] = useState({})
     const [taskEdit, setTaskEdit] = useState()
     const [editDoc, setEditDoc] = useState()
+    const [taskCreateOpen, setTaskCreateOpen] = useState()
 
     const {addPage, goBack} = usePages()
 
@@ -40,6 +43,7 @@ function Doc({docData, docPath, close, frameData})
     }, [frameData])
 
     const addMenu = [
+        {"onClick": () => setTaskCreateOpen(true)},
         {"onClick": () => setEditDoc(docPath), "iconClass": "icon-settings"}
     ]
 
@@ -62,51 +66,6 @@ function Doc({docData, docPath, close, frameData})
         
         <AddButton menu={addMenu}/>
         <EditDoc frameData={frameData} docPath={editDoc} setDocPath={setEditDoc}/>
-    </div>
-}
-
-function TagPicker({frameData, tags, setTags, openTagEdit})
-{
-    const [selectedTag, setSelectedTag] = useState()
-    const [tagEditOpen, setTagEditOpen] = useState()
-
-    function AddTag()
-    {
-        if (!selectedTag) {return}
-
-        const newTags = objClone(tags)
-        newTags[selectedTag] = true
-        setTags(newTags)
-    }
-
-    const {addPage, goBack} = usePages()
-
-    function RemoveTag(key)
-    {
-
-    }
-
-    return <div className="Section">
-        <div className="Section-Header">Tags</div>
-        <div>
-            {Object.keys(tags).map((key) => {
-                return <div className="AllLists-List Tab" key={key}>
-                    {frameData.tags[key].title}
-                    <div className="icon-x cr" onClick={() => RemoveTag(key)}/>
-                </div>
-            })}
-        </div>
-        <div className="Section-Line">
-            <select className="Section-DropDown" value={selectedTag} 
-                onChange={(e) => setSelectedTag(e.target.value)}>
-                {Object.keys(frameData.tags).map((key) => {
-                    return <option key={key} value={key}>{frameData.tags[key].title}</option>
-                })}
-            </select>
-            <div className="Section-Button-1" onClick={AddTag}>Add</div>
-        </div>
-        <div className="Section-Button-1" onClick={openTagEdit}>Edit Tags</div>
-        
     </div>
 }
 
@@ -137,7 +96,7 @@ function Create({create, setTitle, frameData, dirPath})
     
     return <>
         <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
-        <TagPicker frameData={frameData} setTags={setTags} tags={tags} openTagEdit={openTagEdit}/>
+        <TagPicker framePath={getFramePath(dirPath)} frameData={frameData} setTags={setTags} tags={tags}/>
         <div className="Section-Button-1" onClick={make}>Create</div>
     </>
 }

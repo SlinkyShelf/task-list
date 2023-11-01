@@ -25,23 +25,13 @@
     background-color: lighten($background-color, 5%);
 }
 
-.TagsPage-Tag-Color {
-    $size: calc($tab-height * .5);
-
-    width: $size;
-    height: $size;
-
-    inline-size: $size;
-    block-size: $size;
-
-    // border-radius: 100%;
+@mixin color-input {
     border: none;
     outline: none;
     appearance: none;
     // box-sizing: content-box;
     // block-size: 0px;
     background-color: transparent;
-    // inline-size: 0px;
 
     padding: 0px;
 
@@ -57,5 +47,32 @@
         border: none;
         border-radius: 1em;
       }
+}
 
+.TagsPage-Tag-Color {
+    $size: calc($tab-height * .5);
+
+    width: $size;
+    height: $size;
+
+    inline-size: $size;
+    block-size: $size;
+    @include color-input
+}
+
+.TagsPage-Tag-Input {
+    $size: calc($tab-height * .5);
+
+    width: 70%;
+    height: $size;
+
+    inline-size: 70%;
+    block-size: $size;
+    @include color-input;
+    align-self: center;
+}
+
+.Input-Container {
+    display: flex;
+    justify-content: center;
 }
