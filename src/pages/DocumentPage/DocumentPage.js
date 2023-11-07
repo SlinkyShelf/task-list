@@ -26,6 +26,7 @@ function DocumentPage({documentPath, close})
         "docPath": documentPath,
 
         "frameData": frameData,
+        "framePath": getFramePath(documentPath)
         // "driveData": data
     }
 

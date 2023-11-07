@@ -1,4 +1,16 @@
-function TagPicker({frameData, tags, setTags, openTagEdit})
+import { useState, useEffect } from "react"
+import PopupMenu from "../components/PopupMenu/PopupMenu"
+import { TitleEditSection, ColorEditSection } from "../components/SectionPresets/SectionPresets"
+import useGlobalData from "../hooks/useGlobalData"
+import usePages from "../hooks/usePages"
+import TripleDot from "../components/TripleDot/TripleDot"
+import { objClone } from "../modules/default-data"
+import { defaultTag } from "../modules/default-data"
+import { createId } from "../modules/path-functions"
+
+const defaultColor = "#aa0000"
+
+function TagPicker({frameData, tags, setTags, framePath})
 {
     const [selectedTag, setSelectedTag] = useState()
     const [tagEditOpen, setTagEditOpen] = useState()
@@ -47,7 +59,8 @@ function TagPicker({frameData, tags, setTags, openTagEdit})
             </select>
             <div className="Section-Button-1" onClick={AddTag}>Add</div>
         </div>
-        <div className="Section-Button-1" onClick={openTagEdit}>Edit Tags</div>
+        <div className="Section-Button-1" 
+            onClick={() => addPage("tags", {"framePath": framePath})}>Edit Tags</div>
         
     </div>
 }

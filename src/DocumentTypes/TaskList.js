@@ -10,12 +10,13 @@ import usePages from "../hooks/usePages";
 import EditDoc from "../components/EditDoc/EditDoc";
 import AddButton from "../components/AddButton/AddButton";
 import { getFramePath } from "../modules/path-functions";
+import { TagPicker } from "../Items/Tags";
 
 import { CreateTask, EditTask } from "../Items/Task";
 
 const icon = "icon-list"
 
-function Doc({docData, docPath, close, frameData})
+function Doc({docData, docPath, close, frameData, framePath})
 {
     const [tasks, setTasks] = useState({})
     const [taskEdit, setTaskEdit] = useState()
@@ -53,18 +54,21 @@ function Doc({docData, docPath, close, frameData})
             <div className="page-back icon-back" onClick={goBack}/>
         </div>
         <Path path={docPath} frameData={frameData}/>
-
         <div>
             {Object.keys(tasks).map((key) => {
-
+                const task = tasks[key]
 
                 return <div key={key} className="AllLists-List Tab">
-                    <TripleDot onClick={() => setTaskEdit(key)} extraClasses="cr"/>
+                    {task.title}
+                    <TripleDot onClick={() => setTaskEdit(framePath+"/tasks/"+key)} extraClasses="cr"/>
                 </div>})
             }
         </div>
         
         <AddButton menu={addMenu}/>
+        <CreateTask open={taskCreateOpen} setOpen={setTaskCreateOpen} 
+            frameData={frameData} framePath={framePath} startingTags={docData.tags}/>
+        <EditTask taskPath={taskEdit} setTaskPath={setTaskEdit} />
         <EditDoc frameData={frameData} docPath={editDoc} setDocPath={setEditDoc}/>
     </div>
 }
@@ -88,11 +92,6 @@ function Create({create, setTitle, frameData, dirPath})
     useEffect(() => {
         setTitle("Create Task List")
     }, [])
-
-    function openTagEdit()
-    {
-        addPage("tags", {"framePath": getFramePath(dirPath)})
-    }
     
     return <>
         <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
@@ -112,12 +111,14 @@ function Edit({doc, setDoc, setTitle, docPath, close, frameData})
     useEffect(() => {
         setTitle("Edit: "+doc.title)
         setDocTitle(doc.title)
+        setTags(doc.tags)
     }, [doc])
 
     function applyEdits()
     {
         const newDoc = objClone(doc)
         newDoc.title = docTitle
+        newDoc.tags = objClone(tags)
         setDoc(newDoc)
     }
     
@@ -130,15 +131,10 @@ function Edit({doc, setDoc, setTitle, docPath, close, frameData})
         }
     }
 
-    function openTagEdit()
-    {
-        console.log("Add page")
-        addPage("tags", {"framePath": getFramePath(docPath)})
-    }
-
     return <>
         <TitleEditSection title={docTitle} setTitle={setDocTitle}/>
-        <TagPicker frameData={frameData} setTags={setTags} tags={tags} openTagEdit={openTagEdit}/>
+        <TagPicker  setTags={setTags} tags={tags}
+            framePath={getFramePath(docPath)} frameData={frameData}/>
         <div className="Section-Button-1" onClick={applyEdits}>Apply Edits</div>
         <div className="Section-Button-1 red" onClick={deleteFrame}>Delete</div>
     </>

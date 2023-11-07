@@ -18,6 +18,8 @@ import { CreateTag, EditTag, TagTab } from "../../Items/Tags"
 
 function TagsPage({framePath})
 {
+    console.log("TagsPage Path", framePath)
+
     const [frameData, setFrameData] = useState({})
     const [frameTags, setFrameTags] = useState({})
     const {readPath, dataUpdates} = useGlobalData()
