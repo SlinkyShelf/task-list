@@ -6,7 +6,7 @@ import usePages from "../hooks/usePages"
 import TripleDot from "../components/TripleDot/TripleDot"
 import { objClone } from "../modules/default-data"
 import { defaultTag } from "../modules/default-data"
-import { createId } from "../modules/path-functions"
+import { createId, getFramePath, getLastId, popId } from "../modules/path-functions"
 
 const defaultColor = "#aa0000"
 
@@ -43,6 +43,7 @@ function TagPicker({frameData, tags, setTags, framePath})
         <div>
             {Object.keys(tags).map((key) => {
                 const tag = frameData.tags[key]
+                if (!tag) {return}
                 return <div className="AllLists-List Tab" key={key}>
                     <input type="color" className="TagsPage-Tag-Color mr-r" value={tag.color} disabled/>
                     {tag.title}
@@ -111,6 +112,14 @@ function EditTag({tagPath, setTagPath})
         setTagPath(null)
     }
 
+    function Delete()
+    {
+        const {target: frame, data, setData} = readPath(getFramePath(tagPath)) 
+        delete frame.tags[getLastId(tagPath)] 
+        setTagPath(null)
+        setData(data)
+    }
+
     useEffect(() => {
         if (!tagPath) {return;}
 
@@ -125,6 +134,7 @@ function EditTag({tagPath, setTagPath})
         <ColorEditSection color={tagColor} setColor={setTagColor}/>
         <div className="Section-Button-1" onClick={Apply}>Apply</div>
         <div className="Section-Button-1" onClick={() => setTagPath(null)}>Cancel</div>
+        <div className="Section-Button-1 red" onClick={Delete}>Delete</div>
     </PopupMenu>
 }
 
