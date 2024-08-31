@@ -56,7 +56,6 @@ function App() {
 
   return (
     <div className="App">
-      <LocalStore storename={"local-user-data"} docName={"user-data"} defaultData={objClone(defaultUserData)}/>
       {user && <FirebaseStore coll="users" 
         docName={user.uid} 
         storename={"firebase-user-data"} 
