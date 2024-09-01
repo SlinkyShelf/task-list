@@ -79,7 +79,7 @@ function EditFramePopup({open, setOpen, path})
 function CreateFramePopup({open, setOpen})
 {
     const [frameTitle, setFrameTitle] = useState("Untitled")
-    const [frameType, setFrameType] = useState("local")
+    const [frameType, setFrameType] = useState("firebase")
 
     const {readPath} = useGlobalData()
 
@@ -91,9 +91,6 @@ function CreateFramePopup({open, setOpen})
 
         let path
         switch (frameType) {
-            case "local":
-                path = "local:frames"
-                break;
             case "firebase":
                 path = "firebase:frames"
                 break
@@ -110,24 +107,14 @@ function CreateFramePopup({open, setOpen})
 
         // Setting defaults
         setFrameTitle("Untitled")
-        setFrameType("local")
+        setFrameType("firebase")
         setOpen(false)
     }
 
     return <PopupMenu open={open} setOpen={setOpen} title="New Frame">
         <TitleEditSection title={frameTitle} setTitle={setFrameTitle}/>
 
-        <div className="Section">
-            <div className="Section-Header">Type</div>
-                <div className="Section-Line">
-                    <div className="Section-Info-1">Type:</div>
-                    <select className="Section-DropDown" value={frameType} 
-                        onChange={(e) => setFrameType(e.target.value)}>
-                        <option value={"local"}>Local</option>
-                        <option value={"firebase"}>Cloud</option>
-                    </select>
-                </div>
-            </div>
+        
 
         <div className="Section-Button-1" 
             onClick={CreateFrame}>Create</div>
@@ -136,7 +123,7 @@ function CreateFramePopup({open, setOpen})
 
 function FramesPage()
 {
-    const {dataUpdates, readPath, localUserData, firebaseUserData} = useGlobalData()
+    const {dataUpdates, readPath, firebaseUserData} = useGlobalData()
     const [frames, setFrames] = useState([])
 
     const [docsPagePath, setDocPagePath] = useState()
@@ -150,15 +137,12 @@ function FramesPage()
 
     useEffect(() => {
         const newFrames = []
-        Object.keys(localUserData.frames).map((id) => {
-            newFrames.push("local:frames/"+id)
-        })
 
         Object.keys(firebaseUserData.frames).map((id) => {
             newFrames.push("firebase:frames/"+id)
         })
 
-        console.log(localUserData, firebaseUserData)
+        console.log(firebaseUserData)
 
         setFrames(newFrames)
     }, [...dataUpdates])

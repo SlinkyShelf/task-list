@@ -2,7 +2,7 @@ import "./VersionTag.scss"
 
 function VersionTag()
 {
-    return <div className="Version-Tag">2.7.5</div>
+    return <div className="Version-Tag">2.7.6</div>
 }
 
 export default VersionTag

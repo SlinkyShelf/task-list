@@ -16,21 +16,17 @@ import Footer from "./components/Footer/Footer.js";
 
 import AllPages from "./pages/all-pages.js";
 
+import SignInPage from "./pages/SignInPage/SignInPage.js";
 import FramesPage from "./pages/FramesPage/FramesPage.js";
 
 import VersionTag from "./components/VersionTag/VersionTag.js";
 
 import {defaultUserData, objClone} from "./modules/default-data.js";
-import {LocalStore, setDefault} from "./modules/local-store.js";
 
-store.setState("firebase-user-data", setDefault(defaultUserData))
-store.setState("local-user-data", setDefault(defaultUserData))
-
+store.setState("user-data", objClone(defaultUserData))
+console.log(objClone(defaultUserData))
 store.setState("user", null)
-
 store.setState("pages", [])
-
-
 
 function MainContent({ user }) {
   const [pages, setPages] = store.useState("pages")
@@ -58,13 +54,13 @@ function App() {
     <div className="App">
       {user && <FirebaseStore coll="users" 
         docName={user.uid} 
-        storename={"firebase-user-data"} 
+        storename={"user-data"} 
         defData={objClone(defaultUserData)}/>
         }
       
-      {/* {(user == undefined) && <SignInPage />} */}
-      {/* {user && <MainContent user={user} />} */}
-      <MainContent/>
+      {(user == undefined) && <SignInPage />}
+      {user && <MainContent user={user} />}
+      {/* <MainContent/> */}
       <VersionTag/>
     </div>
   );

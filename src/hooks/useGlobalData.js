@@ -7,11 +7,10 @@ function objClone(obj)
 
 function useGlobalData()
 {
-    const [firebaseUserData, setFirebaseUserData, updateFirebaseData] = store.useState("firebase-user-data")
-    const [localUserData, setLocalUserData, updateLocalUserData] = store.useState("local-user-data")
+    const [firebaseUserData, setFirebaseUserData, updateFirebaseData] = store.useState("user-data")
     const [user] = store.useState("user")
 
-    const dataUpdates = [firebaseUserData, localUserData]
+    const dataUpdates = [firebaseUserData]
 
     const readPath = useCallback((path) => {
         const drives = {
@@ -20,11 +19,6 @@ function useGlobalData()
                 "setData": setFirebaseUserData,
                 "updateData": updateFirebaseData
             },
-            "local": {
-                "data": localUserData,
-                "setData": setLocalUserData,
-                "updateData": updateFirebaseData
-            }
         }
 
 
@@ -60,7 +54,7 @@ function useGlobalData()
             "updateData": drives[driveName].updateData
         }
         
-    }, [ localUserData, firebaseUserData ])
+    }, [ firebaseUserData ])
 
     return { 
         readPath, 
@@ -68,11 +62,7 @@ function useGlobalData()
 
         firebaseUserData,
         setFirebaseUserData,
-        updateFirebaseData,
-        
-        localUserData,
-        setLocalUserData,
-        updateLocalUserData 
+        updateFirebaseData
     }
 }
 
